@@ -1,0 +1,2870 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data Science - 6&nbsp; Loan Default Prediction</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./applicationII.html" rel="next">
+<link href="./additional.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./applicationI.html">Applications</a></li><li class="breadcrumb-item"><a href="./applicationI.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Loan Default Prediction</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Data Science</a> 
+        <div class="sidebar-tools-main">
+    <a href="./Data-Science.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About this Course</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Overview and Methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Basic Concepts</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./decisiontrees.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Decision Trees</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./neuralnetworks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Neural Networks</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./additional.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Additional Methods</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Applications</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applicationI.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Loan Default Prediction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applicationII.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">House Price Prediction</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./applicationI.html">Applications</a></li><li class="breadcrumb-item"><a href="./applicationI.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Loan Default Prediction</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Loan Default Prediction</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="quarto-embed-nb-cell" data-notebook="/Users/joel/Dropbox (Privat)/Studium/CEMFI/PhD/TA/Data Science for Diploma in Banking Supervision/Local/Lecture Notes/notebooks/application_loan_default.ipynb" data-notebook-title="Problem Setup" data-notebook-cellid="cell-0">
+<p>The following application is inspired by the empirical example in “Measuring the model risk-adjusted performance of machine learning algorithms in credit default prediction” by <span class="citation" data-cites="AlonsoRobisco2022">Alonso Robisco and Carbó Martínez (<a href="references.html#ref-AlonsoRobisco2022" role="doc-biblioref">2022</a>)</span>. However, since we are not interested in model risk-adjusted performance, the application will purely focus on the implementation of machine learning algorithms for loan default prediction.</p>
+<section id="problem-setup" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="problem-setup"><span class="header-section-number">6.1</span> Problem Setup</h2>
+<p>The dataset that we will be using was used in the Kaggle competition <a href="https://www.kaggle.com/c/GiveMeSomeCredit">“Give Me Some Credit”</a>. The description of the competition reads as follows:</p>
+<blockquote class="blockquote">
+<p>Banks play a crucial role in market economies. They decide who can get finance and on what terms and can make or break investment decisions. For markets and society to function, individuals and companies need access to credit.</p>
+<p>Credit scoring algorithms, which make a guess at the probability of default, are the method banks use to determine whether or not a loan should be granted. This competition requires participants to improve on the state of the art in credit scoring, by predicting the probability that somebody will experience financial distress in the next two years.</p>
+<p>The goal of this competition is to build a model that borrowers can use to help make the best financial decisions.</p>
+<p>Historical data are provided on 250,000 borrowers and the prize pool is $5,000 ($3,000 for first, $1,500 for second and $500 for third).</p>
+</blockquote>
+<p>Unfortunately, there won’t be any prize money today. However, the experience that you can gain from working through an application like this can be invaluable. So, in a way, you are still winning!</p>
+</section>
+<section id="dataset" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="dataset"><span class="header-section-number">6.2</span> Dataset</h2>
+<p>Let’s first have a look at the data dictionary that is provided with the dataset. This will give us an idea of the variables that are available in the dataset and what they represent</p>
+<div id="cell-1" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T21:59:59.509680Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T21:59:59.509340Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:00.497069Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:00.496602Z&quot;}" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>data_dict <span class="op">=</span> pd.read_excel(<span class="st">'data/Data Dictionary.xls'</span>, header<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>data_dict.style.hide()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+<style type="text/css">
+</style>
+
+<table id="T_ac0c0" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th id="T_ac0c0_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Variable Name</th>
+<th id="T_ac0c0_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Description</th>
+<th id="T_ac0c0_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_ac0c0_row0_col0" class="data row0 col0">SeriousDlqin2yrs</td>
+<td id="T_ac0c0_row0_col1" class="data row0 col1">Person experienced 90 days past due delinquency or worse</td>
+<td id="T_ac0c0_row0_col2" class="data row0 col2">Y/N</td>
+</tr>
+<tr class="even">
+<td id="T_ac0c0_row1_col0" class="data row1 col0">RevolvingUtilizationOfUnsecuredLines</td>
+<td id="T_ac0c0_row1_col1" class="data row1 col1">Total balance on credit cards and personal lines of credit except real estate and no installment debt like car loans divided by the sum of credit limits</td>
+<td id="T_ac0c0_row1_col2" class="data row1 col2">percentage</td>
+</tr>
+<tr class="odd">
+<td id="T_ac0c0_row2_col0" class="data row2 col0">age</td>
+<td id="T_ac0c0_row2_col1" class="data row2 col1">Age of borrower in years</td>
+<td id="T_ac0c0_row2_col2" class="data row2 col2">integer</td>
+</tr>
+<tr class="even">
+<td id="T_ac0c0_row3_col0" class="data row3 col0">NumberOfTime30-59DaysPastDueNotWorse</td>
+<td id="T_ac0c0_row3_col1" class="data row3 col1">Number of times borrower has been 30-59 days past due but no worse in the last 2 years.</td>
+<td id="T_ac0c0_row3_col2" class="data row3 col2">integer</td>
+</tr>
+<tr class="odd">
+<td id="T_ac0c0_row4_col0" class="data row4 col0">DebtRatio</td>
+<td id="T_ac0c0_row4_col1" class="data row4 col1">Monthly debt payments, alimony,living costs divided by monthy gross income</td>
+<td id="T_ac0c0_row4_col2" class="data row4 col2">percentage</td>
+</tr>
+<tr class="even">
+<td id="T_ac0c0_row5_col0" class="data row5 col0">MonthlyIncome</td>
+<td id="T_ac0c0_row5_col1" class="data row5 col1">Monthly income</td>
+<td id="T_ac0c0_row5_col2" class="data row5 col2">real</td>
+</tr>
+<tr class="odd">
+<td id="T_ac0c0_row6_col0" class="data row6 col0">NumberOfOpenCreditLinesAndLoans</td>
+<td id="T_ac0c0_row6_col1" class="data row6 col1">Number of Open loans (installment like car loan or mortgage) and Lines of credit (e.g. credit cards)</td>
+<td id="T_ac0c0_row6_col2" class="data row6 col2">integer</td>
+</tr>
+<tr class="even">
+<td id="T_ac0c0_row7_col0" class="data row7 col0">NumberOfTimes90DaysLate</td>
+<td id="T_ac0c0_row7_col1" class="data row7 col1">Number of times borrower has been 90 days or more past due.</td>
+<td id="T_ac0c0_row7_col2" class="data row7 col2">integer</td>
+</tr>
+<tr class="odd">
+<td id="T_ac0c0_row8_col0" class="data row8 col0">NumberRealEstateLoansOrLines</td>
+<td id="T_ac0c0_row8_col1" class="data row8 col1">Number of mortgage and real estate loans including home equity lines of credit</td>
+<td id="T_ac0c0_row8_col2" class="data row8 col2">integer</td>
+</tr>
+<tr class="even">
+<td id="T_ac0c0_row9_col0" class="data row9 col0">NumberOfTime60-89DaysPastDueNotWorse</td>
+<td id="T_ac0c0_row9_col1" class="data row9 col1">Number of times borrower has been 60-89 days past due but no worse in the last 2 years.</td>
+<td id="T_ac0c0_row9_col2" class="data row9 col2">integer</td>
+</tr>
+<tr class="odd">
+<td id="T_ac0c0_row10_col0" class="data row10 col0">NumberOfDependents</td>
+<td id="T_ac0c0_row10_col1" class="data row10 col1">Number of dependents in family excluding themselves (spouse, children etc.)</td>
+<td id="T_ac0c0_row10_col2" class="data row10 col2">integer</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>The variable <span class="math inline">\(y\)</span> that we want to predict is <code>SeriousDlqin2yrs</code> which indicates whether a person has been 90 days past due on a loan payment (serious delinquency) in the past two years. This target variable is <span class="math inline">\(1\)</span> if the loan defaults (i.e., serious delinquency occured) and <span class="math inline">\(0\)</span> if the loan does not default (i.e., no serious delinquency occured) . The other variables are features that we can use to predict this target variable such as the age of the borrower and the monthly income of the borrower.</p>
+</section>
+<section id="putting-the-problem-into-the-context-of-the-course" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="putting-the-problem-into-the-context-of-the-course"><span class="header-section-number">6.3</span> Putting the Problem into the Context of the Course</h2>
+<p>Given the description of the competition and the dataset, we can see that this is a <strong>supervised learning problem</strong>. We have a target variable that we want to predict, and we have features that we can use to predict this target variable. The target variable is binary, i.e., it can take two values: 0 or 1. The value 0 indicates that the loan will not default, while the value 1 indicates that the loan will default. Thus, this is a <strong>binary classification problem</strong>.</p>
+</section>
+<section id="setting-up-the-environment" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="setting-up-the-environment"><span class="header-section-number">6.4</span> Setting up the Environment</h2>
+<p>We will start by setting up the environment by importing the necessary libraries</p>
+<div id="cell-3" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:00.530216Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:00.529936Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.275044Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.274119Z&quot;}" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>and loading the dataset</p>
+<div id="cell-5" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.278593Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.278327Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.391274Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.390524Z&quot;}" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/cs-training.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-preprocessing" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="data-preprocessing"><span class="header-section-number">6.5</span> Data Preprocessing</h2>
+<p>The dataset is now loaded into a pandas DataFrame. Let’s have a look at the first few rows of the dataset to get an idea of what the data looks like.</p>
+<div id="cell-7" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.394677Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.394428Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.407621Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.406951Z&quot;}" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">SeriousDlqin2yrs</th>
+<th data-quarto-table-cell-role="th">RevolvingUtilizationOfUnsecuredLines</th>
+<th data-quarto-table-cell-role="th">age</th>
+<th data-quarto-table-cell-role="th">NumberOfTime30-59DaysPastDueNotWorse</th>
+<th data-quarto-table-cell-role="th">DebtRatio</th>
+<th data-quarto-table-cell-role="th">MonthlyIncome</th>
+<th data-quarto-table-cell-role="th">NumberOfOpenCreditLinesAndLoans</th>
+<th data-quarto-table-cell-role="th">NumberOfTimes90DaysLate</th>
+<th data-quarto-table-cell-role="th">NumberRealEstateLoansOrLines</th>
+<th data-quarto-table-cell-role="th">NumberOfTime60-89DaysPastDueNotWorse</th>
+<th data-quarto-table-cell-role="th">NumberOfDependents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>1</td>
+<td>0.766127</td>
+<td>45</td>
+<td>2</td>
+<td>0.802982</td>
+<td>9120.0</td>
+<td>13</td>
+<td>0</td>
+<td>6</td>
+<td>0</td>
+<td>2.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>0</td>
+<td>0.957151</td>
+<td>40</td>
+<td>0</td>
+<td>0.121876</td>
+<td>2600.0</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>0</td>
+<td>0.658180</td>
+<td>38</td>
+<td>1</td>
+<td>0.085113</td>
+<td>3042.0</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>0</td>
+<td>0.233810</td>
+<td>30</td>
+<td>0</td>
+<td>0.036050</td>
+<td>3300.0</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>0</td>
+<td>0.907239</td>
+<td>49</td>
+<td>1</td>
+<td>0.024926</td>
+<td>63588.0</td>
+<td>7</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<p>The column <code>Unnamed: 0</code> seems to be a superfluous index column that we could drop. Let’s do that</p>
+<div id="cell-9" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.411034Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.410759Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.418580Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.418017Z&quot;}" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop(<span class="st">'Unnamed: 0'</span>, axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Furthermore, the order of the column names in the dataset is not very intuitive. Let’s reorder the columns in the dataset</p>
+<div id="cell-11" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.421536Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.421300Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.430758Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.430206Z&quot;}" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>orderedList <span class="op">=</span> [</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'SeriousDlqin2yrs'</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'age'</span>, </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'NumberOfDependents'</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'MonthlyIncome'</span>, </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'DebtRatio'</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'RevolvingUtilizationOfUnsecuredLines'</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'NumberOfOpenCreditLinesAndLoans'</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'NumberRealEstateLoansOrLines'</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'NumberOfTime30-59DaysPastDueNotWorse'</span>, </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'NumberOfTime60-89DaysPastDueNotWorse'</span>, </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'NumberOfTimes90DaysLate'</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.loc[:, orderedList]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s also have a look at the data types of the columns in the dataset and whether there are any missing values</p>
+<div id="cell-13" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.433558Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.433308Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.443235Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.442660Z&quot;}" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 150000 entries, 0 to 149999
+Data columns (total 11 columns):
+ #   Column                                Non-Null Count   Dtype  
+---  ------                                --------------   -----  
+ 0   SeriousDlqin2yrs                      150000 non-null  int64  
+ 1   age                                   150000 non-null  int64  
+ 2   NumberOfDependents                    146076 non-null  float64
+ 3   MonthlyIncome                         120269 non-null  float64
+ 4   DebtRatio                             150000 non-null  float64
+ 5   RevolvingUtilizationOfUnsecuredLines  150000 non-null  float64
+ 6   NumberOfOpenCreditLinesAndLoans       150000 non-null  int64  
+ 7   NumberRealEstateLoansOrLines          150000 non-null  int64  
+ 8   NumberOfTime30-59DaysPastDueNotWorse  150000 non-null  int64  
+ 9   NumberOfTime60-89DaysPastDueNotWorse  150000 non-null  int64  
+ 10  NumberOfTimes90DaysLate               150000 non-null  int64  
+dtypes: float64(4), int64(7)
+memory usage: 12.6 MB</code></pre>
+</div>
+</div>
+<p>Note that the column <code>MonthlyIncome</code> and <code>NumberOfDependents</code> seem to have missing values. Before we drop these missing values or impute them, let’s have a look at the distribution of our target variable <code>SeriousDlqin2yrs</code></p>
+<div id="cell-15" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.446192Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.445961Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.451609Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.451010Z&quot;}" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'SeriousDlqin2yrs'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>SeriousDlqin2yrs
+0    0.93316
+1    0.06684
+Name: proportion, dtype: float64</code></pre>
+</div>
+</div>
+<p>As with the example that we have seen during one of our previous lectures, the dataset seems to be quite imbalanced. Only about 6.7% of the loans have defaulted. This is something that we need to keep in mind when treating the missing values and when building our models.</p>
+<p>Let’s see what happens to the distribution of the target variable if we drop the missing values</p>
+<div id="cell-17" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.454478Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.454268Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.471275Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.470721Z&quot;}" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df.dropna().value_counts(<span class="st">"SeriousDlqin2yrs"</span>, normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>SeriousDlqin2yrs
+0    0.930514
+1    0.069486
+Name: proportion, dtype: float64</code></pre>
+</div>
+</div>
+<p>It seems to have almost no impact on the distribution of the target variable. This is good news. Let’s compare some other statistics of the dataset before and after dropping the missing values</p>
+<div id="cell-19" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.474437Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.474182Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.532204Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.531669Z&quot;}" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df.describe().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">count</th>
+<th data-quarto-table-cell-role="th">mean</th>
+<th data-quarto-table-cell-role="th">std</th>
+<th data-quarto-table-cell-role="th">min</th>
+<th data-quarto-table-cell-role="th">25%</th>
+<th data-quarto-table-cell-role="th">50%</th>
+<th data-quarto-table-cell-role="th">75%</th>
+<th data-quarto-table-cell-role="th">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">SeriousDlqin2yrs</td>
+<td>150000.0</td>
+<td>0.066840</td>
+<td>0.249746</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">age</td>
+<td>150000.0</td>
+<td>52.295207</td>
+<td>14.771866</td>
+<td>0.0</td>
+<td>41.000000</td>
+<td>52.000000</td>
+<td>63.000000</td>
+<td>109.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfDependents</td>
+<td>146076.0</td>
+<td>0.757222</td>
+<td>1.115086</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>1.000000</td>
+<td>20.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">MonthlyIncome</td>
+<td>120269.0</td>
+<td>6670.221237</td>
+<td>14384.674215</td>
+<td>0.0</td>
+<td>3400.000000</td>
+<td>5400.000000</td>
+<td>8249.000000</td>
+<td>3008750.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">DebtRatio</td>
+<td>150000.0</td>
+<td>353.005076</td>
+<td>2037.818523</td>
+<td>0.0</td>
+<td>0.175074</td>
+<td>0.366508</td>
+<td>0.868254</td>
+<td>329664.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">RevolvingUtilizationOfUnsecuredLines</td>
+<td>150000.0</td>
+<td>6.048438</td>
+<td>249.755371</td>
+<td>0.0</td>
+<td>0.029867</td>
+<td>0.154181</td>
+<td>0.559046</td>
+<td>50708.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfOpenCreditLinesAndLoans</td>
+<td>150000.0</td>
+<td>8.452760</td>
+<td>5.145951</td>
+<td>0.0</td>
+<td>5.000000</td>
+<td>8.000000</td>
+<td>11.000000</td>
+<td>58.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">NumberRealEstateLoansOrLines</td>
+<td>150000.0</td>
+<td>1.018240</td>
+<td>1.129771</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>1.000000</td>
+<td>2.000000</td>
+<td>54.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfTime30-59DaysPastDueNotWorse</td>
+<td>150000.0</td>
+<td>0.421033</td>
+<td>4.192781</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>98.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">NumberOfTime60-89DaysPastDueNotWorse</td>
+<td>150000.0</td>
+<td>0.240387</td>
+<td>4.155179</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>98.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfTimes90DaysLate</td>
+<td>150000.0</td>
+<td>0.265973</td>
+<td>4.169304</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>98.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<div id="cell-20" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.534939Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.534734Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.592342Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.591808Z&quot;}" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df.dropna().describe().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">count</th>
+<th data-quarto-table-cell-role="th">mean</th>
+<th data-quarto-table-cell-role="th">std</th>
+<th data-quarto-table-cell-role="th">min</th>
+<th data-quarto-table-cell-role="th">25%</th>
+<th data-quarto-table-cell-role="th">50%</th>
+<th data-quarto-table-cell-role="th">75%</th>
+<th data-quarto-table-cell-role="th">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">SeriousDlqin2yrs</td>
+<td>120269.0</td>
+<td>0.069486</td>
+<td>0.254280</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">age</td>
+<td>120269.0</td>
+<td>51.289792</td>
+<td>14.426684</td>
+<td>0.0</td>
+<td>40.000000</td>
+<td>51.000000</td>
+<td>61.000000</td>
+<td>103.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfDependents</td>
+<td>120269.0</td>
+<td>0.851832</td>
+<td>1.148391</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>2.000000</td>
+<td>20.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">MonthlyIncome</td>
+<td>120269.0</td>
+<td>6670.221237</td>
+<td>14384.674215</td>
+<td>0.0</td>
+<td>3400.000000</td>
+<td>5400.000000</td>
+<td>8249.000000</td>
+<td>3008750.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">DebtRatio</td>
+<td>120269.0</td>
+<td>26.598777</td>
+<td>424.446457</td>
+<td>0.0</td>
+<td>0.143388</td>
+<td>0.296023</td>
+<td>0.482559</td>
+<td>61106.5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">RevolvingUtilizationOfUnsecuredLines</td>
+<td>120269.0</td>
+<td>5.899873</td>
+<td>257.040685</td>
+<td>0.0</td>
+<td>0.035084</td>
+<td>0.177282</td>
+<td>0.579428</td>
+<td>50708.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfOpenCreditLinesAndLoans</td>
+<td>120269.0</td>
+<td>8.758475</td>
+<td>5.172835</td>
+<td>0.0</td>
+<td>5.000000</td>
+<td>8.000000</td>
+<td>11.000000</td>
+<td>58.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">NumberRealEstateLoansOrLines</td>
+<td>120269.0</td>
+<td>1.054519</td>
+<td>1.149273</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>1.000000</td>
+<td>2.000000</td>
+<td>54.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfTime30-59DaysPastDueNotWorse</td>
+<td>120269.0</td>
+<td>0.381769</td>
+<td>3.499234</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>98.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">NumberOfTime60-89DaysPastDueNotWorse</td>
+<td>120269.0</td>
+<td>0.187829</td>
+<td>3.447901</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>98.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfTimes90DaysLate</td>
+<td>120269.0</td>
+<td>0.211925</td>
+<td>3.465276</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>98.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<p>It looks like the statistics before and after dropping the missing values are quite similar, except for the variable <code>DebtRatio</code>, where we have substantially lower means and standard deviation. Let’s also have a look at the distribution of the variables for the rows that we have dropped</p>
+<div id="cell-22" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.595243Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.595039Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.624225Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.623686Z&quot;}" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df.loc[df.isna().<span class="bu">any</span>(axis<span class="op">=</span><span class="dv">1</span>)].describe().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">count</th>
+<th data-quarto-table-cell-role="th">mean</th>
+<th data-quarto-table-cell-role="th">std</th>
+<th data-quarto-table-cell-role="th">min</th>
+<th data-quarto-table-cell-role="th">25%</th>
+<th data-quarto-table-cell-role="th">50%</th>
+<th data-quarto-table-cell-role="th">75%</th>
+<th data-quarto-table-cell-role="th">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">SeriousDlqin2yrs</td>
+<td>29731.0</td>
+<td>0.056137</td>
+<td>0.230189</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">age</td>
+<td>29731.0</td>
+<td>56.362349</td>
+<td>15.438786</td>
+<td>21.0</td>
+<td>46.000000</td>
+<td>57.000000</td>
+<td>67.000000</td>
+<td>109.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfDependents</td>
+<td>25807.0</td>
+<td>0.316310</td>
+<td>0.809944</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>9.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">MonthlyIncome</td>
+<td>0.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">DebtRatio</td>
+<td>29731.0</td>
+<td>1673.396556</td>
+<td>4248.372895</td>
+<td>0.0</td>
+<td>123.000000</td>
+<td>1159.000000</td>
+<td>2382.000000</td>
+<td>329664.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">RevolvingUtilizationOfUnsecuredLines</td>
+<td>29731.0</td>
+<td>6.649421</td>
+<td>217.814854</td>
+<td>0.0</td>
+<td>0.016027</td>
+<td>0.081697</td>
+<td>0.440549</td>
+<td>22198.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfOpenCreditLinesAndLoans</td>
+<td>29731.0</td>
+<td>7.216071</td>
+<td>4.842720</td>
+<td>0.0</td>
+<td>4.000000</td>
+<td>6.000000</td>
+<td>10.000000</td>
+<td>45.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">NumberRealEstateLoansOrLines</td>
+<td>29731.0</td>
+<td>0.871481</td>
+<td>1.034291</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>23.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfTime30-59DaysPastDueNotWorse</td>
+<td>29731.0</td>
+<td>0.579866</td>
+<td>6.255361</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>98.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">NumberOfTime60-89DaysPastDueNotWorse</td>
+<td>29731.0</td>
+<td>0.452995</td>
+<td>6.242076</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>98.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfTimes90DaysLate</td>
+<td>29731.0</td>
+<td>0.484612</td>
+<td>6.250408</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>98.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<p>Again, the mean of the dropped rows seems to be substantially higher for the variable <code>DebtRatio</code> suggesting that the missing values are not missing entirely at random. Note, however, that the standard deviation is lower meaning that the dropped observations are more similar to each other in the <code>DebtRatio</code> dimension. From our data dictionary, we know that the <code>DebtRatio</code> is defined as</p>
+<div id="cell-24" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.626963Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.626745Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.633574Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.633107Z&quot;}" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>data_dict.loc[data_dict[<span class="st">'Variable Name'</span>] <span class="op">==</span> <span class="st">'DebtRatio'</span>].style.hide()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<div>
+<style type="text/css">
+</style>
+
+<table id="T_2eac3" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th id="T_2eac3_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Variable Name</th>
+<th id="T_2eac3_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Description</th>
+<th id="T_2eac3_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_2eac3_row0_col0" class="data row0 col0">DebtRatio</td>
+<td id="T_2eac3_row0_col1" class="data row0 col1">Monthly debt payments, alimony,living costs divided by monthy gross income</td>
+<td id="T_2eac3_row0_col2" class="data row0 col2">percentage</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>So, it seems that the <code>DebtRatio</code> is the ratio of the monthly debt payments to the monthly gross income. We actually have <code>MonthlyIncome</code> in our dataset!</p>
+<div id="cell-26" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.636222Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.636038Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:01.640446Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:01.640025Z&quot;}" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>data_dict.loc[data_dict[<span class="st">'Variable Name'</span>] <span class="op">==</span> <span class="st">'MonthlyIncome'</span>].style.hide()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<div>
+<style type="text/css">
+</style>
+
+<table id="T_c1b21" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th id="T_c1b21_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Variable Name</th>
+<th id="T_c1b21_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Description</th>
+<th id="T_c1b21_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_c1b21_row0_col0" class="data row0 col0">MonthlyIncome</td>
+<td id="T_c1b21_row0_col1" class="data row0 col1">Monthly income</td>
+<td id="T_c1b21_row0_col2" class="data row0 col2">real</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>It does not say whether this is in gross or net terms though. Nevertheless, let’s have a look at the relationship between the <code>DebtRatio</code> and the <code>MonthlyIncome</code></p>
+<div id="cell-28" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:01.642911Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:01.642734Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:02.328540Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:02.327878Z&quot;}" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> df.plot.scatter(x<span class="op">=</span><span class="st">'MonthlyIncome'</span>, y<span class="op">=</span><span class="st">'DebtRatio'</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>ax.set_xscale(<span class="st">'log'</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>ax.set_yscale(<span class="st">'log'</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'MonthlyIncome'</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'DebtRatio'</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'DebtRatio vs. MonthlyIncome'</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-16-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This looks rather odd. Note how there are a lot of monthly incomes that are close to zero. Furthermore, there is a weird gap going through the scatter points. We can look at the descriptive statistics of the rows with <code>MonthlyIncome</code> less than 100</p>
+<div id="cell-30" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:02.331501Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:02.331256Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:02.360854Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:02.360342Z&quot;}" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df.query(<span class="st">'MonthlyIncome &lt;= 100'</span>).describe().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">count</th>
+<th data-quarto-table-cell-role="th">mean</th>
+<th data-quarto-table-cell-role="th">std</th>
+<th data-quarto-table-cell-role="th">min</th>
+<th data-quarto-table-cell-role="th">25%</th>
+<th data-quarto-table-cell-role="th">50%</th>
+<th data-quarto-table-cell-role="th">75%</th>
+<th data-quarto-table-cell-role="th">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">SeriousDlqin2yrs</td>
+<td>2301.0</td>
+<td>0.036506</td>
+<td>0.187586</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">age</td>
+<td>2301.0</td>
+<td>47.740113</td>
+<td>16.199176</td>
+<td>21.0</td>
+<td>35.000000</td>
+<td>46.000000</td>
+<td>60.000000</td>
+<td>103.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfDependents</td>
+<td>2301.0</td>
+<td>0.778792</td>
+<td>1.192441</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>2.000000</td>
+<td>10.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">MonthlyIncome</td>
+<td>2301.0</td>
+<td>1.837027</td>
+<td>11.408271</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>1.000000</td>
+<td>100.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">DebtRatio</td>
+<td>2301.0</td>
+<td>1370.529300</td>
+<td>2752.843610</td>
+<td>0.0</td>
+<td>79.000000</td>
+<td>732.000000</td>
+<td>1850.500000</td>
+<td>61106.5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">RevolvingUtilizationOfUnsecuredLines</td>
+<td>2301.0</td>
+<td>3.604101</td>
+<td>125.553453</td>
+<td>0.0</td>
+<td>0.022243</td>
+<td>0.113149</td>
+<td>0.486629</td>
+<td>5893.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfOpenCreditLinesAndLoans</td>
+<td>2301.0</td>
+<td>7.171230</td>
+<td>4.869628</td>
+<td>0.0</td>
+<td>4.000000</td>
+<td>6.000000</td>
+<td>10.000000</td>
+<td>31.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">NumberRealEstateLoansOrLines</td>
+<td>2301.0</td>
+<td>0.742721</td>
+<td>0.904984</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>9.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfTime30-59DaysPastDueNotWorse</td>
+<td>2301.0</td>
+<td>0.549326</td>
+<td>6.132226</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>98.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">NumberOfTime60-89DaysPastDueNotWorse</td>
+<td>2301.0</td>
+<td>0.428509</td>
+<td>6.124274</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>98.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfTimes90DaysLate</td>
+<td>2301.0</td>
+<td>0.438505</td>
+<td>6.128357</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>98.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<p>These observations seem to have a higher <code>debtRatio</code> than the rest of the dataset but are less likely to default on their loans (the mean of <code>SeriousDlqin2yrs</code> is equal to the fraction of defaulting loans). Given that they have no income (or essentially no income), this seems rather odd and is likely due to an error during data entry/collection. Since there are only a small number of observations with <code>MonthlyIncome</code> less than 100, we can probably drop them. Let’s look at the same figure for <code>MonthlyIncome</code> greater than 100</p>
+<div id="cell-32" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:02.363678Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:02.363480Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:03.273551Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:03.272639Z&quot;}" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> df.query(<span class="st">'MonthlyIncome &gt; 100'</span>).plot.scatter(x<span class="op">=</span><span class="st">'MonthlyIncome'</span>, y<span class="op">=</span><span class="st">'DebtRatio'</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>ax.set_xscale(<span class="st">'log'</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>ax.set_yscale(<span class="st">'log'</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>ax.axvline(<span class="dv">10</span><span class="op">**</span><span class="dv">3</span>, color<span class="op">=</span><span class="st">'black'</span>, linestyle<span class="op">=</span><span class="st">':'</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">10</span><span class="op">**</span>(<span class="op">-</span><span class="dv">3</span>), color<span class="op">=</span><span class="st">'black'</span>, linestyle<span class="op">=</span><span class="st">':'</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>ax.plot([<span class="dv">10</span>, <span class="dv">10</span><span class="op">**</span><span class="dv">5</span>], [<span class="dv">10</span><span class="op">**</span>(<span class="op">-</span><span class="dv">1</span>), <span class="dv">10</span><span class="op">**</span>(<span class="op">-</span><span class="dv">5</span>)], color<span class="op">=</span><span class="st">'black'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'MonthlyIncome'</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'DebtRatio'</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'DebtRatio vs. MonthlyIncome'</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-18-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This looks better but note how the scatter points below the gap seem to line up with the line <span class="math inline">\(\frac{1}{\text{MonthlyIncome}}\)</span>. Thus, there seems to be another potential data entry/collection error since the debt in the raw data has likely been just set to <span class="math inline">\(1\)</span> for these observations. If this was a real dataset, we would need to investigate this further and maybe talk to the people who have sent us the data. However, given that this is just an example, we leave it as is.</p>
+<p>Let’s also have a look at the distribution of <code>DebtRatio</code> variable</p>
+<div id="cell-34" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:03.276701Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:03.276422Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:07.308198Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:07.307557Z&quot;}" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'DebtRatio'</span>].plot.hist(bins<span class="op">=</span><span class="dv">1000</span>, ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>df.dropna()[<span class="st">'DebtRatio'</span>].plot.hist(bins<span class="op">=</span><span class="dv">1000</span>, ax<span class="op">=</span>ax[<span class="dv">1</span>])</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>df.loc[df.isna().<span class="bu">any</span>(axis<span class="op">=</span><span class="dv">1</span>), <span class="st">'DebtRatio'</span>].plot.hist(bins<span class="op">=</span><span class="dv">1000</span>, ax<span class="op">=</span>ax[<span class="dv">2</span>])</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xscale(<span class="st">'log'</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_xscale(<span class="st">'log'</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].set_xscale(<span class="st">'log'</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">'DebtRatio (Whole Dataset)'</span>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">'DebtRatio (Rows with Missing Values Dropped)'</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].set_title(<span class="st">'DebtRatio (Dropped Rows)'</span>)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-19-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Where we can again see the high <code>DebtRatio</code> values for the rows with missing values. We can also have a look at the distribution of all the variables in the dataset</p>
+<div id="cell-36" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:07.310909Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:07.310705Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.634715Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.634072Z&quot;}" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(df.shape[<span class="dv">1</span>], <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">20</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ii, col <span class="kw">in</span> <span class="bu">enumerate</span>(df.columns):</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot the distribution of the variable for the whole dataset, the dataset with missing values dropped, and the dropped rows</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="kw">in</span> (<span class="st">'SeriousDlqin2yrs'</span>, <span class="st">'age'</span>, <span class="st">'NumberOfTime30-59DaysPastDueNotWorse'</span>, <span class="st">'NumberOfOpenCreditLinesAndLoans'</span>, <span class="st">'NumberOfTimes90DaysLate'</span>, <span class="st">'NumberRealEstateLoansOrLines'</span>, <span class="st">'NumberOfTime60-89DaysPastDueNotWorse'</span>, <span class="st">'NumberOfDependents'</span>): </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Use a bar plot for discrete variables</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>        df[col].value_counts(normalize<span class="op">=</span><span class="va">True</span>).sort_index().plot.bar(ax<span class="op">=</span>ax[ii,<span class="dv">0</span>])</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>        df.dropna()[col].value_counts(normalize<span class="op">=</span><span class="va">True</span>).sort_index().plot.bar(ax<span class="op">=</span>ax[ii,<span class="dv">1</span>])</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>        df.loc[df.isna().<span class="bu">any</span>(axis<span class="op">=</span><span class="dv">1</span>), col].value_counts(normalize<span class="op">=</span><span class="va">True</span>).sort_index().plot.bar(ax<span class="op">=</span>ax[ii,<span class="dv">2</span>])</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Set the y-axis label</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        ax[ii,<span class="dv">0</span>].set_ylabel(<span class="st">'Fraction'</span>)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        ax[ii,<span class="dv">1</span>].set_ylabel(<span class="st">''</span>)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>        ax[ii,<span class="dv">2</span>].set_ylabel(<span class="st">''</span>)</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Use a histogram for continuous variables</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>        df[col].plot.hist(bins<span class="op">=</span><span class="dv">1000</span>, ax<span class="op">=</span>ax[ii,<span class="dv">0</span>])</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>        df.dropna()[col].plot.hist(bins<span class="op">=</span><span class="dv">1000</span>, ax<span class="op">=</span>ax[ii,<span class="dv">1</span>])</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>        df.loc[df.isna().<span class="bu">any</span>(axis<span class="op">=</span><span class="dv">1</span>), col].plot.hist(bins<span class="op">=</span><span class="dv">1000</span>, ax<span class="op">=</span>ax[ii,<span class="dv">2</span>])</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Set the x-axis to a logarithmic scale for the continuous variables</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>        ax[ii,<span class="dv">0</span>].set_xscale(<span class="st">'log'</span>)</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>        ax[ii,<span class="dv">1</span>].set_xscale(<span class="st">'log'</span>)</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>        ax[ii,<span class="dv">2</span>].set_xscale(<span class="st">'log'</span>)</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Set the x-axis label</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>        ax[ii,<span class="dv">0</span>].set_xlabel(col)</span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>        ax[ii,<span class="dv">1</span>].set_xlabel(col)</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>        ax[ii,<span class="dv">2</span>].set_xlabel(col)</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Set the y-axis label</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>        ax[ii,<span class="dv">0</span>].set_ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>        ax[ii,<span class="dv">1</span>].set_ylabel(<span class="st">''</span>)</span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>        ax[ii,<span class="dv">2</span>].set_ylabel(<span class="st">''</span>)</span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>,<span class="dv">0</span>].set_title(<span class="st">'Whole Dataset'</span>)</span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>,<span class="dv">1</span>].set_title(<span class="st">'Rows with Missing Values Dropped'</span>)</span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>,<span class="dv">2</span>].set_title(<span class="st">'Dropped Rows'</span>)</span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-20-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This shows another potential issue with our dataset. Checkout the variable <code>NumberOfTime30-59DaysPastDueNotWorse</code>. It seems that there are a some observations with values greater than 90. This seems rather odd. Let’s have a look at the data dictionary</p>
+<div id="cell-38" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.638164Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.637950Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.643938Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.643398Z&quot;}" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>data_dict.loc[data_dict[<span class="st">'Variable Name'</span>].isin([<span class="st">'NumberOfTime30-59DaysPastDueNotWorse'</span>, <span class="st">'NumberOfTime60-89DaysPastDueNotWorse'</span>, <span class="st">'NumberOfTimes90DaysLate'</span>])].style.hide()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<div>
+<style type="text/css">
+</style>
+
+<table id="T_65a94" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th id="T_65a94_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Variable Name</th>
+<th id="T_65a94_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Description</th>
+<th id="T_65a94_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_65a94_row0_col0" class="data row0 col0">NumberOfTime30-59DaysPastDueNotWorse</td>
+<td id="T_65a94_row0_col1" class="data row0 col1">Number of times borrower has been 30-59 days past due but no worse in the last 2 years.</td>
+<td id="T_65a94_row0_col2" class="data row0 col2">integer</td>
+</tr>
+<tr class="even">
+<td id="T_65a94_row1_col0" class="data row1 col0">NumberOfTimes90DaysLate</td>
+<td id="T_65a94_row1_col1" class="data row1 col1">Number of times borrower has been 90 days or more past due.</td>
+<td id="T_65a94_row1_col2" class="data row1 col2">integer</td>
+</tr>
+<tr class="odd">
+<td id="T_65a94_row2_col0" class="data row2 col0">NumberOfTime60-89DaysPastDueNotWorse</td>
+<td id="T_65a94_row2_col1" class="data row2 col1">Number of times borrower has been 60-89 days past due but no worse in the last 2 years.</td>
+<td id="T_65a94_row2_col2" class="data row2 col2">integer</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>The data dictionary does not mention anything about values above 90. These values may have a special meaning such as being a flag for missing values. Let’s have a look at the distribution of the target variable for the rows with values greater than 90</p>
+<div id="cell-40" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.646683Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.646480Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.651477Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.650866Z&quot;}" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df.loc[df[<span class="st">'NumberOfTime30-59DaysPastDueNotWorse'</span>] <span class="op">&gt;</span> <span class="dv">90</span>, <span class="st">'SeriousDlqin2yrs'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>SeriousDlqin2yrs
+1    147
+0    122
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+<div id="cell-41" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.654070Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.653864Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.658630Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.658121Z&quot;}" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df.loc[df[<span class="st">'NumberOfTime60-89DaysPastDueNotWorse'</span>] <span class="op">&gt;</span> <span class="dv">90</span>, <span class="st">'SeriousDlqin2yrs'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>SeriousDlqin2yrs
+1    147
+0    122
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+<div id="cell-42" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.661211Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.660988Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.665830Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.665264Z&quot;}" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df.loc[df[<span class="st">'NumberOfTimes90DaysLate'</span>] <span class="op">&gt;</span> <span class="dv">90</span>, <span class="st">'SeriousDlqin2yrs'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>SeriousDlqin2yrs
+1    147
+0    122
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+<div id="cell-43" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.668348Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.668145Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.673683Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.673136Z&quot;}" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df.loc[(df[<span class="st">'NumberOfTimes90DaysLate'</span>] <span class="op">&gt;</span> <span class="dv">90</span>) <span class="op">&amp;</span> (df[<span class="st">'NumberOfTime60-89DaysPastDueNotWorse'</span>] <span class="op">&gt;</span> <span class="dv">90</span>) <span class="op">&amp;</span> (df[<span class="st">'NumberOfTime30-59DaysPastDueNotWorse'</span>] <span class="op">&gt;</span> <span class="dv">90</span>), <span class="st">'SeriousDlqin2yrs'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>SeriousDlqin2yrs
+1    147
+0    122
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+<p>There seems to be a very high number of defaults for these observations (more than half), which makes sense given the meaning of these variables. Furthermore, the observations with above 90 in one category have it above 90 in the other categories as well. Thus, this might not be a data entry/collection error and these are just borrowers who commonly fail to make loan payments.</p>
+<p>Given that <span class="citation" data-cites="AlonsoRobisco2022">Alonso Robisco and Carbó Martínez (<a href="references.html#ref-AlonsoRobisco2022" role="doc-biblioref">2022</a>)</span> seem to be dropping the missing values, let’s do the same for our dataset</p>
+<div id="cell-45" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.676637Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.676429Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.683532Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.683035Z&quot;}" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>and let’s also drop the rows with <code>MonthlyIncome</code> less than (or equal) 100</p>
+<div id="cell-47" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.686310Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.686110Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.696105Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.695599Z&quot;}" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.query(<span class="st">'MonthlyIncome &gt; 100'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>to eliminate some of the potential data entry/collection errors.</p>
+<p>Then double-check that we have no missing values left</p>
+<div id="cell-49" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.698905Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.698714Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.704112Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.703517Z&quot;}" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>df.isna().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>SeriousDlqin2yrs                        0
+age                                     0
+NumberOfDependents                      0
+MonthlyIncome                           0
+DebtRatio                               0
+RevolvingUtilizationOfUnsecuredLines    0
+NumberOfOpenCreditLinesAndLoans         0
+NumberRealEstateLoansOrLines            0
+NumberOfTime30-59DaysPastDueNotWorse    0
+NumberOfTime60-89DaysPastDueNotWorse    0
+NumberOfTimes90DaysLate                 0
+dtype: int64</code></pre>
+</div>
+</div>
+<p>or, alternatively,</p>
+<div id="cell-51" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.706905Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.706691Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.713988Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.713491Z&quot;}" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Index: 117968 entries, 0 to 149999
+Data columns (total 11 columns):
+ #   Column                                Non-Null Count   Dtype  
+---  ------                                --------------   -----  
+ 0   SeriousDlqin2yrs                      117968 non-null  int64  
+ 1   age                                   117968 non-null  int64  
+ 2   NumberOfDependents                    117968 non-null  float64
+ 3   MonthlyIncome                         117968 non-null  float64
+ 4   DebtRatio                             117968 non-null  float64
+ 5   RevolvingUtilizationOfUnsecuredLines  117968 non-null  float64
+ 6   NumberOfOpenCreditLinesAndLoans       117968 non-null  int64  
+ 7   NumberRealEstateLoansOrLines          117968 non-null  int64  
+ 8   NumberOfTime30-59DaysPastDueNotWorse  117968 non-null  int64  
+ 9   NumberOfTime60-89DaysPastDueNotWorse  117968 non-null  int64  
+ 10  NumberOfTimes90DaysLate               117968 non-null  int64  
+dtypes: float64(4), int64(7)
+memory usage: 10.8 MB</code></pre>
+</div>
+</div>
+<p>All good! We should also check for duplicated rows with the <code>duplicated()</code> method</p>
+<div id="cell-53" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.716833Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.716643Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.750058Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.749577Z&quot;}" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df.loc[df.duplicated()]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">SeriousDlqin2yrs</th>
+<th data-quarto-table-cell-role="th">age</th>
+<th data-quarto-table-cell-role="th">NumberOfDependents</th>
+<th data-quarto-table-cell-role="th">MonthlyIncome</th>
+<th data-quarto-table-cell-role="th">DebtRatio</th>
+<th data-quarto-table-cell-role="th">RevolvingUtilizationOfUnsecuredLines</th>
+<th data-quarto-table-cell-role="th">NumberOfOpenCreditLinesAndLoans</th>
+<th data-quarto-table-cell-role="th">NumberRealEstateLoansOrLines</th>
+<th data-quarto-table-cell-role="th">NumberOfTime30-59DaysPastDueNotWorse</th>
+<th data-quarto-table-cell-role="th">NumberOfTime60-89DaysPastDueNotWorse</th>
+<th data-quarto-table-cell-role="th">NumberOfTimes90DaysLate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7920</td>
+<td>0</td>
+<td>22</td>
+<td>0.0</td>
+<td>820.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8840</td>
+<td>0</td>
+<td>23</td>
+<td>0.0</td>
+<td>820.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">15546</td>
+<td>0</td>
+<td>22</td>
+<td>0.0</td>
+<td>929.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17265</td>
+<td>0</td>
+<td>22</td>
+<td>0.0</td>
+<td>820.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">21190</td>
+<td>0</td>
+<td>22</td>
+<td>0.0</td>
+<td>820.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">143750</td>
+<td>0</td>
+<td>23</td>
+<td>0.0</td>
+<td>820.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">144153</td>
+<td>0</td>
+<td>28</td>
+<td>0.0</td>
+<td>2200.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">144922</td>
+<td>0</td>
+<td>40</td>
+<td>0.0</td>
+<td>3500.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">148419</td>
+<td>0</td>
+<td>22</td>
+<td>0.0</td>
+<td>1500.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">149993</td>
+<td>0</td>
+<td>22</td>
+<td>0.0</td>
+<td>820.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<p>72 rows × 11 columns</p>
+</div>
+</div>
+</div>
+</div>
+<p>and look at the statistics of the duplicated rows</p>
+<div id="cell-55" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.753020Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.752816Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.795783Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.795260Z&quot;}" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>df.loc[df.duplicated()].describe().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">count</th>
+<th data-quarto-table-cell-role="th">mean</th>
+<th data-quarto-table-cell-role="th">std</th>
+<th data-quarto-table-cell-role="th">min</th>
+<th data-quarto-table-cell-role="th">25%</th>
+<th data-quarto-table-cell-role="th">50%</th>
+<th data-quarto-table-cell-role="th">75%</th>
+<th data-quarto-table-cell-role="th">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">SeriousDlqin2yrs</td>
+<td>72.0</td>
+<td>0.013889</td>
+<td>0.117851</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">age</td>
+<td>72.0</td>
+<td>24.902778</td>
+<td>8.868618</td>
+<td>21.0</td>
+<td>22.0</td>
+<td>22.5</td>
+<td>24.0</td>
+<td>70.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfDependents</td>
+<td>72.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">MonthlyIncome</td>
+<td>72.0</td>
+<td>1031.527778</td>
+<td>542.007873</td>
+<td>764.0</td>
+<td>820.0</td>
+<td>820.0</td>
+<td>929.0</td>
+<td>3500.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">DebtRatio</td>
+<td>72.0</td>
+<td>0.017594</td>
+<td>0.104816</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.633374</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">RevolvingUtilizationOfUnsecuredLines</td>
+<td>72.0</td>
+<td>0.500000</td>
+<td>0.503509</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.5</td>
+<td>1.0</td>
+<td>1.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfOpenCreditLinesAndLoans</td>
+<td>72.0</td>
+<td>1.458333</td>
+<td>0.749413</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>2.0</td>
+<td>4.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">NumberRealEstateLoansOrLines</td>
+<td>72.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfTime30-59DaysPastDueNotWorse</td>
+<td>72.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">NumberOfTime60-89DaysPastDueNotWorse</td>
+<td>72.0</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">NumberOfTimes90DaysLate</td>
+<td>72.0</td>
+<td>0.013889</td>
+<td>0.117851</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<p>There are indeed 72 duplicated rows in the dataset. However, given the variables in our dataset, which are mostly discrete, the fact that monthly income seems to be generally rounded, it does not seem implausible that some rows might appear multiple times in the dataset, simply because some observations have the same values for all variables. Thus, we will keep the duplicated rows in the dataset.</p>
+</section>
+<section id="data-exploration" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="data-exploration"><span class="header-section-number">6.6</span> Data Exploration</h2>
+<p>Let’s start by looking at the distribution of the target variable <code>SeriousDlqin2yrs</code> in our preprocessed dataset</p>
+<div id="cell-57" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.798824Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.798586Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:22.857970Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:22.857106Z&quot;}" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>df.value_counts(<span class="st">"SeriousDlqin2yrs"</span>).plot.pie(autopct <span class="op">=</span> <span class="st">"</span><span class="sc">%.1f</span><span class="st">"</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">''</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-32-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We have already looked at some variables selectively. To do it more broadly, we can look at the pair plot of the dataset. A pair plot shows the pairwise relationships between the variables in our dataset. On the diagonal, we are plotting the kernel density estimate</p>
+<div id="cell-59" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:22.861166Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:22.860958Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:00:51.360824Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:00:51.359849Z&quot;}" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>sns.pairplot(df.sample(<span class="dv">1000</span>), hue<span class="op">=</span><span class="st">'SeriousDlqin2yrs'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-33-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Note that we are plotting all variables in different colors based on whether our target variable <code>SeriousDlqin2yrs</code> is <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>. Furthermore, since it is computationally quite demanding to create this plot, we have sampled only 1000 rows from the dataset. Since we have many variables, some of them with very skewed distributions, and also several discrete variables, it might make sense to look only at a subset</p>
+<div id="cell-61" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:00:51.368858Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:00:51.368568Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:28.169285Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:28.168339Z&quot;}" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>pp <span class="op">=</span> sns.pairplot(df[[<span class="st">'age'</span>, <span class="st">'MonthlyIncome'</span>, <span class="st">'DebtRatio'</span>, <span class="st">'SeriousDlqin2yrs'</span>]], hue<span class="op">=</span><span class="st">'SeriousDlqin2yrs'</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the x-axis and y-axis scales</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> pp.axes.flat:</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ax.get_xlabel() <span class="op">==</span> <span class="st">'MonthlyIncome'</span>:</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>        ax.<span class="bu">set</span>(xscale<span class="op">=</span><span class="st">"log"</span>)</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>        ax.set_xlim(<span class="dv">10</span><span class="op">**</span><span class="dv">1</span>, <span class="dv">10</span><span class="op">**</span><span class="dv">7</span>)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ax.get_ylabel() <span class="op">==</span> <span class="st">'MonthlyIncome'</span>:</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>        ax.<span class="bu">set</span>(yscale<span class="op">=</span><span class="st">"log"</span>)</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim(<span class="dv">10</span><span class="op">**</span><span class="dv">1</span>, <span class="dv">10</span><span class="op">**</span><span class="dv">7</span>)</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ax.get_xlabel() <span class="op">==</span> <span class="st">'DebtRatio'</span>:</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>        ax.<span class="bu">set</span>(xscale<span class="op">=</span><span class="st">"log"</span>)</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>        ax.set_xlim(<span class="dv">10</span><span class="op">**</span>(<span class="op">-</span><span class="dv">5</span>), <span class="dv">10</span><span class="op">**</span><span class="dv">3</span>)</span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ax.get_ylabel() <span class="op">==</span> <span class="st">'DebtRatio'</span>:</span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>        ax.<span class="bu">set</span>(yscale<span class="op">=</span><span class="st">"log"</span>)</span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim(<span class="dv">10</span><span class="op">**</span>(<span class="op">-</span><span class="dv">5</span>), <span class="dv">10</span><span class="op">**</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-34-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can continue with the analysis of our dataset by looking at the correlation matrix of the variables in the dataset. We will calculate both the Pearson correlation (linear relationship) and the Spearman correlation (monotonic relationship) and create a heatmap of both correlation matrices</p>
+<div id="cell-63" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:28.174576Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:28.174328Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:28.430578Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:28.430014Z&quot;}" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> df.corr() <span class="co"># Calculate the Pearson correlation (linear relationship)</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>cmap <span class="op">=</span> sns.diverging_palette(<span class="dv">10</span>, <span class="dv">255</span>, as_cmap<span class="op">=</span><span class="va">True</span>) <span class="co"># Create a color map</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> np.triu(np.ones_like(corr, dtype<span class="op">=</span><span class="bu">bool</span>)) <span class="co"># Create a mask to only show the lower triangle of the matrix</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>sns.heatmap(corr, cmap<span class="op">=</span>cmap, vmax<span class="op">=</span><span class="dv">1</span>, center<span class="op">=</span><span class="dv">0</span>, mask<span class="op">=</span>mask) <span class="co"># Create a heatmap of the correlation matrix (Note: vmax=1 makes sure that the color map goes up to 1 and center=0 are used to center the color map at 0)</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-35-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-64" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:28.433711Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:28.433485Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:28.742040Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:28.741555Z&quot;}" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> df.corr(<span class="st">'spearman'</span>) <span class="co"># Calculate the Spearman correlation (monotonic relationship)</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>cmap <span class="op">=</span> sns.diverging_palette(<span class="dv">10</span>, <span class="dv">255</span>, as_cmap<span class="op">=</span><span class="va">True</span>) <span class="co"># Create a color map</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> np.triu(np.ones_like(corr, dtype<span class="op">=</span><span class="bu">bool</span>)) <span class="co"># Create a mask to only show the lower triangle of the matrix</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>sns.heatmap(corr, cmap<span class="op">=</span>cmap, vmax<span class="op">=</span><span class="dv">1</span>, center<span class="op">=</span><span class="dv">0</span>, mask<span class="op">=</span>mask) <span class="co"># Create a heatmap of the correlation matrix (Note: vmax=1 makes sure that the color map goes up to 1 and center=0 are used to center the color map at 0)</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-36-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It seems that <code>age</code> is negatively correlated with default (<code>SeriousDlqin2yrs</code>) which we can also see in the kernel density estimate of the <code>age</code> variable</p>
+<div id="cell-66" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:28.744956Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:28.744755Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:29.211937Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:29.211055Z&quot;}" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>sns.kdeplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">'age'</span>, hue<span class="op">=</span><span class="st">'SeriousDlqin2yrs'</span>, cut<span class="op">=</span><span class="dv">0</span>, fill<span class="op">=</span><span class="va">True</span>, common_norm<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-37-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>but then <code>MonthlyIncome</code> is also negatively correlated with default and with <code>age</code>. Thus, likely the relationship between <code>age</code> and default is driven by <code>MonthlyIncome</code>.</p>
+<p>Furthermore, the variables <code>NumberOfTime30-59DaysPastDueNotWorse</code>, <code>NumberOfTime60-89DaysPastDueNotWorse</code>, and <code>NumberOfTimes90DaysLate</code> are highly correlated with each other and with the target variable <code>SeriousDlqin2yrs</code>. This is not surprising given that these variables are all related to the number of times a borrower has been past due on a loan payment. <code>RevolvingUtilizationOfUnsecuredLines</code> is also highly correlated with the target variable and with the number of times a borrower has been past due on a loan payment. This is also not surprising given that the <code>RevolvingUtilizationOfUnsecuredLines</code> is the ratio of the amount of money owed to the amount of credit available.</p>
+</section>
+<section id="implementation-of-loan-default-prediction-models" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="implementation-of-loan-default-prediction-models"><span class="header-section-number">6.7</span> Implementation of Loan Default Prediction Models</h2>
+<p>We have explored our dataset and are now ready to implement machine learning algorithms for loan default prediction. Let’s start by importing the required libraries</p>
+<div id="cell-68" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:29.215283Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:29.215017Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:29.606590Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:29.605809Z&quot;}" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> MinMaxScaler, StandardScaler</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> xgboost <span class="im">import</span> XGBClassifier</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neural_network <span class="im">import</span> MLPClassifier</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, accuracy_score, roc_auc_score, recall_score, precision_score, roc_curve</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> joblib <span class="im">import</span> dump, load</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="splitting-the-data-into-training-and-test-sets" class="level3" data-number="6.7.1">
+<h3 data-number="6.7.1" class="anchored" data-anchor-id="splitting-the-data-into-training-and-test-sets"><span class="header-section-number">6.7.1</span> Splitting the Data into Training and Test Sets</h3>
+<p>Before we can train a machine learning model, we need to split our dataset into a training set and a test set.</p>
+<div id="cell-70" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:29.610117Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:29.609771Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:29.615286Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:29.614648Z&quot;}" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop(<span class="st">'SeriousDlqin2yrs'</span>, axis<span class="op">=</span><span class="dv">1</span>) <span class="co"># All variables except `SeriousDlqin2yrs`</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'SeriousDlqin2yrs'</span>] <span class="co"># Only SeriousDlqin2yrs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We follow <span class="citation" data-cites="AlonsoRobisco2022">Alonso Robisco and Carbó Martínez (<a href="references.html#ref-AlonsoRobisco2022" role="doc-biblioref">2022</a>)</span> and use 80% of the data for training and 20% for testing. We will also set the <code>stratify</code> argument to <code>y</code> to make sure that the distribution of the target variable is the same in the training and test sets. Otherwise, we might randomly not have any defaulted loans in the test set, which would make it impossible to correctly evaluate our model.</p>
+<div id="cell-72" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:29.618162Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:29.617914Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:29.653831Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:29.653027Z&quot;}" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, stratify<span class="op">=</span>y, test_size <span class="op">=</span> <span class="fl">0.2</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="scaling-features" class="level3" data-number="6.7.2">
+<h3 data-number="6.7.2" class="anchored" data-anchor-id="scaling-features"><span class="header-section-number">6.7.2</span> Scaling Features</h3>
+<p>To improve the performance of our machine learning model, we should scale the features. This is especially important for models that are sensitive to the scale of the features. We will use the <code>MinMaxScaler</code> class from the <code>sklearn.preprocessing</code> module to scale the features. The <code>MinMaxScaler</code> class scales the features so that they have a minimum of 0 and a maximum of 1.</p>
+<div id="cell-74" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:29.657236Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:29.656987Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:29.675835Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:29.675132Z&quot;}" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> scale_features(scaler, df, col_names, only_transform<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract the features we want to scale</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    features <span class="op">=</span> df[col_names] </span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fit the scaler to the features and transform them</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> only_transform:</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> scaler.transform(features.values)</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> scaler.fit_transform(features.values)</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Replace the original features with the scaled features</span></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>    df[col_names] <span class="op">=</span> features</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> MinMaxScaler() </span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>scale_features(scaler, X_train, X_train.columns)</span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>scale_features(scaler, X_test, X_test.columns, only_transform<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that we have very skewed distributions for some variables in our dataset. This might make the <code>MinMaxScaler</code> less effective and there might be gains from more carefully scaling different variables. However, for the sake of simplicity, we will use the <code>MinMaxScaler</code> for all variables.</p>
+<p>We have fully preprocessed and explored our dataset. The next step will be our main task: the implementation of machine learning algorithms for loan default prediction.</p>
+</section>
+<section id="evaluation-criertia" class="level3" data-number="6.7.3">
+<h3 data-number="6.7.3" class="anchored" data-anchor-id="evaluation-criertia"><span class="header-section-number">6.7.3</span> Evaluation Criertia</h3>
+<p>We will evaluate the performance of our machine-learning models using the following metrics:</p>
+<ul>
+<li><strong>Accuracy</strong>: The proportion of correctly classified instances</li>
+<li><strong>Precision</strong>: The proportion of true positive predictions among all positive predictions</li>
+<li><strong>Recall</strong>: The proportion of true positive predictions among all actual positive instances</li>
+<li><strong>ROC AUC</strong>: The area under the receiver operating characteristic curve</li>
+</ul>
+<p>Furthermore, we will plot the ROC curve for each model to visualize the trade-off between the true positive rate and the false positive rate. To make the evaluation of our models more convenient, we will define a function that computes these metrics and plots the ROC curve for a given model</p>
+<div id="cell-76" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:29.679259Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:29.679000Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:29.685470Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:29.684883Z&quot;}" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> evaluate_model(clf, X_train, y_train, X_test, y_test, label<span class="op">=</span><span class="st">''</span>):</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute predictions and probabilities for tha training and test set</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    y_pred_train <span class="op">=</span> clf.predict(X_train)</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    y_proba_train <span class="op">=</span> clf.predict_proba(X_train)</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    y_pred_test <span class="op">=</span> clf.predict(X_test)</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    y_proba_test <span class="op">=</span> clf.predict_proba(X_test)</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Print accuracy measures</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"--------------------------------------------------------------"</span>)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Metrics: </span><span class="sc">{</span>label<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"--------------------------------------------------------------"</span>)</span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Accuracy (Train): </span><span class="sc">{</span>accuracy_score(y_train, y_pred_train)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Precision (Train): </span><span class="sc">{</span>precision_score(y_train, y_pred_train)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Recall (Train): </span><span class="sc">{</span>recall_score(y_train, y_pred_train)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"ROC AUC (Train): </span><span class="sc">{</span>roc_auc_score(y_train, y_proba_train[:, <span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"--------------------------------------------------------------"</span>)</span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Accuracy (Test): </span><span class="sc">{</span>accuracy_score(y_test, y_pred_test)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Precision (Test): </span><span class="sc">{</span>precision_score(y_test, y_pred_test)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Recall (Test): </span><span class="sc">{</span>recall_score(y_test, y_pred_test)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"ROC AUC (Test): </span><span class="sc">{</span>roc_auc_score(y_test, y_proba_test[:, <span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"--------------------------------------------------------------"</span>)</span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute the ROC curve</span></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a>    fpr_train, tpr_train, thresholds_train <span class="op">=</span> roc_curve(y_train, y_proba_train[:, <span class="dv">1</span>])</span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a>    fpr_test, tpr_test, thresholds_test <span class="op">=</span> roc_curve(y_test, y_proba_test[:, <span class="dv">1</span>])</span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot the ROC curve</span></span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a>    plt.plot(fpr_train, tpr_train, label <span class="op">=</span> <span class="st">"Train"</span>) </span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a>    plt.plot(fpr_test, tpr_test, label <span class="op">=</span> <span class="st">"Test"</span>)</span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a>    plt.plot([<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">1</span>], linestyle<span class="op">=</span><span class="st">'--'</span>, color<span class="op">=</span><span class="st">'grey'</span>)</span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">'False Positive Rate (FPR)'</span>)</span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">'True Positive Rate (TPR)'</span>)</span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f'ROC Curve: </span><span class="sc">{</span>label<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>While we compute all of these metrics, we will focus on the ROC AUC score as our main evaluation metric.</p>
+</section>
+<section id="logistic-regression" class="level3" data-number="6.7.4">
+<h3 data-number="6.7.4" class="anchored" data-anchor-id="logistic-regression"><span class="header-section-number">6.7.4</span> Logistic Regression</h3>
+<p>Let’s start with a simple logistic regression model. We will use the <code>LogisticRegression</code> class from the <code>sklearn.linear_model</code> module to train a logistic regression model. We will use the <code>lbfgs</code> solver and set the <code>max_iter</code> parameter to 5000 to make sure that the optimization algorithm converges. We will also set the <code>penalty</code> parameter to <code>None</code> to avoid regularization.</p>
+<div id="cell-78" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:29.688366Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:29.688121Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:30.451650Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:30.450908Z&quot;}" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>clf_logistic <span class="op">=</span> LogisticRegression(penalty <span class="op">=</span> <span class="va">None</span>, solver <span class="op">=</span> <span class="st">'lbfgs'</span>, max_iter <span class="op">=</span> <span class="dv">5000</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s evaluate the performance of the logistic regression model</p>
+<div id="cell-80" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:30.455399Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:30.455156Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:30.717942Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:30.717447Z&quot;}" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>evaluate_model(clf_logistic, X_train, y_train, X_test, y_test, label <span class="op">=</span> <span class="st">'Logistic Regression'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>--------------------------------------------------------------
+Metrics: Logistic Regression
+--------------------------------------------------------------
+Accuracy (Train): 0.9306588679085341
+Precision (Train): 0.5787234042553191
+Recall (Train): 0.041100030220610456
+ROC AUC (Train): 0.6936171984517471
+--------------------------------------------------------------
+Accuracy (Test): 0.9302788844621513
+Precision (Test): 0.5490196078431373
+Recall (Test): 0.033836858006042296
+ROC AUC (Test): 0.6926238627317243
+--------------------------------------------------------------</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-44-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The model does not perform as well as what we have seen in previous lectures. The ROC AUC score is only around 0.7. Note again that the accuracy score is quite high but this is due to the imbalanced nature of the dataset.</p>
+</section>
+<section id="decision-tree" class="level3" data-number="6.7.5">
+<h3 data-number="6.7.5" class="anchored" data-anchor-id="decision-tree"><span class="header-section-number">6.7.5</span> Decision Tree</h3>
+<p>Let’s now train a decision tree classifier. We will use the <code>DecisionTreeClassifier</code> class from the <code>sklearn.tree</code> module to train a decision tree classifier. We will set the <code>max_depth</code> parameter to 7 as in <span class="citation" data-cites="AlonsoRobisco2022">Alonso Robisco and Carbó Martínez (<a href="references.html#ref-AlonsoRobisco2022" role="doc-biblioref">2022</a>)</span> to avoid overfitting.</p>
+<div id="cell-82" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:30.720711Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:30.720514Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:30.922815Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:30.922135Z&quot;}" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>clf_tree <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">7</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, let’s evaluate the performance of the decision tree classifier</p>
+<div id="cell-84" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:30.926341Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:30.926099Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:31.166584Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:31.165843Z&quot;}" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>evaluate_model(clf_tree, X_train, y_train, X_test, y_test, label <span class="op">=</span> <span class="st">'Decision Tree'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>--------------------------------------------------------------
+Metrics: Decision Tree
+--------------------------------------------------------------
+Accuracy (Train): 0.936348994426431
+Precision (Train): 0.6407185628742516
+Recall (Train): 0.2101843457237836
+ROC AUC (Train): 0.8265896261153018
+--------------------------------------------------------------
+Accuracy (Test): 0.9323556836483852
+Precision (Test): 0.5529622980251346
+Recall (Test): 0.18610271903323264
+ROC AUC (Test): 0.8159823399376106
+--------------------------------------------------------------</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-46-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The decision tree classifier performs better than the logistic regression model with a ROC AUC score of around 0.77. This is not surprising given that decision trees are more flexible models that can capture non-linear relationships in the data.</p>
+</section>
+<section id="random-forest" class="level3" data-number="6.7.6">
+<h3 data-number="6.7.6" class="anchored" data-anchor-id="random-forest"><span class="header-section-number">6.7.6</span> Random Forest</h3>
+<p>Let’s now train a random forest classifier. We will use the <code>RandomForestClassifier</code> class from the <code>sklearn.ensemble</code> module to train a random forest classifier. We will set the <code>max_depth</code> parameter to 20 and the <code>n_estimators</code> parameter to 100 as in <span class="citation" data-cites="AlonsoRobisco2022">Alonso Robisco and Carbó Martínez (<a href="references.html#ref-AlonsoRobisco2022" role="doc-biblioref">2022</a>)</span>.</p>
+<div id="cell-86" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:31.169793Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:31.169527Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:42.459527Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:42.458844Z&quot;}" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>clf_forest <span class="op">=</span> RandomForestClassifier(max_depth<span class="op">=</span><span class="dv">20</span>, n_estimators <span class="op">=</span> <span class="dv">100</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, let’s evaluate the performance of the random forest classifier</p>
+<div id="cell-88" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:42.463818Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:42.463537Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:45.383475Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:45.382937Z&quot;}" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>evaluate_model(clf_forest, X_train, y_train, X_test, y_test, label <span class="op">=</span> <span class="st">'Random Forest'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>--------------------------------------------------------------
+Metrics: Random Forest
+--------------------------------------------------------------
+Accuracy (Train): 0.9755441117256871
+Precision (Train): 1.0
+Recall (Train): 0.6512541553339377
+ROC AUC (Train): 0.9948736572824639
+--------------------------------------------------------------
+Accuracy (Test): 0.9314232431974231
+Precision (Test): 0.5333333333333333
+Recall (Test): 0.17885196374622356
+ROC AUC (Test): 0.8402779803214324
+--------------------------------------------------------------</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-48-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is a good example of the dangers of not using a test set for the evaluation of a model. The random forest classifier performs very well on the training set with a ROC AUC score of close to 1.0. However, it performs much worse on the test set with a ROC AUC score of around 0.83. Nevertheless, the random forest classifier still outperforms the logistic regression and decision tree classifiers.</p>
+</section>
+<section id="xgboost" class="level3" data-number="6.7.7">
+<h3 data-number="6.7.7" class="anchored" data-anchor-id="xgboost"><span class="header-section-number">6.7.7</span> XGBoost</h3>
+<p>Let’s now train an XGBoost classifier. We will use the <code>XGBClassifier</code> class from the <code>xgboost</code> module to train an XGBoost classifier. We will set the <code>max_depth</code> parameter to 5 and the <code>n_estimators</code> parameter to 40 as in <span class="citation" data-cites="AlonsoRobisco2022">Alonso Robisco and Carbó Martínez (<a href="references.html#ref-AlonsoRobisco2022" role="doc-biblioref">2022</a>)</span>.</p>
+<div id="cell-90" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:45.386515Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:45.386297Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:45.471640Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:45.470857Z&quot;}" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>clf_xgb <span class="op">=</span> XGBClassifier(max_depth <span class="op">=</span> <span class="dv">5</span>, n_estimators <span class="op">=</span> <span class="dv">40</span>, random_state <span class="op">=</span> <span class="dv">0</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, let’s evaluate the performance of the XGBoost classifier</p>
+<div id="cell-92" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:45.475623Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:45.475312Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:45.824969Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:45.824439Z&quot;}" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>evaluate_model(clf_xgb, X_train, y_train, X_test, y_test, label <span class="op">=</span> <span class="st">'XGBoost'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>--------------------------------------------------------------
+Metrics: XGBoost
+--------------------------------------------------------------
+Accuracy (Train): 0.9389238561468201
+Precision (Train): 0.6947992700729927
+Recall (Train): 0.23012994862496222
+ROC AUC (Train): 0.8778826700467908
+--------------------------------------------------------------
+Accuracy (Test): 0.9330762058150377
+Precision (Test): 0.5701107011070111
+Recall (Test): 0.18670694864048337
+ROC AUC (Test): 0.8514290998289821
+--------------------------------------------------------------</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-50-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The XGBoost classifier performs quite well with an ROC AUC score of around 0.83. This is the best performance we have seen so far.</p>
+</section>
+<section id="neural-network" class="level3" data-number="6.7.8">
+<h3 data-number="6.7.8" class="anchored" data-anchor-id="neural-network"><span class="header-section-number">6.7.8</span> Neural Network</h3>
+<p>Finally, let’s train a neural network classifier. We will use the <code>MLPClassifier</code> class from the <code>sklearn.neural_network</code> module to train a neural network classifier. We will set the <code>activation</code> parameter to <code>relu</code>, the <code>solver</code> parameter to <code>adam</code>, and the <code>hidden_layer_sizes</code> parameter to <code>(300,200,100)</code> as in <span class="citation" data-cites="AlonsoRobisco2022">Alonso Robisco and Carbó Martínez (<a href="references.html#ref-AlonsoRobisco2022" role="doc-biblioref">2022</a>)</span>. We will also set the <code>random_state</code> parameter to 42 to make the results reproducible.</p>
+<div id="cell-94" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:45.827693Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:45.827473Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:45.830052Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:45.829522Z&quot;}" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co">#clf_nn = MLPClassifier(activation='relu', solver='adam', hidden_layer_sizes=(300,200,100), random_state=42, max_iter = 300, verbose=True).fit(X_train, y_train)</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="co">#dump(clf_nn, 'clf_nn.joblib') </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Since training the neural network classifier can take a long time, we have saved the trained model to a file called <code>clf_nn.joblib</code>. We can load the model from the file using the <code>load</code> function from the <code>joblib</code> module</p>
+<div id="cell-96" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:45.832745Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:45.832529Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:45.839505Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:45.838927Z&quot;}" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>clf_nn <span class="op">=</span> load(<span class="st">'clf_nn.joblib'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s check the loss curve of the neural network classifier</p>
+<div id="cell-98" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:45.842045Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:45.841851Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:45.977757Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:45.977231Z&quot;}" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>plt.plot(clf_nn.loss_curve_)</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Loss Curve"</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Iterations'</span>)</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Cost'</span>)</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-53-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Then, let’s evaluate the performance of the neural network classifier</p>
+<div id="cell-100" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:45.981149Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:45.980719Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:52.419409Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:52.418794Z&quot;}" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>evaluate_model(clf_nn, X_train, y_train, X_test, y_test, label <span class="op">=</span> <span class="st">'Neural Network'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>--------------------------------------------------------------
+Metrics: Neural Network
+--------------------------------------------------------------
+Accuracy (Train): 0.9465742683366182
+Precision (Train): 0.8080531665363565
+Recall (Train): 0.31233000906618313
+ROC AUC (Train): 0.8682599095370773
+--------------------------------------------------------------
+Accuracy (Test): 0.9282020852759176
+Precision (Test): 0.4694835680751174
+Recall (Test): 0.18126888217522658
+ROC AUC (Test): 0.7983637135044449
+--------------------------------------------------------------</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-54-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="overview-of-the-results" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="overview-of-the-results"><span class="header-section-number">6.8</span> Overview of the Results</h2>
+<p>Looking at all the models side by side, we can see that</p>
+<div id="cell-102" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:52.422057Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:52.421835Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:56.862526Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:56.861861Z&quot;}" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Model'</span>: [<span class="st">'Logistic Regression'</span>, <span class="st">'Decision Tree'</span>, <span class="st">'Random Forest'</span>, <span class="st">'XGBoost'</span>, <span class="st">'Neural Network'</span>],</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ROC AUC (Train)'</span>: [roc_auc_score(y_train, clf_logistic.predict_proba(X_train)[:, <span class="dv">1</span>]), </span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y_train, clf_tree.predict_proba(X_train)[:, <span class="dv">1</span>]), </span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y_train, clf_forest.predict_proba(X_train)[:, <span class="dv">1</span>]), </span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y_train, clf_xgb.predict_proba(X_train)[:, <span class="dv">1</span>]), </span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y_train, clf_nn.predict_proba(X_train)[:, <span class="dv">1</span>])],</span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ROC AUC (Test)'</span>: [roc_auc_score(y_test, clf_logistic.predict_proba(X_test)[:, <span class="dv">1</span>]), </span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y_test, clf_tree.predict_proba(X_test)[:, <span class="dv">1</span>]), </span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y_test, clf_forest.predict_proba(X_test)[:, <span class="dv">1</span>]), </span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y_test, clf_xgb.predict_proba(X_test)[:, <span class="dv">1</span>]), </span>
+<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y_test, clf_nn.predict_proba(X_test)[:, <span class="dv">1</span>])]</span>
+<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb68-14"><a href="#cb68-14" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="54">
+<div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Model</th>
+<th data-quarto-table-cell-role="th">ROC AUC (Train)</th>
+<th data-quarto-table-cell-role="th">ROC AUC (Test)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Logistic Regression</td>
+<td>0.693617</td>
+<td>0.692624</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Decision Tree</td>
+<td>0.826590</td>
+<td>0.815982</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Random Forest</td>
+<td>0.994874</td>
+<td>0.840278</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>XGBoost</td>
+<td>0.877883</td>
+<td>0.851429</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Neural Network</td>
+<td>0.868260</td>
+<td>0.798364</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<p>But can we do better? <span class="citation" data-cites="AlonsoRobisco2022">Alonso Robisco and Carbó Martínez (<a href="references.html#ref-AlonsoRobisco2022" role="doc-biblioref">2022</a>)</span> have also applied feature engineering to the dataset. Let’s see if we can improve the performance of our models by adding some additional features.</p>
+</section>
+<section id="feature-engineering-and-model-improvement" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="feature-engineering-and-model-improvement"><span class="header-section-number">6.9</span> Feature Engineering and Model Improvement</h2>
+<p>We will add the square of each feature to the dataset to create additional features as in <span class="citation" data-cites="AlonsoRobisco2022">Alonso Robisco and Carbó Martínez (<a href="references.html#ref-AlonsoRobisco2022" role="doc-biblioref">2022</a>)</span>. We will use the <code>assign</code> method of the <code>pandas</code> DataFrame to add the squared features to the dataset</p>
+<div id="cell-104" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:56.865853Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:56.865614Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:56.886565Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:56.885887Z&quot;}" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>X2 <span class="op">=</span> df.drop(<span class="st">'SeriousDlqin2yrs'</span>, axis<span class="op">=</span><span class="dv">1</span>) <span class="co"># All variables except `SeriousDlqin2yrs`</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>y2 <span class="op">=</span> df[<span class="st">'SeriousDlqin2yrs'</span>] <span class="co"># Only SeriousDlqin2yrs</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>X2 <span class="op">=</span> X2.assign(<span class="op">**</span>X2.<span class="bu">pow</span>(<span class="dv">2</span>).add_suffix(<span class="st">'_sq'</span>)) <span class="co"># Add the squared features to the dataset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, we will split the dataset into a training set and a test set and scale the features</p>
+<div id="cell-106" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:56.890037Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:56.889807Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:01:56.967502Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:01:56.966776Z&quot;}" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>X2_train, X2_test, y2_train, y2_test <span class="op">=</span> train_test_split(X2, y2, stratify<span class="op">=</span>y2, test_size <span class="op">=</span> <span class="fl">0.2</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> MinMaxScaler() </span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>scale_features(scaler, X2_train, X2_train.columns)</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>scale_features(scaler, X2_test, X2_test.columns, only_transform<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s train the models again with the new dataset and evaluate their performance</p>
+<div id="cell-108" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:01:56.971050Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:01:56.970773Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:02:21.922398Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:02:21.921653Z&quot;}" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>clf_logistic2 <span class="op">=</span> LogisticRegression(penalty <span class="op">=</span> <span class="va">None</span>, solver <span class="op">=</span> <span class="st">'lbfgs'</span>, max_iter <span class="op">=</span> <span class="dv">5000</span>).fit(X2_train, y2_train)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>clf_tree2 <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">7</span>).fit(X2_train, y2_train)</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>clf_forest2 <span class="op">=</span> RandomForestClassifier(max_depth<span class="op">=</span><span class="dv">20</span>, n_estimators <span class="op">=</span> <span class="dv">100</span>).fit(X2_train, y2_train)</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>clf_xgb2 <span class="op">=</span> XGBClassifier(max_depth <span class="op">=</span> <span class="dv">5</span>, n_estimators <span class="op">=</span> <span class="dv">40</span>, random_state <span class="op">=</span> <span class="dv">0</span>).fit(X2_train, y2_train)</span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="co">#clf_nn2 = MLPClassifier(activation='relu', solver='adam', hidden_layer_sizes=(300,200,100), random_state=42, max_iter = 300, verbose=True).fit(X2_train, y2_train)</span></span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a><span class="co">#dump(clf_nn2, 'clf_nn2.joblib') </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The neural network classifier takes a long time to train, so we will load the model from the file <code>clf_nn2.joblib</code> that we saved earlier</p>
+<div id="cell-110" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:02:21.926580Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:02:21.926236Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:02:21.935510Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:02:21.934711Z&quot;}" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>clf_nn2 <span class="op">=</span> load(<span class="st">'clf_nn2.joblib'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Furthermore, we will also add a LASSO penalty to the logistic regression model to see if we can improve its performance</p>
+<div id="cell-112" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:02:21.939100Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:02:21.938842Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:02:26.189729Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:02:26.189084Z&quot;}" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>clf_logistic_lasso2 <span class="op">=</span> LogisticRegression(penalty <span class="op">=</span> <span class="st">'l1'</span>, solver <span class="op">=</span> <span class="st">'liblinear'</span>).fit(X2_train, y2_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s evaluate the performance of the models with the new features in the dataset</p>
+<div id="cell-114" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:02:26.192758Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:02:26.192519Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:02:30.801295Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:02:30.800595Z&quot;}" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>results2 <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Model'</span>: [<span class="st">'Logistic Regression'</span>, <span class="st">'Decision Tree'</span>, <span class="st">'Random Forest'</span>, <span class="st">'XGBoost'</span>, <span class="st">'Neural Network'</span>, <span class="st">'Logistic LASSO'</span>],</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ROC AUC (Train)'</span>: [roc_auc_score(y2_train, clf_logistic2.predict_proba(X2_train)[:, <span class="dv">1</span>]), </span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y2_train, clf_tree2.predict_proba(X2_train)[:, <span class="dv">1</span>]), </span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y2_train, clf_forest2.predict_proba(X2_train)[:, <span class="dv">1</span>]), </span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y2_train, clf_xgb2.predict_proba(X2_train)[:, <span class="dv">1</span>]), </span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y2_train, clf_nn2.predict_proba(X2_train)[:, <span class="dv">1</span>]),</span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y2_train, clf_logistic_lasso2.predict_proba(X2_train)[:, <span class="dv">1</span>])</span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ROC AUC (Test)'</span>: [roc_auc_score(y2_test, clf_logistic2.predict_proba(X2_test)[:, <span class="dv">1</span>]), </span>
+<span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y2_test, clf_tree2.predict_proba(X2_test)[:, <span class="dv">1</span>]), </span>
+<span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y2_test, clf_forest2.predict_proba(X2_test)[:, <span class="dv">1</span>]), </span>
+<span id="cb74-13"><a href="#cb74-13" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y2_test, clf_xgb2.predict_proba(X2_test)[:, <span class="dv">1</span>]), </span>
+<span id="cb74-14"><a href="#cb74-14" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y2_test, clf_nn2.predict_proba(X2_test)[:, <span class="dv">1</span>]),</span>
+<span id="cb74-15"><a href="#cb74-15" aria-hidden="true" tabindex="-1"></a>                        roc_auc_score(y2_test, clf_logistic_lasso2.predict_proba(X2_test)[:, <span class="dv">1</span>])</span>
+<span id="cb74-16"><a href="#cb74-16" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb74-17"><a href="#cb74-17" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb74-18"><a href="#cb74-18" aria-hidden="true" tabindex="-1"></a>results2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="60">
+<div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Model</th>
+<th data-quarto-table-cell-role="th">ROC AUC (Train)</th>
+<th data-quarto-table-cell-role="th">ROC AUC (Test)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Logistic Regression</td>
+<td>0.810256</td>
+<td>0.813330</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Decision Tree</td>
+<td>0.826549</td>
+<td>0.816039</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Random Forest</td>
+<td>0.993775</td>
+<td>0.838637</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>XGBoost</td>
+<td>0.877883</td>
+<td>0.851429</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Neural Network</td>
+<td>0.871913</td>
+<td>0.794420</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>Logistic LASSO</td>
+<td>0.804400</td>
+<td>0.810694</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<p>The models with the new features in the dataset perform better than the models without the new features. The random forest classifier and the XGBoost classifier have the best performance with ROC AUC scores of around 0.84 and 0.85, respectively.</p>
+</section>
+<section id="feature-importance" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="feature-importance"><span class="header-section-number">6.10</span> Feature Importance</h2>
+<p>We can also look at the feature importance of the random forest classifier and the XGBoost classifier to see which features are most important for predicting loan defaults. We will use the <code>feature_importances_</code> attribute of the random forest classifier and the XGBoost classifier to get the feature importances</p>
+<div id="cell-116" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:02:30.804779Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:02:30.804447Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:02:30.818886Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:02:30.818262Z&quot;}" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>feature_importances_forest <span class="op">=</span> clf_forest2.feature_importances_</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>feature_importances_xgb <span class="op">=</span> clf_xgb2.feature_importances_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, we will create a bar plot of the feature importances for the random forest classifier and the XGBoost classifier</p>
+<div id="cell-118" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T22:02:30.822253Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T22:02:30.822021Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T22:02:31.155877Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T22:02:31.155340Z&quot;}" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>df_feature_importance_forest <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: clf_forest.feature_importances_})</span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>df_feature_importance_forest <span class="op">=</span> df_feature_importance_forest.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>df_feature_importance_xgb <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: clf_xgb.feature_importances_})</span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>df_feature_importance_xgb <span class="op">=</span> df_feature_importance_xgb.set_index(<span class="st">'Feature'</span>)</span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a>df_feature_importance_xgb <span class="op">=</span> df_feature_importance_xgb.loc[df_feature_importance_forest[<span class="st">'Feature'</span>], ]</span>
+<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Random Forest</span></span>
+<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].barh(df_feature_importance_forest[<span class="st">'Feature'</span>], df_feature_importance_forest[<span class="st">'Importance'</span>])</span>
+<span id="cb76-12"><a href="#cb76-12" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">'Random Forest'</span>)</span>
+<span id="cb76-13"><a href="#cb76-13" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlabel(<span class="st">'Feature Importance'</span>)</span>
+<span id="cb76-14"><a href="#cb76-14" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">'Feature'</span>)</span>
+<span id="cb76-15"><a href="#cb76-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-16"><a href="#cb76-16" aria-hidden="true" tabindex="-1"></a><span class="co"># XGBoost</span></span>
+<span id="cb76-17"><a href="#cb76-17" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].barh(df_feature_importance_forest[<span class="st">'Feature'</span>], df_feature_importance_xgb[<span class="st">'Importance'</span>])</span>
+<span id="cb76-18"><a href="#cb76-18" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">'XGBoost'</span>)</span>
+<span id="cb76-19"><a href="#cb76-19" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_xlabel(<span class="st">'Feature Importance'</span>)</span>
+<span id="cb76-20"><a href="#cb76-20" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_ylabel(<span class="st">'Feature'</span>)</span>
+<span id="cb76-21"><a href="#cb76-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-22"><a href="#cb76-22" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span>
+<span id="cb76-23"><a href="#cb76-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="applicationI_files/figure-html/notebooks-application_loan_default-cell-63-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="conclusions" class="level2" data-number="6.11">
+<h2 data-number="6.11" class="anchored" data-anchor-id="conclusions"><span class="header-section-number">6.11</span> Conclusions</h2>
+<p>We have successfully implemented machine learning algorithms for loan default prediction. We have explored the dataset, preprocessed the data, trained several machine learning models, and evaluated their performance. We have also applied feature engineering to the dataset and improved the performance of the models. The random forest classifier and the XGBoost classifier have the best performance with ROC AUC scores of around 0.84 and 0.85, respectively. We have also looked at the feature importance of the random forest classifier and the XGBoost classifier to see which features are most important for predicting loan defaults.</p>
+</section>
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-AlonsoRobisco2022" class="csl-entry" role="listitem">
+Alonso Robisco, Andrés, and José Manuel Carbó Martínez. 2022. <span>“<span class="nocase">Measuring the model risk-adjusted performance of machine learning algorithms in credit default prediction</span>.”</span> <em>Financial Innovation</em> 8 (1). <a href="https://doi.org/10.1186/s40854-022-00366-1">https://doi.org/10.1186/s40854-022-00366-1</a>.
+</div>
+</div>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./additional.html" class="pagination-link" aria-label="Additional Methods">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Additional Methods</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./applicationII.html" class="pagination-link" aria-label="House Price Prediction">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">House Price Prediction</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

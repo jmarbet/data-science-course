@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data Science - 1&nbsp; Introduction</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./basics.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Overview and Methods</a></li><li class="breadcrumb-item"><a href="./intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Data Science</a> 
+        <div class="sidebar-tools-main">
+    <a href="./Data-Science.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About this Course</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Overview and Methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Basic Concepts</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./decisiontrees.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Decision Trees</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./neuralnetworks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Neural Networks</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./additional.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Additional Methods</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Applications</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applicationI.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Loan Default Prediction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applicationII.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">House Price Prediction</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#taking-advantage-of-machine-learning-in-banking-supervision" id="toc-taking-advantage-of-machine-learning-in-banking-supervision" class="nav-link active" data-scroll-target="#taking-advantage-of-machine-learning-in-banking-supervision"><span class="header-section-number">1.1</span> Taking Advantage of Machine Learning in Banking Supervision</a></li>
+  <li><a href="#what-is-machine-learning" id="toc-what-is-machine-learning" class="nav-link" data-scroll-target="#what-is-machine-learning"><span class="header-section-number">1.2</span> What Is Machine Learning?</a>
+  <ul class="collapse">
+  <li><a href="#sec-definition" id="toc-sec-definition" class="nav-link" data-scroll-target="#sec-definition"><span class="header-section-number">1.2.1</span> Definition</a></li>
+  <li><a href="#relation-to-statistics-and-econometrics" id="toc-relation-to-statistics-and-econometrics" class="nav-link" data-scroll-target="#relation-to-statistics-and-econometrics"><span class="header-section-number">1.2.2</span> Relation to Statistics and Econometrics</a></li>
+  <li><a href="#artificial-intelligence-vs.-machine-learning-vs.-deep-learning" id="toc-artificial-intelligence-vs.-machine-learning-vs.-deep-learning" class="nav-link" data-scroll-target="#artificial-intelligence-vs.-machine-learning-vs.-deep-learning"><span class="header-section-number">1.2.3</span> Artificial Intelligence vs.&nbsp;Machine Learning vs.&nbsp;Deep Learning</a></li>
+  </ul></li>
+  <li><a href="#why-has-machine-learning-become-popular-only-recently" id="toc-why-has-machine-learning-become-popular-only-recently" class="nav-link" data-scroll-target="#why-has-machine-learning-become-popular-only-recently"><span class="header-section-number">1.3</span> Why Has Machine Learning Become Popular Only Recently?</a></li>
+  <li><a href="#types-of-learning" id="toc-types-of-learning" class="nav-link" data-scroll-target="#types-of-learning"><span class="header-section-number">1.4</span> Types of Learning</a>
+  <ul class="collapse">
+  <li><a href="#supervised-learning" id="toc-supervised-learning" class="nav-link" data-scroll-target="#supervised-learning"><span class="header-section-number">1.4.1</span> Supervised Learning</a></li>
+  <li><a href="#unsupervised-learning" id="toc-unsupervised-learning" class="nav-link" data-scroll-target="#unsupervised-learning"><span class="header-section-number">1.4.2</span> Unsupervised Learning</a></li>
+  <li><a href="#reinforcement-learning" id="toc-reinforcement-learning" class="nav-link" data-scroll-target="#reinforcement-learning"><span class="header-section-number">1.4.3</span> Reinforcement Learning</a></li>
+  </ul></li>
+  <li><a href="#popular-practice-datasets" id="toc-popular-practice-datasets" class="nav-link" data-scroll-target="#popular-practice-datasets"><span class="header-section-number">1.5</span> Popular Practice Datasets</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Overview and Methods</a></li><li class="breadcrumb-item"><a href="./intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The hype around <strong>artificial intelligence</strong> (AI) reached new highs with the release of OpenAI’s ChatGPT in late 2022. These drastic improvements in artificial intelligence have been fueled by <strong>machine learning</strong> (ML) methods that have become popular in recent years and have a <strong>wide variety of applications</strong> such as, for example,</p>
+<ul>
+<li>Computer vision,</li>
+<li>Speech recognition,</li>
+<li>Data mining,</li>
+</ul>
+<p>and many more. These tools also have <strong>many potential applications in economics and finance</strong> and can be invaluable in extracting information from the evergrowing amounts of data available. As current (or future) Banco de España employees, you are in a unique position to work with large datasets that are often not available to the general public. Therefore, you have a unique <strong>opportunity to apply these methods</strong> to a wide range of unexplored problems.</p>
+<p>The field can be very technical, but <strong>barriers to entry are not as high as they may seem</strong>. This course aims to provide you with the tools to apply machine learning methods to problems in economics and finance.</p>
+<section id="taking-advantage-of-machine-learning-in-banking-supervision" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="taking-advantage-of-machine-learning-in-banking-supervision"><span class="header-section-number">1.1</span> Taking Advantage of Machine Learning in Banking Supervision</h2>
+<div id="fig-go-board" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-go-board-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Figures/go.jpg" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-go-board-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Go board (Source: <a href="https://commons.wikimedia.org/wiki/File:FloorGoban.JPG">Wikimedia</a>)
+</figcaption>
+</figure>
+</div>
+<p>You might have heard of some of the well-known <strong>advances in the field of AI</strong> from recent years such as</p>
+<ul>
+<li><a href="https://deepmind.google/technologies/alphago/">DeepMind’s AlphaGo</a> can beat the best human Go players</li>
+<li><a href="https://openai.com/chatgpt">OpenAI’s ChatGPT</a> responds to complex text prompts</li>
+<li><a href="https://www.midjourney.com/">Midjourney</a>, <a href="https://openai.com/dall-e-3">DALL-E</a>, and <a href="https://stability.ai/news/stable-diffusion-3">Stable Diffusion</a> generate images from text</li>
+<li>…</li>
+</ul>
+<p>While these examples are impressive, you might wonder how these methods can help you in your work. There is a wide range of potential applications. Machine learning methods have been used <strong>in practice</strong> to</p>
+<ul>
+<li><em>Predict</em> loan or firm defaults,</li>
+<li><em>Detect</em> fraud (e.g., credit card fraud, or money laundering),</li>
+<li><em>Interpret</em> large quantities of data, or</li>
+<li><em>Forecast</em> economic variables</li>
+</ul>
+<p>to just name a few examples. <span class="citation" data-cites="BIS2021e">Bank for International Settlements (<a href="references.html#ref-BIS2021e" role="doc-biblioref">2021</a>)</span> provides an overview of how machine learning methods have been used at central banks.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The report also notes how machine learning methods can be used in the context of <strong>financial supervision</strong></p>
+<blockquote class="blockquote">
+<p>These techniques can support supervisors’ efficiency in: (i) covering traditional supervisory tasks (eg quality reporting, anomaly detection, sending of instructions); (ii) facilitating the assessment of micro-level fragilities; and (iii) identifying and tackling new emerging topics, such as climate-related financial risks, vulnerabilities from the Covid-19 pandemic, or the consequence of increased digitisation in finance (eg the development of fintechs).</p>
+</blockquote>
+<p>To give you a few more ideas from <strong>academic research</strong>, machine learning techniques have been used to, for example,</p>
+<ul>
+<li>Detect emotions in voices during press conferences after FOMC meetings <span class="citation" data-cites="Gorodnichenko2023">(<a href="references.html#ref-Gorodnichenko2023" role="doc-biblioref">Gorodnichenko, Pham, and Talavera 2023</a>)</span>,</li>
+<li>Identify Monetary Policy Shocks using Natural Language Processing <span class="citation" data-cites="Aruoba2022">(<a href="references.html#ref-Aruoba2022" role="doc-biblioref">Aruoba and Drechsel 2022</a>)</span>,</li>
+<li>Solve macroeconomic models with heterogeneous agents <span class="citation" data-cites="Maliar2021 FernandezVillaverde2023 FernandezVillaverde2024 Kase2022">(<a href="references.html#ref-Maliar2021" role="doc-biblioref">Maliar, Maliar, and Winant 2021</a>; <a href="references.html#ref-FernandezVillaverde2023" role="doc-biblioref">Fernández-Villaverde, Hurtado, and Nuño 2023</a>; <a href="references.html#ref-FernandezVillaverde2024" role="doc-biblioref">Fernández-Villaverde et al. 2024</a>; <a href="references.html#ref-Kase2022" role="doc-biblioref">Kase, Melosi, and Rottner 2022</a>)</span>, or</li>
+<li>Estimate structural models with the help of neural networks <span class="citation" data-cites="Kaji2023">(<a href="references.html#ref-Kaji2023" role="doc-biblioref">Kaji, Manresa, and Pouliot 2023</a>)</span>.</li>
+</ul>
+<p>In this course, we will only be able to scratch the surface of the field. However, I hope to provide you with the tools to get you started with machine learning and to apply these methods to novel problems.</p>
+</section>
+<section id="what-is-machine-learning" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="what-is-machine-learning"><span class="header-section-number">1.2</span> What Is Machine Learning?</h2>
+<p>You might have already some idea of what machine learning is. In this section, we will provide a more formal definition, discuss the relation to statistics and econometrics, and distinguish between machine learning, artificial intelligence, and deep learning.</p>
+<section id="sec-definition" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="sec-definition"><span class="header-section-number">1.2.1</span> Definition</h3>
+<p>Let’s start with the straightforward definition provided by <span class="citation" data-cites="Murphy2012">Murphy (<a href="references.html#ref-Murphy2012" role="doc-biblioref">2012</a>)</span></p>
+<blockquote class="blockquote">
+<p>[…] a <strong>set of methods</strong> that can <strong>automatically detect patterns in data</strong>, and then use the uncovered patterns to <strong>predict future data</strong>, or to <strong>perform other kinds of decision making</strong> under uncertainty […]</p>
+</blockquote>
+<p>Therefore, machine learning provides a range of methods for data analysis. In that sense, it is <strong>similar to statistics or econometrics</strong>.</p>
+<p>A popular, albeit more technical, definition of ML is due to <span class="citation" data-cites="Mitchell1997">Mitchell (<a href="references.html#ref-Mitchell1997" role="doc-biblioref">1997</a>)</span>:</p>
+<blockquote class="blockquote">
+<p>A computer program is said to learn from experience <span class="math inline">\(E\)</span> with respect to some class of tasks <span class="math inline">\(T\)</span>, and performance measure <span class="math inline">\(P\)</span>, if its performance at tasks in <span class="math inline">\(T\)</span>, as measured by <span class="math inline">\(P\)</span>, improves with experience <span class="math inline">\(E\)</span>.</p>
+</blockquote>
+<p>In the context of this course, experience <span class="math inline">\(E\)</span> is given by a dataset that we feed into a machine-learning algorithm, tasks <span class="math inline">\(T\)</span> are usually some form of prediction that we would like to perform (e.g., loan default prediction), and the performance measure <span class="math inline">\(P\)</span> is the measure assessing the accuracy of our predictions.</p>
+</section>
+<section id="relation-to-statistics-and-econometrics" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="relation-to-statistics-and-econometrics"><span class="header-section-number">1.2.2</span> Relation to Statistics and Econometrics</h3>
+<p>We have already mentioned that machine learning is similar to statistics and econometrics, in the sense that it provides a set of methods for data analysis. The <strong>focus</strong> of machine learning is more <strong>on prediction rather than causality</strong> meaning that in machine learning we are often interested in whether we can predict A given B rather than whether B truly causes A. For example, we could probably predict the sale of sunburn lotion on a day given the sales of ice cream on the previous day. However, this does not mean that ice cream sales cause sunburn lotion sales, it is just that the sunny weather on the first day causes both.</p>
+<p><span class="citation" data-cites="Varian2014">Varian (<a href="references.html#ref-Varian2014" role="doc-biblioref">2014</a>)</span> provides another example showing the difference between prediction and causality:</p>
+<blockquote class="blockquote">
+<p>A classic example: there are often more police in precincts with high crime, but that does not imply that increasing the number of police in a precinct would increase crime. […] If our data were generated by policymakers who assigned police to areas with high crime, then the observed relationship between police and crime rates could be highly predictive for the <em>historical</em> data but not useful in predicting the causal impact of explicitly <em>assigning</em> additional police to a precinct.</p>
+</blockquote>
+<!--
+* **Causal impact:** Change in sales associated with change in advertising expenditure everything else held constant
+* **Prediction:** Change in sales you would expect to observe when advertising expenditure changes
+
+To decide whether to increase advertising expenditures, we are interested in the former rather than the latter.
+-->
+<p>Nevertheless, leaving problems aside where we are interested in causality, there is still a very large range of problems where we are interested in mere prediction, such as loan default prediction, or credit card fraud detection.</p>
+</section>
+<section id="artificial-intelligence-vs.-machine-learning-vs.-deep-learning" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="artificial-intelligence-vs.-machine-learning-vs.-deep-learning"><span class="header-section-number">1.2.3</span> Artificial Intelligence vs.&nbsp;Machine Learning vs.&nbsp;Deep Learning</h3>
+<p>Artificial intelligence (AI), machine learning (ML), and deep learning (DL) are often used interchangeably in the media. However, they describe more narrow subfields <span class="citation" data-cites="Microsoft2024">(<a href="references.html#ref-Microsoft2024" role="doc-biblioref">Microsoft 2024</a>)</span>:</p>
+<div id="fig-ai-ml-dl" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ai-ml-dl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="intro_files/figure-html/ai-ml-dl-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ai-ml-dl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: Artificial intelligence vs.&nbsp;Machine Learning vs.&nbsp;Deep Learning
+</figcaption>
+</figure>
+</div>
+<ul>
+<li><strong>Artificial Intelligence (AI)</strong>: Any method allowing computers to imitate human behavior.</li>
+<li><strong>Machine Learning (ML)</strong>: A subset of AI including methods that allow machines to improve at tasks with experience.</li>
+<li><strong>Deep Learning (DL)</strong>: A subset of ML using neural networks with many layers allowing machines to learn how to perform tasks.</li>
+</ul>
+<p>We will have a look at neural networks and deep learning later on.</p>
+</section>
+</section>
+<section id="why-has-machine-learning-become-popular-only-recently" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="why-has-machine-learning-become-popular-only-recently"><span class="header-section-number">1.3</span> Why Has Machine Learning Become Popular Only Recently?</h2>
+<p>Early contributions to the field reach back at least to <span class="citation" data-cites="McCulloch1943">McCulloch and Pitts (<a href="references.html#ref-McCulloch1943" role="doc-biblioref">1943</a>)</span> and <span class="citation" data-cites="Rosenblatt1958">Rosenblatt (<a href="references.html#ref-Rosenblatt1958" role="doc-biblioref">1958</a>)</span>. They attempted to find mathematical representations of information processing in biological systems <span class="citation" data-cites="Bishop2006">(<a href="references.html#ref-Bishop2006" role="doc-biblioref">Bishop 2006</a>)</span>. The field has <strong>grown substantially mainly in recent years</strong> due to</p>
+<ul>
+<li>Advances in <strong>computational power</strong> of personal computers</li>
+<li>Increased availability of large datasets <span class="math inline">\(\rightarrow\)</span> <strong>“big data”</strong></li>
+<li>Improvements in <strong>algorithms</strong></li>
+</ul>
+<p>The need for large data sets still limits the applicability to certain fields. For example, in macroeconomic forecasting, we usually only have quarterly data for 40-50 years. Conventional time series methods (e.g., ARIMA) often still tend to perform better than ML methods (e.g., neural networks).</p>
+</section>
+<section id="types-of-learning" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="types-of-learning"><span class="header-section-number">1.4</span> Types of Learning</h2>
+<p>Machine learning methods are <strong>commonly distinguished based on</strong> the <strong>tasks that we would like to perform</strong>, and the <strong>data that we have access to for learning</strong> how to perform said task. For <strong>example</strong>, our task might be to figure out whether a credit card transaction is fraudulent or not. Based on the data we have access to, two different types of learning might be appropriate:</p>
+<ul>
+<li>We <em>know</em> which transactions are fraudulent meaning that we need to learn a function that maps the transaction data (e.g., value of transaction, location, etc.) to the label “fraudulent” or “not fraudulent”. This is an example of <em>supervised learning</em>.</li>
+<li>We <em>do not know</em> whether they are fraudulent or not meaning that we might want to find clusters in the data that group similar transactions. This is an example of <em>unsupervised learning</em>.</li>
+</ul>
+<p>More generally, ML methods are <strong>commonly categorized into</strong></p>
+<ul>
+<li><strong>Supervised Learning</strong>: Learn function <span class="math inline">\(y=f(x)\)</span> from data that you observe for <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span></li>
+<li><strong>Unsupervised Learning</strong>: “Make sense” of observed data <span class="math inline">\(x\)</span></li>
+<li><strong>Reinforcement Learning</strong>: Learn how to interact with the environment</li>
+</ul>
+<p>The focus of this course will be on supervised learning, but we will also have a look at some unsupervised learning techniques if time allows. Let’s have a closer look at the three types of learning.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Types of Learning in Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Machine learning models might <strong>combine different types of learning</strong>. For example, ChatGPT is trained using a combination of supervised and reinforcement learning. Furthermore, some machine learning methods, such as neural networks, might be used as part of different types of learning.</p>
+</div>
+</div>
+<section id="supervised-learning" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="supervised-learning"><span class="header-section-number">1.4.1</span> Supervised Learning</h3>
+<p><strong>Supervised learning</strong> is probably the <strong>most common</strong> form of machine learning. In supervised learning, we have a <strong>training dataset</strong> consisting of input-output pairs <span class="math inline">\((x_n, y_n)\)</span> for <span class="math inline">\(n=1,\ldots,N\)</span>. The goal is to learn a function <span class="math inline">\(f\)</span> that maps inputs <span class="math inline">\(x\)</span> to outputs <span class="math inline">\(y\)</span>.</p>
+<p>The type of <strong>function <span class="math inline">\(f\)</span> might be incredibly complex</strong>, e.g.</p>
+<ul>
+<li>From images of cats and dogs <span class="math inline">\(x\)</span> to a classification of the image <span class="math inline">\(y\)</span> (<span class="math inline">\(\rightarrow\)</span> <a href="#fig-classification-example" class="quarto-xref">Figure&nbsp;<span>1.3</span></a>)</li>
+<li>From text input <span class="math inline">\(x\)</span> to some coherent text response <span class="math inline">\(y\)</span> (<span class="math inline">\(\rightarrow\)</span> ChatGPT)</li>
+<li>From text input <span class="math inline">\(x\)</span> to a generated image <span class="math inline">\(y\)</span> (<span class="math inline">\(\rightarrow\)</span> Midjourney)</li>
+<li>From bank loan application form <span class="math inline">\(x\)</span> to a loan decision <span class="math inline">\(y\)</span></li>
+</ul>
+<p>Regarding <strong>terminology</strong>, note that sometimes</p>
+<ul>
+<li>Inputs <span class="math inline">\(x\)</span> are called features, predictors, or covariates,</li>
+<li>Outputs <span class="math inline">\(y\)</span> are called labels, targets, or responses.</li>
+</ul>
+<p>Based on the <strong>type of output</strong>, we can distinguish between</p>
+<ul>
+<li><strong>Classification</strong>: Output <span class="math inline">\(y\)</span> is in a set of mutually exclusive labels (i.e., classes), i.e.&nbsp;<span class="math inline">\(\mathcal{Y}=\{1,2,3,\ldots,C\}\)</span></li>
+<li><strong>Regression</strong>: Output <span class="math inline">\(y\)</span> is a real-valued quantity, i.e.&nbsp;<span class="math inline">\(y\in\mathbb{R}\)</span></li>
+</ul>
+<p>Let’s have a closer look at some examples of classification and regression tasks.</p>
+<section id="classification" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="classification">Classification</h4>
+<div id="fig-classification-example" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-classification-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="intro_files/figure-html/classification-example-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-classification-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.3: Training a machine learning algorithm to classify images of cats and dogs
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-classification-example" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> shows an example of a <strong>binary classification task</strong>. The algorithm is trained on a dataset of images of cats and dogs. The goal is to predict the label (i.e., “cat” or “dog”) of a new image (new in the sense that the images were not part of the training dataset). After training, the algorithm can predict the label of new images with a certain degree of accuracy. However, if you give the algorithm an image of, e.g., a horse it might mistakenly predict that it is a dog because the algorithm has never seen an image like that before and because it has been trained only for binary classification (it only knows two kinds of classes, “cats” and “dogs”). In this example, <span class="math inline">\(x\)</span> would be an image in the training dataset and <span class="math inline">\(y\)</span> would be the label of that image.</p>
+<p>Extending the training dataset to also include images of horses with a corresponding label would turn the tasks into <strong>multiclass classification</strong>.</p>
+<!--
+Another example of a classification task, is provided by the following [company bankruptcy dataset](https://www.kaggle.com/datasets/fedesoriano/company-bankruptcy-prediction/data) from Kaggle.com. In this case, we would like to predict whether a company goes bankrupt or not based on a set of features (e.g., financial ratios). This is again a binary classification task where $x$ would be the financial variables and $y$ would be a binary variable indicating whether the company went bankrupt or not.
+
+::: {.cell}
+
+```{.python .cell-code}
+import pandas as pd
+
+# Load the data from a csv file
+data_bankruptcy = pd.read_csv("notebooks/data/company_bankruptcy.csv", encoding = 'utf-8') 
+```
+:::
+
+::: {.cell}
+::: {.cell-output-display}
+|   Bankrupt? |    ROA(C) before interest and depreciation before interest |    ROA(A) before interest and % after tax |    ROA(B) before interest and depreciation after tax |    Operating Gross Margin |    Realized Sales Gross Margin |    Operating Profit Rate |    Pre-tax net Interest Rate |    After-tax net Interest Rate |    Non-industry income and expenditure/revenue |    Continuous interest rate (after tax) |    Operating Expense Rate |    Research and development expense rate |    Cash flow rate |    Interest-bearing debt interest rate |    Tax rate (A) |    Net Value Per Share (B) |    Net Value Per Share (A) |    Net Value Per Share (C) |    Persistent EPS in the Last Four Seasons |    Cash Flow Per Share |    Revenue Per Share (Yuan ¥) |    Operating Profit Per Share (Yuan ¥) |    Per Share Net profit before tax (Yuan ¥) |    Realized Sales Gross Profit Growth Rate |    Operating Profit Growth Rate |    After-tax Net Profit Growth Rate |    Regular Net Profit Growth Rate |    Continuous Net Profit Growth Rate |    Total Asset Growth Rate |    Net Value Growth Rate |    Total Asset Return Growth Rate Ratio |    Cash Reinvestment % |    Current Ratio |    Quick Ratio |    Interest Expense Ratio |    Total debt/Total net worth |    Debt ratio % |    Net worth/Assets |    Long-term fund suitability ratio (A) |    Borrowing dependency |    Contingent liabilities/Net worth |    Operating profit/Paid-in capital |    Net profit before tax/Paid-in capital |    Inventory and accounts receivable/Net value |    Total Asset Turnover |    Accounts Receivable Turnover |    Average Collection Days |    Inventory Turnover Rate (times) |    Fixed Assets Turnover Frequency |    Net Worth Turnover Rate (times) |    Revenue per person |    Operating profit per person |    Allocation rate per person |    Working Capital to Total Assets |    Quick Assets/Total Assets |    Current Assets/Total Assets |    Cash/Total Assets |    Quick Assets/Current Liability |    Cash/Current Liability |    Current Liability to Assets |    Operating Funds to Liability |    Inventory/Working Capital |    Inventory/Current Liability |    Current Liabilities/Liability |    Working Capital/Equity |    Current Liabilities/Equity |    Long-term Liability to Current Assets |    Retained Earnings to Total Assets |    Total income/Total expense |    Total expense/Assets |    Current Asset Turnover Rate |    Quick Asset Turnover Rate |    Working capitcal Turnover Rate |    Cash Turnover Rate |    Cash Flow to Sales |    Fixed Assets to Assets |    Current Liability to Liability |    Current Liability to Equity |    Equity to Long-term Liability |    Cash Flow to Total Assets |    Cash Flow to Liability |    CFO to Assets |    Cash Flow to Equity |    Current Liability to Current Assets |    Liability-Assets Flag |    Net Income to Total Assets |    Total assets to GNP price |    No-credit Interval |    Gross Profit to Sales |    Net Income to Stockholder's Equity |    Liability to Equity |    Degree of Financial Leverage (DFL) |    Interest Coverage Ratio (Interest expense to EBIT) |    Net Income Flag |    Equity to Liability |
+|------------:|-----------------------------------------------------------:|------------------------------------------:|-----------------------------------------------------:|--------------------------:|-------------------------------:|-------------------------:|-----------------------------:|-------------------------------:|-----------------------------------------------:|----------------------------------------:|--------------------------:|-----------------------------------------:|------------------:|---------------------------------------:|----------------:|---------------------------:|---------------------------:|---------------------------:|-------------------------------------------:|-----------------------:|------------------------------:|---------------------------------------:|--------------------------------------------:|-------------------------------------------:|--------------------------------:|------------------------------------:|----------------------------------:|-------------------------------------:|---------------------------:|-------------------------:|----------------------------------------:|-----------------------:|-----------------:|---------------:|--------------------------:|------------------------------:|----------------:|--------------------:|----------------------------------------:|------------------------:|------------------------------------:|------------------------------------:|-----------------------------------------:|-----------------------------------------------:|------------------------:|--------------------------------:|---------------------------:|-----------------------------------:|-----------------------------------:|-----------------------------------:|----------------------:|-------------------------------:|------------------------------:|-----------------------------------:|-----------------------------:|-------------------------------:|---------------------:|----------------------------------:|--------------------------:|-------------------------------:|--------------------------------:|-----------------------------:|-------------------------------:|---------------------------------:|--------------------------:|------------------------------:|-----------------------------------------:|-------------------------------------:|------------------------------:|------------------------:|-------------------------------:|-----------------------------:|----------------------------------:|----------------------:|----------------------:|--------------------------:|----------------------------------:|-------------------------------:|---------------------------------:|-----------------------------:|--------------------------:|-----------------:|-----------------------:|---------------------------------------:|-------------------------:|------------------------------:|-----------------------------:|----------------------:|-------------------------:|--------------------------------------:|-----------------------:|--------------------------------------:|------------------------------------------------------:|-------------------:|-----------------------:|
+|           1 |                                                   0.370594 |                                  0.424389 |                                             0.40575  |                  0.601457 |                       0.601457 |                 0.998969 |                     0.796887 |                       0.808809 |                                       0.302646 |                                0.780985 |               0.000125697 |                                 0        |          0.458143 |                            0.000725073 |      0          |                   0.14795  |                   0.14795  |                   0.14795  |                                   0.169141 |               0.311664 |                    0.0175598  |                              0.0959205 |                                    0.138736 |                                  0.0221023 |                        0.848195 |                            0.688979 |                          0.688979 |                             0.217535 |                   4.98e+09 |              0.000326977 |                                0.2631   |               0.363725 |       0.00225896 |    0.00120776  |                  0.629951 |                    0.0212659  |       0.207576  |            0.792424 |                              0.00502445 |                0.390284 |                          0.0064785  |                           0.0958848 |                                 0.137757 |                                       0.398036 |               0.0869565 |                      0.00181388 |                 0.00348736 |                        0.000182093 |                        0.000116501 |                          0.0329032 |            0.0341642  |                       0.392913 |                    0.0371353  |                           0.672775 |                    0.166673  |                       0.190643 |          0.00409441  |                       0.00199677  |               0.000147336 |                      0.147308  |                        0.334015 |                     0.27692  |                     0.00103599 |                         0.676269 |                  0.721275 |                      0.339077 |                               0.0255924  |                             0.903225 |                    0.00202161 |               0.0648557 |                    7.01e+08    |                   6.55e+09   |                          0.593831 |            4.58e+08   |              0.671568 |                  0.424206 |                          0.676269 |                       0.339077 |                         0.126549 |                     0.637555 |                  0.458609 |         0.520382 |               0.312905 |                              0.11825   |                        0 |                      0.716845 |                  0.00921944  |              0.622879 |                 0.601453 |                              0.82789  |               0.290202 |                             0.0266006 |                                              0.56405  |                  1 |              0.0164687 |
+|           1 |                                                   0.464291 |                                  0.538214 |                                             0.51673  |                  0.610235 |                       0.610235 |                 0.998946 |                     0.79738  |                       0.809301 |                                       0.303556 |                                0.781506 |               0.000289785 |                                 0        |          0.461867 |                            0.000647065 |      0          |                   0.182251 |                   0.182251 |                   0.182251 |                                   0.208944 |               0.318137 |                    0.0211443  |                              0.093722  |                                    0.169918 |                                  0.0220802 |                        0.848088 |                            0.689693 |                          0.689702 |                             0.21762  |                   6.11e+09 |              0.00044304  |                                0.264516 |               0.376709 |       0.00601621 |    0.00403937  |                  0.635172 |                    0.0125024  |       0.171176  |            0.828824 |                              0.00505888 |                0.37676  |                          0.00583504 |                           0.0937434 |                                 0.168962 |                                       0.397725 |               0.0644678 |                      0.00128636 |                 0.00491681 |                        9.36e+09    |                        7.19e+08    |                          0.0254839 |            0.00688865 |                       0.39159  |                    0.012335   |                           0.751111 |                    0.127236  |                       0.182419 |          0.0149477   |                       0.00413603  |               0.00138391  |                      0.0569628 |                        0.341106 |                     0.289642 |                     0.00520968 |                         0.308589 |                  0.731975 |                      0.32974  |                               0.0239468  |                             0.931065 |                    0.00222561 |               0.0255159 |                    0.00010652  |                   7.7e+09    |                          0.593916 |            2.49e+09   |              0.67157  |                  0.468828 |                          0.308589 |                       0.32974  |                         0.120916 |                     0.6411   |                  0.459001 |         0.567101 |               0.314163 |                              0.0477753 |                        0 |                      0.795297 |                  0.0083233   |              0.623652 |                 0.610237 |                              0.839969 |               0.283846 |                             0.264577  |                                              0.570175 |                  1 |              0.0207943 |
+|           1 |                                                   0.426071 |                                  0.499019 |                                             0.472295 |                  0.60145  |                       0.601364 |                 0.998857 |                     0.796403 |                       0.808388 |                                       0.302035 |                                0.780284 |               0.00023613  |                                 2.55e+07 |          0.458521 |                            0.000790079 |      0          |                   0.177911 |                   0.177911 |                   0.193713 |                                   0.180581 |               0.307102 |                    0.00594401 |                              0.0923378 |                                    0.142803 |                                  0.0227601 |                        0.848094 |                            0.689463 |                          0.68947  |                             0.217601 |                   7.28e+09 |              0.000396425 |                                0.264184 |               0.368913 |       0.0115426  |    0.00534756  |                  0.629631 |                    0.0212477  |       0.207516  |            0.792484 |                              0.0050999  |                0.379093 |                          0.00656198 |                           0.0923185 |                                 0.148036 |                                       0.40658  |               0.0149925 |                      0.00149534 |                 0.00422685 |                        6.5e+07     |                        2.65e+09    |                          0.0133871 |            0.028997   |                       0.381968 |                    0.141016   |                           0.829502 |                    0.340201  |                       0.602806 |          0.000990944 |                       0.00630248  |               5.34e+09    |                      0.0981621 |                        0.336731 |                     0.277456 |                     0.0138788  |                         0.446027 |                  0.742729 |                      0.334777 |                               0.00371512 |                             0.909903 |                    0.00206007 |               0.0213874 |                    0.00179109  |                   0.00102268 |                          0.594502 |            7.61e+08   |              0.671571 |                  0.276179 |                          0.446027 |                       0.334777 |                         0.117922 |                     0.642765 |                  0.459254 |         0.538491 |               0.314515 |                              0.0253465 |                        0 |                      0.77467  |                  0.0400029   |              0.623841 |                 0.601449 |                              0.836774 |               0.290189 |                             0.0265547 |                                              0.563706 |                  1 |              0.0164741 |
+|           1 |                                                   0.399844 |                                  0.451265 |                                             0.457733 |                  0.583541 |                       0.583541 |                 0.9987   |                     0.796967 |                       0.808966 |                                       0.30335  |                                0.781241 |               0.000107889 |                                 0        |          0.465705 |                            0.000449045 |      0          |                   0.154187 |                   0.154187 |                   0.154187 |                                   0.193722 |               0.321674 |                    0.0143685  |                              0.0777624 |                                    0.148603 |                                  0.0220461 |                        0.848005 |                            0.68911  |                          0.68911  |                             0.217568 |                   4.88e+09 |              0.000382426 |                                0.263371 |               0.384077 |       0.00419406 |    0.00289649  |                  0.630228 |                    0.0095724  |       0.151465  |            0.848535 |                              0.00504692 |                0.379743 |                          0.00536585 |                           0.0777273 |                                 0.147561 |                                       0.397925 |               0.089955  |                      0.00196606 |                 0.00321497 |                        7.13e+09    |                        9.15e+09    |                          0.0280645 |            0.0154635  |                       0.378497 |                    0.02132    |                           0.725754 |                    0.161575  |                       0.225815 |          0.0188506   |                       0.00296124  |               0.00101065  |                      0.0987146 |                        0.348716 |                     0.27658  |                     0.00354015 |                         0.615848 |                  0.729825 |                      0.331509 |                               0.0221652  |                             0.906902 |                    0.00183136 |               0.0241611 |                    8.14e+09    |                   6.05e+09   |                          0.593889 |            2.03e+09   |              0.671519 |                  0.559144 |                          0.615848 |                       0.331509 |                         0.12076  |                     0.579039 |                  0.448518 |         0.604105 |               0.302382 |                              0.0672496 |                        0 |                      0.739555 |                  0.00325248  |              0.622929 |                 0.583538 |                              0.834697 |               0.281721 |                             0.0266966 |                                              0.564663 |                  1 |              0.0239823 |
+|           1 |                                                   0.465022 |                                  0.538432 |                                             0.522298 |                  0.598783 |                       0.598783 |                 0.998973 |                     0.797366 |                       0.809304 |                                       0.303475 |                                0.78155  |               7.89e+09    |                                 0        |          0.462746 |                            0.000686069 |      0          |                   0.167502 |                   0.167502 |                   0.167502 |                                   0.212537 |               0.319162 |                    0.0296898  |                              0.0968976 |                                    0.168412 |                                  0.0220959 |                        0.848258 |                            0.689697 |                          0.689697 |                             0.217626 |                   5.51e+09 |              0.000438948 |                                0.265218 |               0.37969  |       0.00602245 |    0.00372745  |                  0.636055 |                    0.0051496  |       0.106509  |            0.893491 |                              0.00530332 |                0.375025 |                          0.00662353 |                           0.0969271 |                                 0.167461 |                                       0.400079 |               0.175412  |                      0.00144867 |                 0.00436689 |                        0.000163367 |                        0.000293521 |                          0.0401613 |            0.0581114  |                       0.394371 |                    0.0239882  |                           0.751822 |                    0.26033   |                       0.35838  |          0.014161    |                       0.00427477  |               0.000680464 |                      0.110195  |                        0.344639 |                     0.287913 |                     0.00486857 |                         0.975007 |                  0.732    |                      0.330726 |                               0          |                             0.91385  |                    0.00222393 |               0.0263852 |                    6.68e+09    |                   5.05e+09   |                          0.593915 |            8.24e+08   |              0.671563 |                  0.309555 |                          0.975007 |                       0.330726 |                         0.110933 |                     0.622374 |                  0.454411 |         0.578469 |               0.311567 |                              0.0477254 |                        0 |                      0.795016 |                  0.00387756  |              0.623521 |                 0.598782 |                              0.839973 |               0.278514 |                             0.0247518 |                                              0.575617 |                  1 |              0.0354902 |
+|           1 |                                                   0.38868  |                                  0.415177 |                                             0.419134 |                  0.590171 |                       0.590251 |                 0.998758 |                     0.796903 |                       0.808771 |                                       0.303116 |                                0.781069 |               0.00015715  |                                 0        |          0.465861 |                            0.000716072 |      0          |                   0.155577 |                   0.155577 |                   0.155577 |                                   0.174435 |               0.325387 |                    0.0181043  |                              0.0780881 |                                    0.138811 |                                  0.0215649 |                        0.847983 |                            0.689105 |                          0.689178 |                             0.217566 |                   6.08e+08 |              0.000351782 |                                0.26325  |               0.388026 |       0.00274009 |    0.000854661 |                  0.630184 |                    0.0142132  |       0.180427  |            0.819573 |                              0.00491319 |                0.381448 |                          0.00574912 |                           0.0781018 |                                 0.137825 |                                       0.400419 |               0.095952  |                      0.0015278  |                 0.00413719 |                        6.5e+08     |                        9.3e+09     |                          0.0296774 |            0.0213005  |                       0.377569 |                    0.0328288  |                           0.686729 |                    0.0802637 |                       0.214536 |          0.00264523  |                       0.000988425 |               0.000100856 |                      0.139002  |                        0.350563 |                     0.276678 |                     0.00487913 |                         0.733352 |                  0.725202 |                      0.335534 |                               0.0037725  |                             0.903041 |                    0.00186561 |               0.0400936 |                    8.01e+09    |                   2.81e+09   |                          0.593846 |            2.95e+08   |              0.671568 |                  0.603193 |                          0.733352 |                       0.335534 |                         0.112917 |                     0.63747  |                  0.458499 |         0.62219  |               0.313268 |                              0.0995219 |                        0 |                      0.71042  |                  0.00527787  |              0.622605 |                 0.590172 |                              0.829939 |               0.285087 |                             0.0266754 |                                              0.564538 |                  1 |              0.0195345 |
+|           0 |                                                   0.390923 |                                  0.445704 |                                             0.436158 |                  0.61995  |                       0.61995  |                 0.998993 |                     0.797012 |                       0.80896  |                                       0.302814 |                                0.78118  |               0.000398483 |                                 7.3e+08  |          0.46102  |                            0.000805081 |      0          |                   0.158822 |                   0.158822 |                   0.158822 |                                   0.161482 |               0.316687 |                    0.0309149  |                              0.0999104 |                                    0.128945 |                                  0.0221123 |                        0.848322 |                            0.68859  |                          0.68859  |                             0.217604 |                   5.72e+09 |              0.000351757 |                                0.263032 |               0.375303 |       0.00467206 |    0.00286904  |                  0.629988 |                    0.0244412  |       0.216102  |            0.783898 |                              0.00500504 |                0.384999 |                          0.0080439  |                           0.0998665 |                                 0.127939 |                                       0.400574 |               0.10045   |                      0.00166171 |                 0.00380502 |                        0.00016203  |                        0.000145248 |                          0.0408065 |            0.0114595  |                       0.393173 |                    0.00970314 |                           0.729416 |                    0.255093  |                       0.295221 |          0.0229886   |                       0.00397383  |               0.00105031  |                      0.11592   |                        0.340081 |                     0.276643 |                     0.00215935 |                         0.508089 |                  0.728731 |                      0.337392 |                               0.00934743 |                             0.911441 |                    0.00212074 |               0.0928023 |                    0.000105801 |                   9.56e+09   |                          0.593893 |            2.39e+09   |              0.671562 |                  0.355854 |                          0.508089 |                       0.337392 |                         0.120561 |                     0.630419 |                  0.457785 |         0.560653 |               0.310296 |                              0.0607651 |                        0 |                      0.736619 |                  0.0183719   |              0.623655 |                 0.619949 |                              0.82998  |               0.292504 |                             0.0266223 |                                              0.5642   |                  1 |              0.0156631 |
+|           0 |                                                   0.508361 |                                  0.570922 |                                             0.559077 |                  0.601738 |                       0.601717 |                 0.999009 |                     0.797449 |                       0.809362 |                                       0.303545 |                                0.781621 |               9e+09       |                                 5.09e+07 |          0.467024 |                            0.000630063 |      0.157607   |                   0.176984 |                   0.176984 |                   0.176984 |                                   0.225206 |               0.324114 |                    0.0425609  |                              0.104796  |                                    0.180462 |                                  0.0221143 |                        0.848082 |                            0.689535 |                          0.689535 |                             0.217633 |                   6.63e+09 |              0.00045105  |                                0.264112 |               0.384235 |       0.00965738 |    0.00730455  |                  0.631379 |                    0.00527818 |       0.108202  |            0.891798 |                              0.00564016 |                0.374219 |                          0.00638345 |                           0.104784  |                                 0.179519 |                                       0.400883 |               0.218891  |                      0.00133505 |                 0.00474005 |                        0.000199098 |                        0.000518201 |                          0.0462903 |            0.0280775  |                       0.396463 |                    0.00705804 |                           0.797005 |                    0.361219  |                       0.447942 |          0.0146159   |                       0.00756496  |               0.000888122 |                      0.0870418 |                        0.353511 |                     0.277275 |                     0.00575585 |                         0.75577  |                  0.734946 |                      0.329804 |                               0.00534566 |                             0.935449 |                    0.00236    |               0.0254822 |                    7.29e+09    |                   6.18e+09   |                          0.593937 |            7.34e+08   |              0.671572 |                  0.218473 |                          0.75577  |                       0.329804 |                         0.114508 |                     0.641553 |                  0.458954 |         0.610091 |               0.314364 |                              0.0302011 |                        0 |                      0.81535  |                  0.0100045   |              0.623843 |                 0.601739 |                              0.841459 |               0.278607 |                             0.0270305 |                                              0.566089 |                  1 |              0.0348886 |
+|           0 |                                                   0.488519 |                                  0.545137 |                                             0.543284 |                  0.603612 |                       0.603612 |                 0.998961 |                     0.797414 |                       0.809338 |                                       0.303584 |                                0.781598 |               0.000168714 |                                 0        |          0.463142 |                            0.000737074 |      0.00587104 |                   0.184189 |                   0.184189 |                   0.184189 |                                   0.218398 |               0.318773 |                    0.0266044  |                              0.0951877 |                                    0.173157 |                                  0.0221284 |                        0.848159 |                            0.689924 |                          0.689924 |                             0.217654 |                   6.89e+09 |              0.000452722 |                                0.264151 |               0.377994 |       0.0134989  |    0.011823    |                  0.630915 |                    0.00226612 |       0.0585906 |            0.941409 |                              0.00541795 |                0.370253 |                          0.00536585 |                           0.095209  |                                 0.172159 |                                       0.397462 |               0.154423  |                      0.00130259 |                 0.00485533 |                        0.000304188 |                        0.000245862 |                          0.0295161 |            0.0163829  |                       0.39194  |                    0.00881462 |                           0.813738 |                    0.378625  |                       0.414646 |          0.145189    |                       0.0119376   |               0.0131902   |                      0.0580597 |                        0.345441 |                     0.277087 |                     0.00438475 |                         0.906707 |                  0.735182 |                      0.328093 |                               0          |                             0.9352   |                    0.00227396 |               0.0298841 |                    0.000102672 |                   9.84e+09   |                          0.593959 |            0.00010523 |              0.671576 |                  0.323861 |                          0.906707 |                       0.328093 |                         0.110933 |                     0.649869 |                  0.462165 |         0.574033 |               0.315376 |                              0.0217105 |                        0 |                      0.803647 |                  0.000824071 |              0.623977 |                 0.603613 |                              0.840487 |               0.276423 |                             0.0268906 |                                              0.565592 |                  1 |              0.0658265 |
+|           0 |                                                   0.495686 |                                  0.550916 |                                             0.542963 |                  0.599209 |                       0.599209 |                 0.999001 |                     0.797404 |                       0.80932  |                                       0.303483 |                                0.781574 |               5.82e+09    |                                 0        |          0.470575 |                            0.000672067 |      0.392449   |                   0.177447 |                   0.177447 |                   0.177447 |                                   0.217831 |               0.330162 |                    0.0786636  |                              0.109844  |                                    0.176621 |                                  0.0221183 |                        0.848084 |                            0.689338 |                          0.689338 |                             0.2177   |                   5.55e+09 |              0.000444912 |                                0.263883 |               0.390084 |       0.0114745  |    0.00751665  |                  0.632188 |                    0.00635424 |       0.121293  |            0.878707 |                              0.00547526 |                0.374509 |                          0.00581859 |                           0.109873  |                                 0.175658 |                                       0.406363 |               0.347826  |                      0.00146896 |                 0.00430285 |                        0.000205977 |                        0.000738342 |                          0.0766129 |            0.03328    |                       0.396373 |                    0.00572061 |                           0.825696 |                    0.394951  |                       0.577189 |          0.00877279  |                       0.00760468  |               0.000490883 |                      0.0945633 |                        0.361044 |                     0.277337 |                     0.010343   |                         0.734899 |                  0.73718  |                      0.330409 |                               0.00495068 |                             0.93829  |                    0.0022692  |               0.0358911 |                    5.11e+09    |                   3.6e+09    |                          0.593936 |            2.58e+08   |              0.671572 |                  0.254953 |                          0.734899 |                       0.330409 |                         0.115499 |                     0.643428 |                  0.459379 |         0.645146 |               0.314645 |                              0.0254943 |                        0 |                      0.804195 |                  0.00579764  |              0.623865 |                 0.599205 |                              0.840688 |               0.279388 |                             0.027243  |                                              0.566668 |                  1 |              0.0308009 |
+:::
+:::
+
+
+Note twe are just showing the first 10 rows of the dataset. The dataset contains 96 variables, 95 of which are features and one is the target variable indicating whether the company went bankrupt or not. It has more than 6800 observations.
+
+::: {.cell}
+
+```{.python .cell-code}
+data_bankruptcy.describe()
+```
+:::
+
+::: {.cell}
+::: {.cell-output-display}
+|       |    Bankrupt? |    ROA(C) before interest and depreciation before interest |    ROA(A) before interest and % after tax |    ROA(B) before interest and depreciation after tax |    Operating Gross Margin |    Realized Sales Gross Margin |    Operating Profit Rate |    Pre-tax net Interest Rate |    After-tax net Interest Rate |    Non-industry income and expenditure/revenue |    Continuous interest rate (after tax) |    Operating Expense Rate |    Research and development expense rate |    Cash flow rate |    Interest-bearing debt interest rate |    Tax rate (A) |    Net Value Per Share (B) |    Net Value Per Share (A) |    Net Value Per Share (C) |    Persistent EPS in the Last Four Seasons |    Cash Flow Per Share |    Revenue Per Share (Yuan ¥) |    Operating Profit Per Share (Yuan ¥) |    Per Share Net profit before tax (Yuan ¥) |    Realized Sales Gross Profit Growth Rate |    Operating Profit Growth Rate |    After-tax Net Profit Growth Rate |    Regular Net Profit Growth Rate |    Continuous Net Profit Growth Rate |    Total Asset Growth Rate |    Net Value Growth Rate |    Total Asset Return Growth Rate Ratio |    Cash Reinvestment % |    Current Ratio |    Quick Ratio |    Interest Expense Ratio |    Total debt/Total net worth |    Debt ratio % |    Net worth/Assets |    Long-term fund suitability ratio (A) |    Borrowing dependency |    Contingent liabilities/Net worth |    Operating profit/Paid-in capital |    Net profit before tax/Paid-in capital |    Inventory and accounts receivable/Net value |    Total Asset Turnover |    Accounts Receivable Turnover |    Average Collection Days |    Inventory Turnover Rate (times) |    Fixed Assets Turnover Frequency |    Net Worth Turnover Rate (times) |    Revenue per person |    Operating profit per person |    Allocation rate per person |    Working Capital to Total Assets |    Quick Assets/Total Assets |    Current Assets/Total Assets |    Cash/Total Assets |    Quick Assets/Current Liability |    Cash/Current Liability |    Current Liability to Assets |    Operating Funds to Liability |    Inventory/Working Capital |    Inventory/Current Liability |    Current Liabilities/Liability |    Working Capital/Equity |    Current Liabilities/Equity |    Long-term Liability to Current Assets |    Retained Earnings to Total Assets |    Total income/Total expense |    Total expense/Assets |    Current Asset Turnover Rate |    Quick Asset Turnover Rate |    Working capitcal Turnover Rate |    Cash Turnover Rate |    Cash Flow to Sales |    Fixed Assets to Assets |    Current Liability to Liability |    Current Liability to Equity |    Equity to Long-term Liability |    Cash Flow to Total Assets |    Cash Flow to Liability |    CFO to Assets |    Cash Flow to Equity |    Current Liability to Current Assets |    Liability-Assets Flag |    Net Income to Total Assets |    Total assets to GNP price |    No-credit Interval |    Gross Profit to Sales |    Net Income to Stockholder's Equity |    Liability to Equity |    Degree of Financial Leverage (DFL) |    Interest Coverage Ratio (Interest expense to EBIT) |    Net Income Flag |    Equity to Liability |
+|:------|-------------:|-----------------------------------------------------------:|------------------------------------------:|-----------------------------------------------------:|--------------------------:|-------------------------------:|-------------------------:|-----------------------------:|-------------------------------:|-----------------------------------------------:|----------------------------------------:|--------------------------:|-----------------------------------------:|------------------:|---------------------------------------:|----------------:|---------------------------:|---------------------------:|---------------------------:|-------------------------------------------:|-----------------------:|------------------------------:|---------------------------------------:|--------------------------------------------:|-------------------------------------------:|--------------------------------:|------------------------------------:|----------------------------------:|-------------------------------------:|---------------------------:|-------------------------:|----------------------------------------:|-----------------------:|-----------------:|---------------:|--------------------------:|------------------------------:|----------------:|--------------------:|----------------------------------------:|------------------------:|------------------------------------:|------------------------------------:|-----------------------------------------:|-----------------------------------------------:|------------------------:|--------------------------------:|---------------------------:|-----------------------------------:|-----------------------------------:|-----------------------------------:|----------------------:|-------------------------------:|------------------------------:|-----------------------------------:|-----------------------------:|-------------------------------:|---------------------:|----------------------------------:|--------------------------:|-------------------------------:|--------------------------------:|-----------------------------:|-------------------------------:|---------------------------------:|--------------------------:|------------------------------:|-----------------------------------------:|-------------------------------------:|------------------------------:|------------------------:|-------------------------------:|-----------------------------:|----------------------------------:|----------------------:|----------------------:|--------------------------:|----------------------------------:|-------------------------------:|---------------------------------:|-----------------------------:|--------------------------:|-----------------:|-----------------------:|---------------------------------------:|-------------------------:|------------------------------:|-----------------------------:|----------------------:|-------------------------:|--------------------------------------:|-----------------------:|--------------------------------------:|------------------------------------------------------:|-------------------:|-----------------------:|
+| count | 6819         |                                               6819         |                               6819        |                                         6819         |              6819         |                   6819         |              6819        |                  6819        |                   6819         |                                   6819         |                             6819        |            6819           |                           6819           |      6819         |                         6819           |    6819         |               6819         |               6819         |               6819         |                               6819         |           6819         |                6819           |                           6819         |                                6819         |                               6819         |                    6819         |                         6819        |                      6819         |                          6819        |             6819           |           6819           |                           6819          |           6819         |   6819           | 6819           |              6819         |                6819           |    6819         |        6819         |                           6819          |            6819         |                       6819          |                        6819         |                             6819         |                                   6819         |            6819         |                  6819           |             6819           |                     6819           |                     6819           |                       6819         |        6819           |                   6819         |                6819           |                       6819         |                  6819        |                    6819        |         6819         |                    6819           |            6819           |                   6819         |                    6819         |                 6819         |                 6819           |                      6819        |               6819        |                   6819        |                           6819           |                         6819         |                 6819          |            6819         |                 6819           |               6819           |                     6819          |        6819           |         6819          |            6819           |                       6819        |                    6819        |                     6819         |                 6819         |              6819         |     6819         |           6819         |                           6819         |            6819          |                  6819         |               6819           |          6819         |             6819         |                          6819         |           6819         |                          6819         |                                          6819         |               6819 |           6819         |
+| mean  |    0.0322628 |                                                  0.50518   |                                  0.558625 |                                            0.553589  |                 0.607948  |                      0.607929  |                 0.998755 |                     0.79719  |                      0.809084  |                                      0.303623  |                                0.781381 |               1.99535e+09 |                              1.95043e+09 |         0.467431  |                            1.6448e+07  |       0.115001  |                  0.190661  |                  0.190633  |                  0.190672  |                                  0.228813  |              0.323482  |                   1.32864e+06 |                              0.109091  |                                   0.184361  |                                  0.0224079 |                       0.84798   |                            0.689146 |                         0.68915   |                             0.217639 |                5.5081e+09  |              1.56621e+06 |                              0.264248   |              0.379677  | 403285           |    8.37659e+06 |                 0.630991  |                   4.41634e+06 |       0.113177  |           0.886823  |                              0.00878273 |               0.374654  |                          0.00596828 |                           0.108977  |                                0.182715  |                                      0.402459  |               0.141606  |                     1.27897e+07 |                9.82622e+06 |                        2.14911e+09 |                        1.0086e+09  |                          0.0385951 |           2.32585e+06 |                      0.400671  |                   1.12558e+07 |                          0.814125  |                     0.400132 |                       0.522273 |            0.124095  |                       3.5929e+06  |               3.716e+07   |                      0.0906728 |                       0.353828  |                    0.277395  |                    5.58068e+07 |                         0.761599 |                  0.735817 |                      0.33141  |                              5.416e+07   |                            0.934733  |                    0.00254895 |               0.0291841 |                    1.19586e+09 |                  2.16374e+09 |                        0.594006   |           2.47198e+09 |            0.671531   |               1.22012e+06 |                          0.761599 |                       0.33141  |                        0.115645  |                    0.649731  |                 0.461849  |        0.593415  |              0.315582  |                              0.0315064 |               0.00117319 |                     0.80776   |                  1.86294e+07 |             0.623915  |                0.607946  |                             0.840402  |              0.280365  |                             0.0275411 |                                             0.565358  |                  1 |              0.0475784 |
+| std   |    0.17671   |                                                  0.0606856 |                                  0.06562  |                                            0.0615948 |                 0.0169338 |                      0.0169161 |                 0.01301  |                     0.012869 |                      0.0136007 |                                      0.0111634 |                                0.012679 |               3.23768e+09 |                              2.59829e+09 |         0.0170355 |                            1.08275e+08 |       0.138667  |                  0.0333898 |                  0.0334735 |                  0.0334801 |                                  0.0332626 |              0.0176109 |                   5.17071e+07 |                              0.0279422 |                                   0.0331802 |                                  0.0120793 |                       0.0107525 |                            0.013853 |                         0.0139103 |                             0.010063 |                2.89772e+09 |              1.14159e+08 |                              0.00963421 |              0.0207366 |      3.33022e+07 |    2.44685e+08 |                 0.0112385 |                   1.68407e+08 |       0.0539203 |           0.0539203 |                              0.0281529  |               0.0162862 |                          0.0121884  |                           0.0277817 |                                0.0307848 |                                      0.0133241 |               0.101145  |                     2.7826e+08  |                2.56359e+08 |                        3.24797e+09 |                        2.47756e+09 |                          0.0366803 |           1.36633e+08 |                      0.0327201 |                   2.94506e+08 |                          0.0590544 |                     0.201998 |                       0.218112 |            0.139251  |                       1.71621e+08 |               5.10351e+08 |                      0.0502899 |                       0.0351472 |                    0.0104688 |                    5.82052e+08 |                         0.206677 |                  0.011678 |                      0.013488 |                              5.70271e+08 |                            0.0255642 |                    0.0120928  |               0.0271488 |                    2.82116e+09 |                  3.37494e+09 |                        0.00895938 |           2.93862e+09 |            0.00934135 |               1.00754e+08 |                          0.206677 |                       0.013488 |                        0.0195292 |                    0.0473721 |                 0.0299427 |        0.0585606 |              0.0129609 |                              0.0308447 |               0.0342343  |                     0.0403322 |                  3.7645e+08  |             0.0122895 |                0.0169338 |                             0.0145225 |              0.0144632 |                             0.0156679 |                                             0.0132142 |                  0 |              0.0500137 |
+| min   |    0         |                                                  0         |                                  0        |                                            0         |                 0         |                      0         |                 0        |                     0        |                      0         |                                      0         |                                0        |               0           |                              0           |         0         |                            0           |       0         |                  0         |                  0         |                  0         |                                  0         |              0         |                   0           |                              0         |                                   0         |                                  0         |                       0         |                            0        |                         0         |                             0        |                0           |              0           |                              0          |              0         |      0           |    0           |                 0         |                   0           |       0         |           0         |                              0          |               0         |                          0          |                           0         |                                0         |                                      0         |               0         |                     0           |                0           |                        0           |                        0           |                          0         |           0           |                      0         |                   0           |                          0         |                     0        |                       0        |            0         |                       0           |               0           |                      0         |                       0         |                    0         |                    0           |                         0        |                  0        |                      0        |                              0           |                            0         |                    0          |               0         |                    0           |                  0           |                        0          |           0           |            0          |               0           |                          0        |                       0        |                        0         |                    0         |                 0         |        0         |              0         |                              0         |               0          |                     0         |                  0           |             0         |                0         |                             0         |              0         |                             0         |                                             0         |                  1 |              0         |
+| 25%   |    0         |                                                  0.476527  |                                  0.535543 |                                            0.527277  |                 0.600445  |                      0.600434  |                 0.998969 |                     0.797386 |                      0.809312  |                                      0.303466  |                                0.781567 |               0.000156687 |                              0.000128188 |         0.461558  |                            0.00020302  |       0         |                  0.173613  |                  0.173613  |                  0.173676  |                                  0.214711  |              0.317748  |                   0.0156314   |                              0.0960834 |                                   0.17037   |                                  0.0220645 |                       0.847984  |                            0.68927  |                         0.68927   |                             0.21758  |                4.86e+09    |              0.000440969 |                              0.263759   |              0.374749  |      0.00755505  |    0.0047259   |                 0.630612  |                   0.00300705  |       0.0728905 |           0.851196  |                              0.00524368 |               0.370168  |                          0.00536585 |                           0.0961047 |                                0.169376  |                                      0.397403  |               0.0764618 |                     0.000710134 |                0.00438653  |                        0.000172826 |                        0.000233001 |                          0.0217742 |           0.0104329   |                      0.392438  |                   0.00412053  |                          0.774309  |                     0.241973 |                       0.352845 |            0.0335432 |                       0.00523978  |               0.00197301  |                      0.0533013 |                       0.341023  |                    0.277034  |                    0.00316315  |                         0.626981 |                  0.733612 |                      0.328096 |                              0           |                            0.931097  |                    0.0022356  |               0.0145671 |                    0.000145624 |                  0.000141715 |                        0.593934   |           0.000273534 |            0.671565   |               0.0853604   |                          0.626981 |                       0.328096 |                        0.110933  |                    0.633265  |                 0.457116  |        0.565987  |              0.312995  |                              0.0180337 |               0          |                     0.79675   |                  0.00090362  |             0.623636  |                0.600443  |                             0.840115  |              0.276944  |                             0.0267912 |                                             0.565158  |                  1 |              0.0244767 |
+| 50%   |    0         |                                                  0.502706  |                                  0.559802 |                                            0.552278  |                 0.605997  |                      0.605976  |                 0.999022 |                     0.797464 |                      0.809375  |                                      0.303525  |                                0.781635 |               0.000277759 |                              5.09e+08    |         0.46508   |                            0.000321032 |       0.0734892 |                  0.1844    |                  0.1844    |                  0.1844    |                                  0.224544  |              0.322487  |                   0.0273757   |                              0.104226  |                                   0.179709  |                                  0.0221024 |                       0.848044  |                            0.689439 |                         0.689439  |                             0.217598 |                6.4e+09     |              0.000461956 |                              0.26405    |              0.380425  |      0.0105872   |    0.00741247  |                 0.630698  |                   0.00554628  |       0.111407  |           0.888593  |                              0.00566464 |               0.372624  |                          0.00536585 |                           0.104133  |                                0.178456  |                                      0.400131  |               0.118441  |                     0.000967811 |                0.00657254  |                        0.000764674 |                        0.000593094 |                          0.0295161 |           0.0186155   |                      0.395898  |                   0.00784437  |                          0.810275  |                     0.386451 |                       0.51483  |            0.0748875 |                       0.0079089   |               0.00490389  |                      0.0827048 |                       0.348597  |                    0.277178  |                    0.00649734  |                         0.806881 |                  0.736013 |                      0.329685 |                              0.00197462  |                            0.937672  |                    0.00233617 |               0.0226739 |                    0.000198782 |                  0.000224773 |                        0.593963   |           1.08e+09    |            0.671574   |               0.196881    |                          0.806881 |                       0.329685 |                        0.11234   |                    0.645366  |                 0.45975   |        0.593266  |              0.314953  |                              0.0275971 |               0          |                     0.810619  |                  0.00208521  |             0.623879  |                0.605998  |                             0.841179  |              0.278778  |                             0.0268081 |                                             0.565252  |                  1 |              0.0337977 |
+| 75%   |    0         |                                                  0.535563  |                                  0.589157 |                                            0.584105  |                 0.613914  |                      0.613842  |                 0.999095 |                     0.797579 |                      0.809469  |                                      0.303585  |                                0.781735 |               4.145e+09   |                              3.45e+09    |         0.471004  |                            0.000532553 |       0.205841  |                  0.19957   |                  0.19957   |                  0.199612  |                                  0.23882   |              0.328623  |                   0.0463572   |                              0.116155  |                                   0.193493  |                                  0.0221531 |                       0.848123  |                            0.689647 |                         0.689647  |                             0.217622 |                7.39e+09    |              0.000499362 |                              0.264388   |              0.386731  |      0.0162695   |    0.0122491   |                 0.631125  |                   0.00927329  |       0.148804  |           0.927109  |                              0.00684743 |               0.376271  |                          0.00576436 |                           0.115927  |                                0.191607  |                                      0.404551  |               0.176912  |                     0.00145476  |                0.00897288  |                        4.62e+09    |                        0.00365237  |                          0.0429032 |           0.0358548   |                      0.401851  |                   0.0150203   |                          0.850383  |                     0.540594 |                       0.689051 |            0.161073  |                       0.0129509   |               0.0128056   |                      0.119523  |                       0.360915  |                    0.277429  |                    0.0111468   |                         0.942027 |                  0.73856  |                      0.332322 |                              0.00900595  |                            0.944811  |                    0.00249185 |               0.0359301 |                    0.000452595 |                  4.9e+09     |                        0.594002   |           4.51e+09    |            0.671587   |               0.3722      |                          0.942027 |                       0.332322 |                        0.117106  |                    0.663062  |                 0.464236  |        0.624769  |              0.317707  |                              0.0383746 |               0          |                     0.826455  |                  0.00526978  |             0.624168  |                0.613913  |                             0.842357  |              0.281449  |                             0.0269132 |                                             0.565725  |                  1 |              0.0528378 |
+| max   |    1         |                                                  1         |                                  1        |                                            1         |                 1         |                      1         |                 1        |                     1        |                      1         |                                      1         |                                1        |               9.99e+09    |                              9.98e+09    |         1         |                            9.9e+08     |       1         |                  1         |                  1         |                  1         |                                  1         |              1         |                   3.02e+09    |                              1         |                                   1         |                                  1         |                       1         |                            1        |                         1         |                             1        |                9.99e+09    |              9.33e+09    |                              1          |              1         |      2.75e+09    |    9.23e+09    |                 1         |                   9.94e+09    |       1         |           1         |                              1          |               1         |                          1          |                           1         |                                1         |                                      1         |               1         |                     9.74e+09    |                9.73e+09    |                        9.99e+09    |                        9.99e+09    |                          1         |           8.81e+09    |                      1         |                   9.57e+09    |                          1         |                     1        |                       1        |            1         |                       8.82e+09    |               9.65e+09    |                      1         |                       1         |                    1         |                    9.91e+09    |                         1        |                  1        |                      1        |                              9.54e+09    |                            1         |                    1          |               1         |                    1e+10       |                  1e+10       |                        1          |           1e+10       |            1          |               8.32e+09    |                          1        |                       1        |                        1         |                    1         |                 1         |        1         |              1         |                              1         |               1          |                     1         |                  9.82e+09    |             1         |                1         |                             1         |              1         |                             1         |                                             1         |                  1 |              1         |
+:::
+:::
+
+-->
+</section>
+<section id="regression" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="regression">Regression</h4>
+<div id="fig-regression-example" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-regression-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+
+</div>
+<div class="cell quarto-layout-panel" data-layout-align="center" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="intro_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="intro_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-regression-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.4: Linear and Polynomial Regression
+</figcaption>
+</figure>
+</div>
+<p>In <strong>regression tasks</strong>, the variable that we want to predict is continuous. Linear and polynomial regression in <a href="#fig-regression-example" class="quarto-xref">Figure&nbsp;<span>1.4</span></a> are a form of supervised learning. Thus, you are already familiar with some basic ML techniques from the statistics and econometrics courses.</p>
+<p>Another common way to solve regression tasks is to use <strong>neural networks</strong>, which can learn <strong>highly non-linear relationships</strong>. In contrast to, for example, polynomial regression, neural networks can learn these relationships <strong>without the need to specify the functional form</strong> (i.e., whether it is quadratic as in <a href="#fig-regression-example" class="quarto-xref">Figure&nbsp;<span>1.4</span></a>) of the relationship. This makes them very flexible and powerful tools. We will have a look at neural networks later on.</p>
+</section>
+</section>
+<section id="unsupervised-learning" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="unsupervised-learning"><span class="header-section-number">1.4.2</span> Unsupervised Learning</h3>
+<p>An issue with supervised learning is that we need labeled data which is often not available. <strong>Unsupervised learning</strong> is used to <strong>explore data</strong> and to <strong>find patterns</strong> that are not immediately obvious. For example, unsupervised learning could be used to find groups of customers with similar purchasing behavior in a dataset of customer transactions. Therefore, the task is to learn some structure in the data <span class="math inline">\(x\)</span>. Note that we only have features in the dataset and no labels, i.e., the training dataset consists of <span class="math inline">\(N\)</span> data points <span class="math inline">\(x_n\)</span>.</p>
+<p>Unsupervised learning tasks could be, for example,</p>
+<ul>
+<li>Finding <strong>clusters</strong> in the data, i.e.&nbsp;finding data points that are “similar” (<span class="math inline">\(\rightarrow\)</span> clustering)</li>
+<li>Finding <strong>latent factors</strong> that capture the “essence” of the data (<span class="math inline">\(\rightarrow\)</span> dimensionality reduction)</li>
+</ul>
+<p>Let’s have a look at some examples of clustering and dimensionality reduction.</p>
+<section id="clustering" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="clustering">Clustering</h4>
+<div id="fig-clustering-example" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-clustering-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+
+</div>
+<div class="cell quarto-layout-panel" data-layout-align="center" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="intro_files/figure-html/unnamed-chunk-8-5.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="intro_files/figure-html/unnamed-chunk-8-6.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-clustering-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.5: Clusters in data on iris flowers (left-hand side: true classes, right-hand side: k-means clusters)
+</figcaption>
+</figure>
+</div>
+<p>Clustering is a form of unsupervised learning where the goal is to group data points into so-called clusters based on their similarity. We want to find clusters in the data such that observations within a cluster are more similar to each other than to observations in other clusters.</p>
+<p><a href="#fig-clustering-example" class="quarto-xref">Figure&nbsp;<span>1.5</span></a> shows an example of a <strong>clustering task</strong>. The <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set">dataset</a> consists of measurements of sepal (and petal) length and width of three species of iris flowers. The goal is to find clusters based on just the similarity in sepal and petal lengths and widths without relying on information about the actual iris flower species. The left-hand panel of <a href="#fig-clustering-example" class="quarto-xref">Figure&nbsp;<span>1.5</span></a>, shows the actual classification of the iris flowers. The right-hand side shows the result of a k-means clustering algorithm that groups the data points into three clusters.</p>
+<div id="fig-petal-sepal" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-petal-sepal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Figures/Petal-sepal.jpg" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-petal-sepal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.6: Petal vs Sepal (Source: <a href="https://commons.wikimedia.org/wiki/File:Petal-sepal.jpg">Wikimedia</a>)
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="dimensionality-reduction" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="dimensionality-reduction">Dimensionality Reduction</h4>
+<p>Suppose you observe data on house prices and many variables describing each house. You might observe, e.g., property size, number of rooms, room sizes, proximity to the closest supermarket, and hundreds of variables more. A ML algorithm (e.g., principal component analysis or autoencoders) could find the <strong>unobserved factors that determine house prices</strong>. These factors sometimes (but not always) have an interpretation. For example, a factor driving house prices could be <em>amenities</em>. This factor could summarize variables such as proximity to the closest supermarket, number of nearby restaurants, etc. Ultimately, <strong>hundreds of explanatory variables</strong> in the data set might be <strong>represented by a small number of factors</strong>.</p>
+</section>
+</section>
+<section id="reinforcement-learning" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="reinforcement-learning"><span class="header-section-number">1.4.3</span> Reinforcement Learning</h3>
+<p>In <strong>reinforcement learning</strong>, an agent learns how to interact with its environment. The agent receives feedback in the form of rewards or penalties for its actions. The goal is to learn a policy that maximizes the total reward.</p>
+<p>For example, a machine could learn to play chess using reinforcement learning</p>
+<ul>
+<li><strong>Input <span class="math inline">\(x\)</span></strong> would be the current position (i.e., the position of pieces on the board)</li>
+<li><strong>Action <span class="math inline">\(a\)</span></strong> would be the next move to make given the position</li>
+<li>One also needs to define a <strong>reward</strong> (e.g., winning the game at the end)</li>
+<li>Goal is then to find <span class="math inline">\(a=\pi(x)\)</span> to maximize the reward</li>
+</ul>
+<p>This is also the principle behind <strong>AlphaGo</strong> that learned how to play Go.</p>
+<p>Another example is <strong>MarI/O</strong> which learned how to play Super Mario World. The algorithm learns to play the game by receiving feedback in the form of rewards (e.g., points for collecting coins, penalties for dying) and then improves in playing the game by “an advanced form of trial and error”.</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/qv6UVOQ0F44" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p>In this course, we will focus on supervised learning. However, we will look at some unsupervised learning techniques if time allows. Reinforcement learning is going beyond the scope of this course and will not be covered.</p>
+<!--
+::: {.callout-tip}
+## A More Technical Definition of Machine Learning
+
+@Mitchell1997 defines machine learning as
+
+> A computer program is said to learn from experience $E$ with respect to some class of tasks $T$, and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$.
+
+In the context of this course, experience $E$ is given by a dataset that we feed into a ML algorithm, tasks $T$ are usually some form of prediction that we would like to perform (e.g., loan default prediction), and the performance measure $P$ is the accuracy of our predictions.
+
+Following the definition of @Mitchell1997, a task $T$ in **supervised learning** would be to learn mapping $f$ from inputs $x\in\mathcal{X}$ into outputs $y\in\mathcal{Y}$ where the experience $E$ is given by a training data set $\{(x_n, y_n\}_{n=1}^N$ of $N$ input-output pairs $(x_n,y_n)$.
+
+A task $T$ in **unsupervised learning** would be to learn some structure in the data $x\in\mathcal{X}$ where the experience $E$ is given by a dataset $\{x_n\}_{n=1}^N$ of $N$ data points $x_n$.
+
+A task $T$: in **reinforcement learning** would be to learn policy $a=\pi(x)$ which specifies **action to take in response to input $x$**, e.g., an agent has to learn how to interact with its environment.
+:::
+-->
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mini-Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Are the following tasks examples of supervised, or unsupervised learning?</p>
+<ol type="1">
+<li>Predicting the price of a house based on its size and location (given a dataset of house prices and features).</li>
+<li>Finding groups of customers with similar purchasing behavior (given a dataset of customer transactions and customer characteristics).</li>
+<li>Detecting fraudulent credit card transactions (given a dataset of <em>unlabeled</em> credit card transactions).</li>
+<li>Detecting fraudulent credit card transactions (given a dataset of <em>labeled</em> credit card transactions).</li>
+<li>Recognizing handwritten digits in the MNIST dataset (see next section).</li>
+</ol>
+</div>
+</div>
+</section>
+</section>
+<section id="popular-practice-datasets" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="popular-practice-datasets"><span class="header-section-number">1.5</span> Popular Practice Datasets</h2>
+<p>There are many publicly available datasets that you can use to learn how to implement machine learning methods. Here are some well-known platforms with a large collection of datasets</p>
+<ul>
+<li><a href="https://www.kaggle.com/datasets">Kaggle</a>,</li>
+<li><a href="https://huggingface.co/datasets">HuggingFace</a>, and</li>
+<li><a href="https://www.openml.org/search?type=data">OpenML</a>.</li>
+</ul>
+<p>Another good source for practice datasets is the collection of datasets provided by <a href="https://scikit-learn.org/stable/datasets.html#datasets">scikit-learn</a>. These datasets can be easily loaded into Python from the scikit-learn package. Furthermore, <span class="citation" data-cites="Murphy2022">Murphy (<a href="references.html#ref-Murphy2022" role="doc-biblioref">2022</a>)</span> provides an overview of some well-known datasets that are often used in machine learning. For example, MNIST is a dataset of handwritten digits (see <a href="#fig-mnist" class="quarto-xref">Figure&nbsp;<span>1.7</span></a>) that is often used to test machine learning algorithms. The dataset consists of 60,000 training images and 10,000 test images. Each image is a 28x28 pixel image of a handwritten digit. The goal is to predict the digit in the image.</p>
+<div id="fig-mnist" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mnist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Figures/MnistExamplesModified.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mnist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.7: MNIST (Source: <a href="https://commons.wikimedia.org/wiki/File:MnistExamplesModified.png">Wikimedia</a>)
+</figcaption>
+</figure>
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-Aruoba2022" class="csl-entry" role="listitem">
+Aruoba, S. Boragan, and Thomas Drechsel. 2022. <span>“<span>Identifying Monetary Policy Shocks: A Natural Language Approach</span>.”</span> CEPR Discussion Paper DP17133. CEPR.
+</div>
+<div id="ref-BIS2021e" class="csl-entry" role="listitem">
+Bank for International Settlements. 2021. <span>“<span class="nocase">Machine learning applications in central banking</span>.”</span> IFC Bulletin 57. <a href="https://www.bis.org/ifc/publ/ifcb57.pdf">https://www.bis.org/ifc/publ/ifcb57.pdf</a>.
+</div>
+<div id="ref-Bishop2006" class="csl-entry" role="listitem">
+Bishop, Christopher M. 2006. <em><span class="nocase">Pattern Recognition and Machine Learning</span></em>. Edited by Michael Jordan, Jon Kleinberg, and Bernhard Schölkopf. Information Science and Statistics. Springer Science+Business Media, LLC. <a href="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf">https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf</a>.
+</div>
+<div id="ref-FernandezVillaverde2023" class="csl-entry" role="listitem">
+Fernández-Villaverde, Jesús, Samuel Hurtado, and Galo Nuño. 2023. <span>“<span class="nocase">Financial Frictions and the Wealth Distribution</span>.”</span> <em>Econometrica</em> 91 (3): 869–901. <a href="https://doi.org/10.3982/ecta18180">https://doi.org/10.3982/ecta18180</a>.
+</div>
+<div id="ref-FernandezVillaverde2024" class="csl-entry" role="listitem">
+Fernández-Villaverde, Jesús, Joël Marbet, Galo Nuño, and Omar Rachedi. 2024. <span>“<span class="nocase">Inequality and the Zero Lower Bound</span>.”</span> Working Paper 2407. Banco de España.
+</div>
+<div id="ref-Gorodnichenko2023" class="csl-entry" role="listitem">
+Gorodnichenko, Yuriy, Tho Pham, and Oleksandr Talavera. 2023. <span>“<span class="nocase">The Voice of Monetary Policy</span>.”</span> <em>American Economic Review</em> 113 (2): 548–84. <a href="https://doi.org/10.1257/aer.20220129">https://doi.org/10.1257/aer.20220129</a>.
+</div>
+<div id="ref-Kaji2023" class="csl-entry" role="listitem">
+Kaji, Tetsuya, Elena Manresa, and Guillaume Pouliot. 2023. <span>“<span class="nocase">An Adversarial Approach to Structural Estimation</span>.”</span> <em>Econometrica</em> 91 (6): 2041–63. <a href="https://doi.org/10.3982/ecta18707">https://doi.org/10.3982/ecta18707</a>.
+</div>
+<div id="ref-Kase2022" class="csl-entry" role="listitem">
+Kase, Hanno, Leonardo Melosi, and Matthias Rottner. 2022. <span>“<span class="nocase">Estimating Nonlinear Heterogeneous Agents Models with Neural Networks</span>.”</span> Federal Reserve Bank of Chicago. <a href="https://doi.org/10.21033/wp-2022-26">https://doi.org/10.21033/wp-2022-26</a>.
+</div>
+<div id="ref-Maliar2021" class="csl-entry" role="listitem">
+Maliar, Lilia, Serguei Maliar, and Pablo Winant. 2021. <span>“<span class="nocase">Deep learning for solving dynamic economic models.</span>”</span> <em>Journal of Monetary Economics</em> 122 (September): 76–101. <a href="https://doi.org/10.1016/j.jmoneco.2021.07.004">https://doi.org/10.1016/j.jmoneco.2021.07.004</a>.
+</div>
+<div id="ref-McCulloch1943" class="csl-entry" role="listitem">
+McCulloch, Warren S., and Walter Pitts. 1943. <span>“<span class="nocase">A logical calculus of the ideas immanent in nervous activity</span>.”</span> <em>The Bulletin of Mathematical Biophysics</em> 5 (4): 115–33. <a href="https://doi.org/10.1007/bf02478259">https://doi.org/10.1007/bf02478259</a>.
+</div>
+<div id="ref-Microsoft2024" class="csl-entry" role="listitem">
+Microsoft. 2024. <span>“<span class="nocase">Deep learning vs. machine learning in Azure Machine Learning</span>.”</span> Website. <a href="https://learn.microsoft.com/en-us/azure/machine-learning/concept-deep-learning-vs-machine-learning?view=azureml-api-2">https://learn.microsoft.com/en-us/azure/machine-learning/concept-deep-learning-vs-machine-learning?view=azureml-api-2</a>.
+</div>
+<div id="ref-Mitchell1997" class="csl-entry" role="listitem">
+Mitchell, Tom. 1997. <em><span>Machine Learning</span></em>. McGraw Hill. <a href="https://www.cs.cmu.edu/~tom/mlbook.html">https://www.cs.cmu.edu/~tom/mlbook.html</a>.
+</div>
+<div id="ref-Murphy2012" class="csl-entry" role="listitem">
+Murphy, Kevin P. 2012. <em><span>Machine Learning: A Probabilistic Perspective</span></em>. Cambridge: MIT Press. <a href="https://probml.github.io/pml-book/book0.html">https://probml.github.io/pml-book/book0.html</a>.
+</div>
+<div id="ref-Murphy2022" class="csl-entry" role="listitem">
+———. 2022. <em><span>Probabilistic Machine Learning: An Introduction</span></em>. MIT Press. <a href="https://probml.github.io/pml-book/book1.html">https://probml.github.io/pml-book/book1.html</a>.
+</div>
+<div id="ref-Rosenblatt1958" class="csl-entry" role="listitem">
+Rosenblatt, F. 1958. <span>“<span class="nocase">The perceptron: A probabilistic model for information storage and organization in the brain.</span>”</span> <em>Psychological Review</em> 65 (6): 386–408. <a href="https://doi.org/10.1037/h0042519">https://doi.org/10.1037/h0042519</a>.
+</div>
+<div id="ref-Varian2014" class="csl-entry" role="listitem">
+Varian, Hal R. 2014. <span>“<span class="nocase">Big Data: New Tricks for Econometrics</span>.”</span> <em>Journal of Economic Perspectives</em> 28 (2): 3–28. <a href="https://doi.org/10.1257/jep.28.2.3">https://doi.org/10.1257/jep.28.2.3</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>See <a href="https://www.bis.org/ifc/publ/ifcb57.htm">https://www.bis.org/ifc/publ/ifcb57.htm</a> for a more detailed overview<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="About this Course">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">About this Course</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./basics.html" class="pagination-link" aria-label="Basic Concepts">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Basic Concepts</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
