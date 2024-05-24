@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Joël Marbet">
+<meta name="dcterms.date" content="2024-05-24">
 
 <title>Data Science</title>
 <style>
@@ -225,7 +226,7 @@ div.csl-indent {
   <li><a href="#testing-the-installation" id="toc-testing-the-installation" class="nav-link" data-scroll-target="#testing-the-installation">Testing the Installation</a></li>
   </ul></li>
   </ul>
-<div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="environment.yml"><i class="bi bi-file-code"></i>Environment YAML (Conda)</a></li></ul></div></nav>
+<div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="installation_notes.pdf"><i class="bi bi-file-earmark-pdf"></i>Installation Notes</a></li><li><a href="environment.yml"><i class="bi bi-file-code"></i>Environment YAML (Conda)</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -257,7 +258,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 2024</p>
+      <p class="date">May 24, 2024</p>
     </div>
   </div>
   
@@ -330,21 +331,29 @@ div.csl-indent {
 <p>Next, we want to create a new environment for this course that contains the correct Python version and all the Python packages we need. We can do this by creating a new Conda environment from the <code>environment.yml</code> provided on Moodle.</p>
 <ol type="1">
 <li><p>Open a <em>terminal window</em> on macOS/Linux or an <em>Anaconda Prompt</em> if you are on Windows.</p></li>
+<li><p>There are two ways to create the Conda environment:</p>
+<p><strong>Option A</strong>: Run the following command from the terminal or Anaconda Prompt:</p>
+<pre><code>conda env create -f https://datascience.joelmarbet.com/environment.yml</code></pre>
+<p>This downloads the <code>environment.yml</code> file automatically and creates the environment.</p>
+<p><strong>Option B</strong>: Download the <code>environment.yml</code> file manually:</p>
+<ol type="i">
 <li><p>Navigate to the folder where you have downloaded the <code>environment.yml</code> file. On macOS/Linux, you can do this by running the following command in the terminal:</p>
 <pre><code>cd ~/Downloads</code></pre>
 <p>which will navigate to the <code>Downloads</code> folder in your home directory.</p>
 <p>On Windows, you can do this by running the following command in the Anaconda Prompt:</p>
-<pre><code>cd %userprofile%/Downloads</code></pre>
-<p>which will navigate to the <code>Downloads</code> folder in your user profile.</p></li>
+<pre><code>cd "%userprofile%/Downloads"</code></pre>
+<p>which will navigate to the <code>Downloads</code> folder in your user profile.</p>
+<p>Note that if you use a different path that contains space you need to put the path in quotes, e.g., <code>cd "~/My Downloads"</code>.</p></li>
 <li><p>Create a new Conda environment from the <code>environment.yml</code> file by running the following command in the terminal or Anaconda Prompt:</p>
-<pre><code>conda env create -f environment.yml</code></pre>
-<p>This will create a new Conda environment called <code>datascience_course_cemfi</code> with the correct Python version and all the Python packages we need for this course. Note that the installation might take a few minutes.</p></li>
+<pre><code>conda env create -f environment.yml</code></pre></li>
+</ol>
+<p>Either option will create a new Conda environment called <code>datascience_course_cemfi</code> with the correct Python version and all the Python packages we need for this course. Note that the installation might take a few minutes.</p></li>
 <li><p>Activate the new Conda environment by running the following command in the terminal or Anaconda Prompt:</p>
 <pre><code>conda activate datascience_course_cemfi </code></pre></li>
 </ol>
 <p>To <strong>confirm that the environment was created successfully</strong>, you can run the following command in the terminal or Anaconda Prompt:</p>
 <pre><code>python --version</code></pre>
-<p>This should display Python version 3.8.8. If you see another Python version you might have forgotten to activate the environment or the environment was not created successfully.</p>
+<p>This should display Python version 3.8.8.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> If you see another Python version you might have forgotten to activate the environment or the environment was not created successfully.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Figures/terminal_conda_environment.png" class="img-fluid figure-img"></p>
@@ -363,6 +372,8 @@ Resetting or Updating a Conda Environment
 <div class="callout-body-container callout-body">
 <p>If you accidentally make changes to the environment and want to reset it to the original state, you can do this by navigating to the folder where you have downloaded <code>environment.yml</code> and then running the following command in the <em>terminal</em> or <em>Anaconda Prompt</em>:</p>
 <pre><code>conda env update --file environment.yml --prune</code></pre>
+<p>Alternatively, you can also update the environment by running the following command in the <em>terminal</em> or <em>Anaconda Prompt</em>, which downloads the environment.yml file automatically from the course website:</p>
+<pre><code>conda env update --file https://datascience.joelmarbet.com/environment.yml --prune</code></pre>
 <p>This can also be used to update the environment if we add new packages to the <code>environment.yml</code> file.</p>
 </div>
 </div>
@@ -450,6 +461,12 @@ Sutton, Richard S., and Andrew G. Barto. 2018. <em><span>Reinforcement Learning:
 </div>
 </div>
 </section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>There might<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
