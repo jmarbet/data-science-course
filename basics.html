@@ -1057,6 +1057,19 @@ Figure&nbsp;2.13: Ridge Regression Loss for Different Levels of <span class="mat
 <section id="training-validation-and-test-datasets" class="level3" data-number="2.4.3">
 <h3 data-number="2.4.3" class="anchored" data-anchor-id="training-validation-and-test-datasets"><span class="header-section-number">2.4.3</span> Training, Validation, and Test Datasets</h3>
 <p>Regularization discussed in the previous section is a method to directly <em>prevent</em> overfitting. However, another approach to the issues is to <strong>adjust our evaluation procedure</strong> in a way that allows us <em>to detect overfitting</em>. To do this, we can split the dataset into several parts. The first option shown in <a href="#fig-training-test-dataset" class="quarto-xref">Figure&nbsp;<span>2.14</span></a> is to split the dataset into a <strong>training dataset</strong> and a <strong>test dataset</strong>. The training dataset is used to train the model, while the test dataset is used to evaluate the model. Why does this help to detect overfitting? If the model performs well on the training dataset but poorly on the test dataset, this is a sign of overfitting. If the model performs well on the test dataset, this is a sign that the model generalizes well to new data.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Difference with Terminology in Econometrics/Statistics
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In econometrics/statistics, it is more common to talk about <strong>in-sample</strong> and <strong>out-of-sample</strong> performance. The idea is the same: the in-sample performance is the performance of the model on the training dataset, while the out-of-sample performance is the performance of the model on the test dataset.</p>
+</div>
+</div>
 <div id="fig-training-test-dataset" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-training-test-dataset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">

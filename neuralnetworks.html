@@ -910,16 +910,16 @@ Figure&nbsp;4.12: Backpropagation Algorithm
 <section id="implementing-the-feedforward-part-of-a-neural-network" class="level3" data-number="4.10.1">
 <h3 data-number="4.10.1" class="anchored" data-anchor-id="implementing-the-feedforward-part-of-a-neural-network"><span class="header-section-number">4.10.1</span> Implementing the Feedforward Part of a Neural Network</h3>
 <p>As a small programming exercise and to improve our understanding of neural networks, let’s implement the feedforward part of a neural network from scratch. We will have to calculate the output of the network for some given weights and biases, as well as some inputs. Let’s start by importing the necessary libraries</p>
-<div id="cell-1" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:26:54.163874Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:26:54.163389Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:26:54.347410Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:26:54.346193Z&quot;}" data-execution_count="1">
+<div id="cell-1" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:33:33.217526Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:33:33.217242Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:33:33.290827Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:33:33.290105Z&quot;}" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we define the activation function for which we use the sigmoid function</p>
-<div id="cell-3" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:26:54.354276Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:26:54.353658Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:26:54.360054Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:26:54.358683Z&quot;}" data-execution_count="2">
+<div id="cell-3" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:33:33.294489Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:33:33.294193Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:33:33.297952Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:33:33.297091Z&quot;}" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> activation_function(x):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>np.exp(<span class="op">-</span>x)) <span class="co"># sigmoid function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now, we define the feedforward function which calculates the output of the neural network given some inputs, weights, and biases. The function takes the inputs, weights, and biases as arguments and returns the output of the network</p>
-<div id="cell-5" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:26:54.366042Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:26:54.365602Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:26:54.372936Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:26:54.371473Z&quot;}" data-execution_count="3">
+<div id="cell-5" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:33:33.301265Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:33:33.301050Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:33:33.304816Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:33:33.304108Z&quot;}" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> feedforward(inputs, w1, w2, b1, b2):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute the pre-activation values for the first layer</span></span>
@@ -943,7 +943,7 @@ Figure&nbsp;4.12: Backpropagation Algorithm
 <p>and the output of the network is given by</p>
 <p>$ g(x ; w) = b<sup>{2}+<em>{j=1}^{M} w</em>{j}</sup>{2} a_j.$</p>
 <p>Let’s test the function with some example inputs, weights and biases</p>
-<div id="cell-7" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:26:54.378700Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:26:54.378243Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:26:54.392596Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:26:54.391367Z&quot;}" data-execution_count="4">
+<div id="cell-7" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:33:33.308077Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:33:33.307836Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:33:33.315425Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:33:33.314690Z&quot;}" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the weights and biases</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>w1 <span class="op">=</span> np.array([[<span class="fl">0.1</span>, <span class="fl">0.2</span>], [<span class="fl">0.3</span>, <span class="fl">0.4</span>]]) <span class="co"># 2x2 matrix</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>w2 <span class="op">=</span> np.array([<span class="fl">0.5</span>, <span class="fl">0.6</span>]) <span class="co"># 1-d vector</span></span>
@@ -960,25 +960,11 @@ Figure&nbsp;4.12: Backpropagation Algorithm
 </div>
 </div>
 <p>To operationalize this, we would also need to define a loss function and an optimization algorithm to update the weights and biases. However, this is beyond the scope of this course.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Mini-Exercise
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Define a new function <code>deep_feedforward</code> that takes <code>w3</code> and <code>b3</code> as additional arguments and computes the output of a neural network with two hidden layers. The function should return the output of the network.</p>
-<p>Note that you will have to change the dimensions of the weights and biases, <code>w2</code> and <code>b2</code>, to match the new hidden layer.</p>
-</div>
-</div>
 </section>
 <section id="using-neural-networks-in-sci-kit-learn" class="level3" data-number="4.10.2">
 <h3 data-number="4.10.2" class="anchored" data-anchor-id="using-neural-networks-in-sci-kit-learn"><span class="header-section-number">4.10.2</span> Using Neural Networks in Sci-Kit Learn</h3>
 <p>Sci-kit learn provides a simple interface to use neural networks. However, it is not as flexible as the more commonly used PyTorch or TensorFlow. We can reuse the <strong>dataset of credit card transactions</strong> from <a href="https://www.kaggle.com/datasets/dhanushnarayananr/credit-card-fraud/data">Kaggle.com</a> to demonstrate how to use neural networks in scikit-learn.</p>
-<div id="cell-9" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:26:54.463875Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:26:54.463379Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:26:59.775865Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:26:59.774491Z&quot;}" data-execution_count="5">
+<div id="cell-9" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:33:33.348659Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:33:33.348388Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:33:35.795655Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:33:35.794647Z&quot;}" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -1019,16 +1005,16 @@ Mini-Exercise
 </div>
 <p>Recall that the target variable <span class="math inline">\(y\)</span> is <code>fraud</code>, which indicates whether the transaction is fraudulent or not. The other variables are the features <span class="math inline">\(x\)</span> of the transactions.</p>
 <p>To use a neural network for a classification task, we can use the <code>MLPClassifier</code> class from scikit-learn. The following code snippet shows how to use a neural network with one hidden layer with 16 nodes</p>
-<div id="cell-11" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:26:59.781648Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:26:59.781180Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:29:20.375176Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:29:20.374408Z&quot;}" data-execution_count="6">
+<div id="cell-11" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:33:35.799666Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:33:35.799365Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:34:51.407700Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:34:51.407108Z&quot;}" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> MLPClassifier(hidden_layer_sizes<span class="op">=</span>(<span class="dv">16</span>,), random_state<span class="op">=</span><span class="dv">42</span>, verbose<span class="op">=</span><span class="va">False</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>If you would like to use a neural network with multiple hidden layers, you can specify the number of nodes per hidden layer using the <code>hidden_layer_sizes</code> parameter. For example, the following code snippet shows how to use a neural network with two hidden layers, one with 5 nodes and the other with 4 nodes</p>
-<div id="cell-13" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:29:20.379088Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:29:20.378774Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:30:25.793102Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:30:25.792217Z&quot;}" data-execution_count="7">
+<div id="cell-13" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:34:51.411080Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:34:51.410834Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:35:31.277597Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:35:31.277039Z&quot;}" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> MLPClassifier(alpha<span class="op">=</span><span class="fl">1e-5</span>, hidden_layer_sizes<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">4</span>), activation<span class="op">=</span><span class="st">'logistic'</span>, random_state<span class="op">=</span><span class="dv">42</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note that the <code>alpha</code> parameter specifies the regularization strength, the <code>activation</code> parameter specifies the activation function (by default it uses <code>relu</code>) and the <code>random_state</code> parameter specifies the seed for the random number generator (useful for reproducible results).</p>
 <p>We can check the loss curve to see how the neural network loss declined during training</p>
-<div id="cell-15" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:30:25.797742Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:30:25.797355Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:30:26.062598Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:30:26.061401Z&quot;}" data-execution_count="8">
+<div id="cell-15" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:35:31.280780Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:35:31.280544Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:35:31.437427Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:35:31.436860Z&quot;}" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plt.plot(clf.loss_curve_)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Loss Curve"</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Iterations'</span>)</span>
@@ -1043,7 +1029,7 @@ Mini-Exercise
 </div>
 </div>
 <p>We can then use the same way to evaluate the neural network performance as we did for the other ML models</p>
-<div id="cell-17" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:30:26.068886Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:30:26.068234Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:30:26.797515Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:30:26.796572Z&quot;}" data-execution_count="9">
+<div id="cell-17" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:35:31.440613Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:35:31.440351Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:35:31.872281Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:35:31.871447Z&quot;}" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> clf.predict(X_test)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>y_proba <span class="op">=</span> clf.predict_proba(X_test)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1059,7 +1045,7 @@ ROC AUC: 0.9996638991577014</code></pre>
 </div>
 </div>
 <p>The neural network performs substantially better than the logistic regression. As in the case of the tree-based methods, the ROC AUC score is much closer to the maximum value of 1 and we have an almost perfect classifier</p>
-<div id="cell-19" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:30:26.802009Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:30:26.801406Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:30:27.095293Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:30:27.094469Z&quot;}" data-execution_count="10">
+<div id="cell-19" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:35:31.875572Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:35:31.875333Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:35:32.060068Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:35:32.058910Z&quot;}" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the ROC curve</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fpr, tpr, thresholds <span class="op">=</span> roc_curve(y_test, y_proba[:, <span class="dv">1</span>])</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1079,7 +1065,7 @@ ROC AUC: 0.9996638991577014</code></pre>
 </div>
 </div>
 <p>Let’s also check the confusion matrix to see where we still make mistakes</p>
-<div id="cell-21" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:30:27.099456Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:30:27.098995Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:30:27.587095Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:30:27.586099Z&quot;}" data-execution_count="11">
+<div id="cell-21" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:35:32.063105Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:35:32.062904Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:35:32.376914Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:35:32.375987Z&quot;}" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> confusion_matrix(y_test, y_pred, labels<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>]).transpose() <span class="co"># Transpose the sklearn confusion matrix to match the convention in the lecture</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(conf_mat, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, fmt<span class="op">=</span><span class="st">'g'</span>, xticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>], yticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>])</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Actual"</span>)</span>
@@ -1113,23 +1099,23 @@ Feel Free to Skip This Section
 </div>
 </div>
 <p>Let’s start by importing the necessary libraries</p>
-<div id="cell-23" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:30:27.591341Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:30:27.591003Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:30:28.921996Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:30:28.921175Z&quot;}" data-execution_count="12">
+<div id="cell-23" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:35:32.380527Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:35:32.380317Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:35:33.861475Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:35:33.860714Z&quot;}" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> DataLoader, TensorDataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, let’s prepare the data for PyTorch. We need to convert the data in our DataFrame to PyTorch tensors</p>
-<div id="cell-25" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:30:28.926236Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:30:28.925899Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:30:28.954969Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:30:28.953962Z&quot;}" data-execution_count="13">
+<div id="cell-25" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:35:33.864805Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:35:33.864557Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:35:33.901163Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:35:33.900426Z&quot;}" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>X_train_tensor <span class="op">=</span> torch.tensor(X_train.values, dtype<span class="op">=</span>torch.float32)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>y_train_tensor <span class="op">=</span> torch.tensor(y_train.values, dtype<span class="op">=</span>torch.<span class="bu">long</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note that we also converted the input values to <code>float32</code> for improved training speed and the target values to <code>long</code> which is a type of integer (remember our target <code>y</code> can only take values zero or one). Next, we need to create a <code>DataLoader</code> object to load the data in mini-batches during the training process</p>
-<div id="cell-27" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:30:28.960374Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:30:28.960004Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:30:28.965320Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:30:28.964356Z&quot;}" data-execution_count="14">
+<div id="cell-27" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:35:33.904738Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:35:33.904473Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:35:33.908672Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:35:33.907961Z&quot;}" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> TensorDataset(X_train_tensor, y_train_tensor)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>dataloader <span class="op">=</span> DataLoader(dataset, batch_size<span class="op">=</span><span class="dv">200</span>, shuffle<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>dataset_size <span class="op">=</span> <span class="bu">len</span>(dataloader.dataset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we define the neural network model using the <code>nn</code> module from PyTorch</p>
-<div id="cell-29" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:30:28.971309Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:30:28.970902Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:30:28.976842Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:30:28.975886Z&quot;}" data-execution_count="15">
+<div id="cell-29" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:35:33.911919Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:35:33.911670Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:35:33.920236Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:35:33.919648Z&quot;}" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> torch.nn.Sequential(</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    torch.nn.Linear(<span class="dv">7</span>, <span class="dv">16</span>), <span class="co"># 7 input features, 16 nodes in the hidden layer</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    torch.nn.ReLU(),        <span class="co"># ReLU activation function</span></span>
@@ -1137,12 +1123,12 @@ Feel Free to Skip This Section
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We also need to define the loss function and the optimizer. We will use the cross-entropy loss function and the Adam optimizer</p>
-<div id="cell-31" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:30:28.981788Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:30:28.981385Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:30:28.986839Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:30:28.985787Z&quot;}" data-execution_count="16">
+<div id="cell-31" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:35:33.923333Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:35:33.923106Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:35:33.926743Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:35:33.925942Z&quot;}" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>loss_fn <span class="op">=</span> torch.nn.CrossEntropyLoss()</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.Adam(model.parameters(), lr<span class="op">=</span><span class="fl">1e-3</span>, weight_decay<span class="op">=</span><span class="fl">1e-5</span>) <span class="co"># Adam optimizer with learning rate of 0.001 and L2 regularization (analogous to alpha in scikit-learn)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can now train the neural network using the following code snippet</p>
-<div id="cell-33" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:30:28.991730Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:30:28.991339Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:43:03.242317Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:43:03.241205Z&quot;}" data-execution_count="17">
+<div id="cell-33" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:35:33.929916Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:35:33.929662Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:42:37.904238Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:42:37.903483Z&quot;}" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">80</span>):</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Loop over batches in an epoch using DataLoader</span></span>
@@ -1166,19 +1152,19 @@ Feel Free to Skip This Section
 <span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> epoch <span class="op">%</span> <span class="dv">10</span> <span class="op">==</span> <span class="dv">9</span>:</span>
 <span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="sc">}</span><span class="ss"> loss: </span><span class="sc">{</span>loss<span class="sc">.</span>item()<span class="sc">:&gt;7f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Epoch 9 loss: 0.026985
-Epoch 19 loss: 0.036898
-Epoch 29 loss: 0.013686
-Epoch 39 loss: 0.008159
-Epoch 49 loss: 0.067167
-Epoch 59 loss: 0.020151
-Epoch 69 loss: 0.035507
-Epoch 79 loss: 0.017207</code></pre>
+<pre><code>Epoch 9 loss: 0.002971
+Epoch 19 loss: 0.010346
+Epoch 29 loss: 0.010593
+Epoch 39 loss: 0.004047
+Epoch 49 loss: 0.014236
+Epoch 59 loss: 0.006514
+Epoch 69 loss: 0.004833
+Epoch 79 loss: 0.011132</code></pre>
 </div>
 </div>
 <p>Note that here we are updating the model weights for each mini-batch in the dataset and go over the whole dataset 80 times (epochs). We print the loss every epoch to see how the loss decreases over time.</p>
 <p>The following snippet shows how to use full-batch gradient descent instead of mini-batch gradient descent</p>
-<div id="cell-35" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:43:03.248233Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:43:03.247748Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:49:34.515160Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:49:34.513204Z&quot;}" data-execution_count="18">
+<div id="cell-35" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:42:37.907830Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:42:37.907569Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:46:37.137352Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:46:37.136261Z&quot;}" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2000</span>):</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute the predicted y using the neural network model with the current weights</span></span>
@@ -1200,30 +1186,30 @@ Epoch 79 loss: 0.017207</code></pre>
 <span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> epoch <span class="op">%</span> <span class="dv">100</span> <span class="op">==</span> <span class="dv">99</span>:</span>
 <span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="sc">}</span><span class="ss"> loss: </span><span class="sc">{</span>loss<span class="sc">.</span>item()<span class="sc">:&gt;7f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Epoch 99 loss: 0.019051
-Epoch 199 loss: 0.019033
-Epoch 299 loss: 0.019024
-Epoch 399 loss: 0.019020
-Epoch 499 loss: 0.019016
-Epoch 599 loss: 0.019014
-Epoch 699 loss: 0.019012
-Epoch 799 loss: 0.019009
-Epoch 899 loss: 0.019007
-Epoch 999 loss: 0.019005
-Epoch 1099 loss: 0.019004
-Epoch 1199 loss: 0.019002
-Epoch 1299 loss: 0.019000
-Epoch 1399 loss: 0.018997
-Epoch 1499 loss: 0.018995
-Epoch 1599 loss: 0.018993
-Epoch 1699 loss: 0.018991
-Epoch 1799 loss: 0.018988
-Epoch 1899 loss: 0.018986
-Epoch 1999 loss: 0.018983</code></pre>
+<pre><code>Epoch 99 loss: 0.006053
+Epoch 199 loss: 0.005863
+Epoch 299 loss: 0.005810
+Epoch 399 loss: 0.005786
+Epoch 499 loss: 0.005771
+Epoch 599 loss: 0.005759
+Epoch 699 loss: 0.005750
+Epoch 799 loss: 0.005743
+Epoch 899 loss: 0.005736
+Epoch 999 loss: 0.005731
+Epoch 1099 loss: 0.005726
+Epoch 1199 loss: 0.005722
+Epoch 1299 loss: 0.005719
+Epoch 1399 loss: 0.005716
+Epoch 1499 loss: 0.005714
+Epoch 1599 loss: 0.005712
+Epoch 1699 loss: 0.005710
+Epoch 1799 loss: 0.005707
+Epoch 1899 loss: 0.005705
+Epoch 1999 loss: 0.005703</code></pre>
 </div>
 </div>
 <p>Note that in this version we are updating the model weights 2000 times (epochs) and printing the loss every 100 epochs. We can now evaluate the model on the test set</p>
-<div id="cell-37" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T16:49:34.523339Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T16:49:34.522734Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T16:49:35.231276Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T16:49:35.229773Z&quot;}" data-execution_count="19">
+<div id="cell-37" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-28T18:46:37.141781Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-28T18:46:37.141439Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-28T18:46:37.532975Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-28T18:46:37.532289Z&quot;}" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>X_test_tensor <span class="op">=</span> torch.tensor(X_test.values, dtype<span class="op">=</span>torch.float32)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> torch.argmax(model(X_test_tensor), dim<span class="op">=</span><span class="dv">1</span>).numpy()</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1231,9 +1217,9 @@ Epoch 1999 loss: 0.018983</code></pre>
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Precision: </span><span class="sc">{</span>precision_score(y_test, y_pred)<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Recall: </span><span class="sc">{</span>recall_score(y_test, y_pred)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 0.9923833333333333
-Precision: 0.9520661781370401
-Recall: 0.9612524312573891</code></pre>
+<pre><code>Accuracy: 0.9987533333333334
+Precision: 0.9946794258373206
+Recall: 0.9910377178597307</code></pre>
 </div>
 </div>
 <p>Note that for simplicity we are reusing the sci-kit learn metrics to evaluate the model.</p>
