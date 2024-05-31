@@ -368,7 +368,7 @@ Figure&nbsp;3.2: Regression Tree - Prediction of <span class="math inline">\(y\)
 <div>
 
 </div>
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-layout-align="center">
+<div class="cell quarto-layout-panel" data-layout-align="center" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
@@ -564,8 +564,8 @@ Table&nbsp;3.2: Gini Impurities for Different CET1 Thresholds
 <tr class="even">
 <td style="text-align: right;">9.8</td>
 <td style="text-align: right;">0.5</td>
-<td style="text-align: right;">0.2</td>
-<td style="text-align: right;">0.29</td>
+<td style="text-align: right;">0.48</td>
+<td style="text-align: right;">0.49</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">10.7</td>
@@ -599,7 +599,7 @@ Table&nbsp;3.2: Gini Impurities for Different CET1 Thresholds
 </div>
 </div>
 <p>According to <a href="#tbl-decision-tree-classification-example-impurity" class="quarto-xref">Table&nbsp;<span>3.2</span></a>, the best split is at a CET1 ratio of 7.0%. The Gini impurity for <span class="math inline">\(\text{CET1}\leq 11\%\)</span> is 0.38, the Gini impurity of <span class="math inline">\(\text{CET1}&gt;11\%\)</span> is 0, and the total impurity is 0.21. However, we could also split based on whether a bank would be systemically important. In this case, the Gini impurity of the split is 0.40. This means that the best split is based on the CET1 ratio. We split the data into two regions: one with a CET1 ratio of 11.0% or less and one with a CET1 ratio of more than 11.0%.</p>
-<p>Note that the child node for a CET1 ratio of more than <span class="math inline">\(11.0\%\)</span> is already pure, i.e., all banks in this region are not defaulting. However, the child node for a CET1 ratio of <span class="math inline">\(11.0\%\)</span> or less is not pure meaning that we can do additional splits as shown in <a href="#fig-decision-tree-classification-example" class="quarto-xref">Figure&nbsp;<span>3.6</span></a>. In particular, both, the split at a CET1 ratio of 9.8% and the split based on whether a bank is systemically important yield a Gini impurity of 0.25. We choose the split based on whether a bank is systemically important as the next split, which means we can do the final split based on the CET1 ratio.</p>
+<p>Note that the child node for a CET1 ratio of more than <span class="math inline">\(11.0\%\)</span> is already pure, i.e., all banks in this region are not defaulting. However, the child node for a CET1 ratio of <span class="math inline">\(11.0\%\)</span> or less is not pure meaning that we can do additional splits as shown in <a href="#fig-decision-tree-classification-example" class="quarto-xref">Figure&nbsp;<span>3.6</span></a>. In particular, both, the split at a CET1 ratio of 8.8% and the split based on whether a bank is systemically important yield a Gini impurity of 0.25. We choose the split based on whether a bank is systemically important as the next split, which means we can do the final split based on the CET1 ratio.</p>
 <div id="fig-decision-tree-classification-example" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-decision-tree-classification-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
