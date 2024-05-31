@@ -368,7 +368,7 @@ Figure&nbsp;3.2: Regression Tree - Prediction of <span class="math inline">\(y\)
 <div>
 
 </div>
-<div class="cell quarto-layout-panel" data-layout-align="center" data-layout-ncol="2">
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-layout-align="center">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
@@ -754,9 +754,9 @@ Warning
 </section>
 <section id="python-implementation" class="level2" data-number="3.8">
 <h2 data-number="3.8" class="anchored" data-anchor-id="python-implementation"><span class="header-section-number">3.8</span> Python Implementation</h2>
-<div class="quarto-embed-nb-cell" data-notebook="/Users/joel/Dropbox (Privat)/Studium/CEMFI/PhD/TA/Data Science for Diploma in Banking Supervision/Local/Lecture Notes/notebooks/decision_trees.ipynb" data-notebook-title="Load the data" data-notebook-cellid="cell-0">
+<div class="quarto-embed-nb-cell" data-notebook="/Users/joel/Dropbox (Privat)/Studium/CEMFI/PhD/TA/Data Science for Diploma in Banking Supervision/Local/Lecture Notes/notebooks/decision_trees.ipynb" data-notebook-title="Check if the file exists" data-notebook-cellid="cell-0">
 <p>Let’s have a look at how to implement a decision tree in Python. Again, we need to first import the required packages and load the data</p>
-<div id="cell-1" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:00.323278Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:00.322950Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:10:02.906354Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:10:02.905676Z&quot;}" data-execution_count="1">
+<div id="cell-1" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:11.447517Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:11.447229Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:14.385646Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:14.384714Z&quot;}" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -769,13 +769,39 @@ Warning
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, accuracy_score, roc_auc_score, recall_score, precision_score, roc_curve</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.inspection <span class="im">import</span> permutation_importance</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.max_columns'</span>, <span class="dv">50</span>) <span class="co"># Display up to 50 columns</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/card_transdata.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> io <span class="im">import</span> BytesIO</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib.request <span class="im">import</span> urlopen</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> zipfile <span class="im">import</span> ZipFile</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os.path</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the file exists</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.isfile(<span class="st">'data/card_transdata.csv'</span>):</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Downloading dataset...'</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define the dataset to be downloaded</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    zipurl <span class="op">=</span> <span class="st">'https://www.kaggle.com/api/v1/datasets/download/dhanushnarayananr/credit-card-fraud'</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Download and unzip the dataset in the data folder</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> urlopen(zipurl) <span class="im">as</span> zipresp:</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> ZipFile(BytesIO(zipresp.read())) <span class="im">as</span> zfile:</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>            zfile.extractall(<span class="st">'data'</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'DONE!'</span>)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Dataset already downloaded!'</span>)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/card_transdata.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dataset already downloaded!</code></pre>
+</div>
 </div>
 <p>This is the <strong>dataset of credit card transactions</strong> from <a href="https://www.kaggle.com/datasets/dhanushnarayananr/credit-card-fraud/data">Kaggle.com</a> which we have used before. Recall that the target variable <span class="math inline">\(y\)</span> is <code>fraud</code>, which indicates whether the transaction is fraudulent or not. The other variables are the features <span class="math inline">\(x\)</span> of the transactions.</p>
-<div id="cell-3" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:02.909571Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:02.909312Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:10:02.930848Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:10:02.930224Z&quot;}" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df.head(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-3" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:14.389689Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:14.389392Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:14.413731Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:14.413088Z&quot;}" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.head(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 <div>
@@ -1023,8 +1049,8 @@ Warning
 </div>
 </div>
 </div>
-<div id="cell-4" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:02.965442Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:02.965157Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:10:03.221288Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:10:03.220719Z&quot;}" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-4" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:14.416833Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:14.416577Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:14.681122Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:14.680506Z&quot;}" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 <div>
@@ -1140,8 +1166,8 @@ Warning
 </div>
 </div>
 </div>
-<div id="cell-5" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:03.224262Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:03.224026Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:10:03.241214Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:10:03.240613Z&quot;}" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-5" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:14.684192Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:14.683945Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:14.706136Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:14.705541Z&quot;}" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
 RangeIndex: 1000000 entries, 0 to 999999
@@ -1164,43 +1190,43 @@ memory usage: 61.0 MB</code></pre>
 <h3 data-number="3.8.1" class="anchored" data-anchor-id="data-preprocessing"><span class="header-section-number">3.8.1</span> Data Preprocessing</h3>
 <p>Since we have already explored the dataset in the previous notebook, we can skip that part and move directly to the data preprocessing.</p>
 <p>We will again split the data into training and test sets using the <code>train_test_split</code> function</p>
-<div id="cell-7" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:03.244378Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:03.244138Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:10:03.619666Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:10:03.618438Z&quot;}" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop(<span class="st">'fraud'</span>, axis<span class="op">=</span><span class="dv">1</span>) <span class="co"># All variables except `fraud`</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'fraud'</span>] <span class="co"># Only our fraud variables</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, stratify<span class="op">=</span>y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-7" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:14.709129Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:14.708889Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:15.140280Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:15.139363Z&quot;}" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop(<span class="st">'fraud'</span>, axis<span class="op">=</span><span class="dv">1</span>) <span class="co"># All variables except `fraud`</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'fraud'</span>] <span class="co"># Only our fraud variables</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, stratify<span class="op">=</span>y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we can do the feature scaling to ensure our non-binary variables have mean zero and variance 1</p>
-<div id="cell-9" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:03.623495Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:03.623187Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:10:03.677314Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:10:03.676525Z&quot;}" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> scale_features(scaler, df, col_names, only_transform<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract the features we want to scale</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    features <span class="op">=</span> df[col_names] </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fit the scaler to the features and transform them</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> only_transform:</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> scaler.transform(features.values)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> scaler.fit_transform(features.values)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Replace the original features with the scaled features</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    df[col_names] <span class="op">=</span> features</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>col_names <span class="op">=</span> [<span class="st">'distance_from_home'</span>, <span class="st">'distance_from_last_transaction'</span>, <span class="st">'ratio_to_median_purchase_price'</span>] </span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler() </span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>scale_features(scaler, X_train, col_names)</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>scale_features(scaler, X_test, col_names, only_transform<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-9" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:15.144210Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:15.143906Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:15.212285Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:15.211306Z&quot;}" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> scale_features(scaler, df, col_names, only_transform<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract the features we want to scale</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    features <span class="op">=</span> df[col_names] </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fit the scaler to the features and transform them</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> only_transform:</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> scaler.transform(features.values)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> scaler.fit_transform(features.values)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Replace the original features with the scaled features</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    df[col_names] <span class="op">=</span> features</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>col_names <span class="op">=</span> [<span class="st">'distance_from_home'</span>, <span class="st">'distance_from_last_transaction'</span>, <span class="st">'ratio_to_median_purchase_price'</span>] </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler() </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>scale_features(scaler, X_train, col_names)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>scale_features(scaler, X_test, col_names, only_transform<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="implementing-a-decision-tree-classifier" class="level3" data-number="3.8.2">
 <h3 data-number="3.8.2" class="anchored" data-anchor-id="implementing-a-decision-tree-classifier"><span class="header-section-number">3.8.2</span> Implementing a Decision Tree Classifier</h3>
 <p>We can now implement a decision tree model using the <code>DecisionTreeClassifier</code> class from the <code>sklearn.tree</code> module. Fitting the model to the data is almost the same as when we used logistic regression</p>
-<div id="cell-11" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:03.681116Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:03.680813Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:10:05.075611Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:10:05.074940Z&quot;}" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>clf_dt <span class="op">=</span> DecisionTreeClassifier(random_state<span class="op">=</span><span class="dv">0</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-11" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:15.216478Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:15.216062Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:16.810704Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:16.809876Z&quot;}" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>clf_dt <span class="op">=</span> DecisionTreeClassifier(random_state<span class="op">=</span><span class="dv">0</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can visualize the tree using the <code>plot_tree</code> function from the <code>sklearn.tree</code> module</p>
-<div id="cell-13" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:05.078722Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:05.078466Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:10:06.612414Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:10:06.611784Z&quot;}" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plot_tree(clf_dt, filled<span class="op">=</span><span class="va">True</span>, feature_names <span class="op">=</span> X_train.columns.to_list())</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-13" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:16.814207Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:16.813956Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:18.615317Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:18.614624Z&quot;}" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plot_tree(clf_dt, filled<span class="op">=</span><span class="va">True</span>, feature_names <span class="op">=</span> X_train.columns.to_list())</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1210,9 +1236,9 @@ memory usage: 61.0 MB</code></pre>
 </div>
 </div>
 <p>The tree is quite large and it’s difficult to see details. Let’s only look at the first level of the tree</p>
-<div id="cell-15" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:06.615403Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:06.615160Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:10:06.794988Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:10:06.794198Z&quot;}" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plot_tree(clf_dt, max_depth<span class="op">=</span><span class="dv">1</span>, filled<span class="op">=</span><span class="va">True</span>, feature_names <span class="op">=</span> X_train.columns.to_list(), fontsize<span class="op">=</span><span class="dv">10</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-15" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:18.618482Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:18.618226Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:18.837833Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:18.837226Z&quot;}" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plot_tree(clf_dt, max_depth<span class="op">=</span><span class="dv">1</span>, filled<span class="op">=</span><span class="va">True</span>, feature_names <span class="op">=</span> X_train.columns.to_list(), fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1223,14 +1249,14 @@ memory usage: 61.0 MB</code></pre>
 </div>
 <p>Recall from the data exploration that <code>ratio_to_median_purchase_price</code> was highly correlated with fraud. The decision tree model seems to have picked up on this as well since the first split is based on this variable. Also, note that the order in which the variables are split can differ between different branches of the tree.</p>
 <p>We can also make predictions using the model and evaluate its performance using the same functions as before</p>
-<div id="cell-17" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:06.798209Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:06.798003Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:10:07.162081Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:10:07.161358Z&quot;}" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>y_pred_dt <span class="op">=</span> clf_dt.predict(X_test)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>y_proba_dt <span class="op">=</span> clf_dt.predict_proba(X_test)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy_score(y_test, y_pred_dt)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Precision: </span><span class="sc">{</span>precision_score(y_test, y_pred_dt)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Recall: </span><span class="sc">{</span>recall_score(y_test, y_pred_dt)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ROC AUC: </span><span class="sc">{</span>roc_auc_score(y_test, y_proba_dt[:, <span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-17" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:18.841487Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:18.841201Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:19.336618Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:19.335912Z&quot;}" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>y_pred_dt <span class="op">=</span> clf_dt.predict(X_test)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>y_proba_dt <span class="op">=</span> clf_dt.predict_proba(X_test)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy_score(y_test, y_pred_dt)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Precision: </span><span class="sc">{</span>precision_score(y_test, y_pred_dt)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Recall: </span><span class="sc">{</span>recall_score(y_test, y_pred_dt)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ROC AUC: </span><span class="sc">{</span>roc_auc_score(y_test, y_proba_dt[:, <span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Accuracy: 0.9999833333333333
 Precision: 0.9999237223493517
@@ -1239,17 +1265,17 @@ ROC AUC: 0.999939141362689</code></pre>
 </div>
 </div>
 <p>The decision tree performs substantially better than the logistic regression. The ROC AUC score is much closer to the maximum value of 1 and we have an almost perfect classifier</p>
-<div id="cell-19" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:07.165118Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:07.164869Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:10:07.345786Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:10:07.345271Z&quot;}" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the ROC curve</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fpr, tpr, thresholds <span class="op">=</span> roc_curve(y_test, y_proba_dt[:, <span class="dv">1</span>])</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the ROC curve</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>plt.plot(fpr, tpr)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">1</span>], linestyle<span class="op">=</span><span class="st">'--'</span>, color<span class="op">=</span><span class="st">'grey'</span>)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'False Positive Rate (FPR)'</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'True Positive Rate (TPR)'</span>)</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'ROC Curve'</span>)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-19" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:19.340610Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:19.340303Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:19.547348Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:19.546207Z&quot;}" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the ROC curve</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fpr, tpr, thresholds <span class="op">=</span> roc_curve(y_test, y_proba_dt[:, <span class="dv">1</span>])</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the ROC curve</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>plt.plot(fpr, tpr)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">1</span>], linestyle<span class="op">=</span><span class="st">'--'</span>, color<span class="op">=</span><span class="st">'grey'</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'False Positive Rate (FPR)'</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'True Positive Rate (TPR)'</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'ROC Curve'</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1259,12 +1285,12 @@ ROC AUC: 0.999939141362689</code></pre>
 </div>
 </div>
 <p>Let’s also check the confusion matrix to see where we still make mistakes</p>
-<div id="cell-21" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:07.349189Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:07.348892Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:10:07.686410Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:10:07.685529Z&quot;}" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> confusion_matrix(y_test, y_pred_dt, labels<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>]).transpose() <span class="co"># Transpose the sklearn confusion matrix to match the convention in the lecture</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(conf_mat, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, fmt<span class="op">=</span><span class="st">'g'</span>, xticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>], yticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>])</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Actual"</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Predicted"</span>)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-21" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:19.550818Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:19.550570Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:19.929916Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:19.929072Z&quot;}" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> confusion_matrix(y_test, y_pred_dt, labels<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>]).transpose() <span class="co"># Transpose the sklearn confusion matrix to match the convention in the lecture</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(conf_mat, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, fmt<span class="op">=</span><span class="st">'g'</span>, xticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>], yticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>])</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Actual"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Predicted"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1278,18 +1304,18 @@ ROC AUC: 0.999939141362689</code></pre>
 <section id="implementing-a-random-forest-classifier" class="level3" data-number="3.8.3">
 <h3 data-number="3.8.3" class="anchored" data-anchor-id="implementing-a-random-forest-classifier"><span class="header-section-number">3.8.3</span> Implementing a Random Forest Classifier</h3>
 <p>We can also implement a random forest model using the <code>RandomForestClassifier</code> class from the <code>sklearn.ensemble</code> module. Fitting the model to the data is almost the same as when we used logistic regression and decision trees</p>
-<div id="cell-23" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:10:07.690254Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:10:07.690013Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:11:10.267786Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:11:10.267180Z&quot;}" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>clf_rf <span class="op">=</span> RandomForestClassifier(random_state <span class="op">=</span> <span class="dv">0</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-23" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:19.934623Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:19.934275Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:30.233105Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:30.232143Z&quot;}" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>clf_rf <span class="op">=</span> RandomForestClassifier(random_state <span class="op">=</span> <span class="dv">0</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note that it takes a bit longer to train the Random Forest since we have to train many trees (the default setting is 100). We can also make predictions using the model and evaluate its performance using the same functions as before</p>
-<div id="cell-25" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:11:10.271284Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:11:10.271026Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:11:13.314017Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:11:13.313240Z&quot;}" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>y_pred_rf <span class="op">=</span> clf_rf.predict(X_test)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>y_proba_rf <span class="op">=</span> clf_rf.predict_proba(X_test)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy_score(y_test, y_pred_rf)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Precision: </span><span class="sc">{</span>precision_score(y_test, y_pred_rf)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Recall: </span><span class="sc">{</span>recall_score(y_test, y_pred_rf)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ROC AUC: </span><span class="sc">{</span>roc_auc_score(y_test, y_proba_rf[:, <span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-25" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:30.236995Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:30.236695Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:33.920027Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:33.919371Z&quot;}" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>y_pred_rf <span class="op">=</span> clf_rf.predict(X_test)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>y_proba_rf <span class="op">=</span> clf_rf.predict_proba(X_test)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy_score(y_test, y_pred_rf)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Precision: </span><span class="sc">{</span>precision_score(y_test, y_pred_rf)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Recall: </span><span class="sc">{</span>recall_score(y_test, y_pred_rf)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ROC AUC: </span><span class="sc">{</span>roc_auc_score(y_test, y_proba_rf[:, <span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Accuracy: 0.9999833333333333
 Precision: 1.0
@@ -1298,12 +1324,12 @@ ROC AUC: 0.9999999993035008</code></pre>
 </div>
 </div>
 <p>As expected, the Random Forest performs better than the Decision Tree in the metrics we have used. Now, let’s also check the confusion matrix to see where we still make mistakes</p>
-<div id="cell-27" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:11:13.317155Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:11:13.316877Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:11:13.631584Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:11:13.630614Z&quot;}" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> confusion_matrix(y_test, y_pred_rf, labels<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>]).transpose() <span class="co"># Transpose the sklearn confusion matrix to match the convention in the lecture</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(conf_mat, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, fmt<span class="op">=</span><span class="st">'g'</span>, xticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>], yticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>])</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Actual"</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Predicted"</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-27" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:33.923169Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:33.922912Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:34.283529Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:34.282757Z&quot;}" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> confusion_matrix(y_test, y_pred_rf, labels<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>]).transpose() <span class="co"># Transpose the sklearn confusion matrix to match the convention in the lecture</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(conf_mat, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, fmt<span class="op">=</span><span class="st">'g'</span>, xticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>], yticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>])</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Actual"</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Predicted"</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1317,17 +1343,17 @@ ROC AUC: 0.9999999993035008</code></pre>
 <section id="implementing-a-xgboost-classifier" class="level3" data-number="3.8.4">
 <h3 data-number="3.8.4" class="anchored" data-anchor-id="implementing-a-xgboost-classifier"><span class="header-section-number">3.8.4</span> Implementing a XGBoost Classifier</h3>
 <p>Let’s also have a look at the XGBoost classifier. We can implement the model using the <code>XGBClassifier</code> class from the <code>xgboost</code> package. Fitting the model to the data is almost the same as when we used logistic regression, decision trees, and random forests, even though it is not part of the <code>sklearn</code> package. This is because the <code>xgboost</code> package is designed to work well with the <code>sklearn</code> package. Let’s fit the model to the data</p>
-<div id="cell-29" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:11:13.634989Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:11:13.634755Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:11:15.334186Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:11:15.333422Z&quot;}" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>clf_xgb <span class="op">=</span> XGBClassifier(random_state <span class="op">=</span> <span class="dv">0</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-29" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:34.286855Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:34.286641Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:36.494100Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:36.493306Z&quot;}" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>clf_xgb <span class="op">=</span> XGBClassifier(random_state <span class="op">=</span> <span class="dv">0</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-30" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:11:15.338042Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:11:15.337764Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:11:15.853483Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:11:15.852770Z&quot;}" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>y_pred_xgb <span class="op">=</span> clf_xgb.predict(X_test)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>y_proba_xgb <span class="op">=</span> clf_xgb.predict_proba(X_test)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy_score(y_test, y_pred_xgb)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Precision: </span><span class="sc">{</span>precision_score(y_test, y_pred_xgb)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Recall: </span><span class="sc">{</span>recall_score(y_test, y_pred_xgb)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ROC AUC: </span><span class="sc">{</span>roc_auc_score(y_test, y_proba_xgb[:, <span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-30" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:36.498147Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:36.497858Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:37.082068Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:37.081474Z&quot;}" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>y_pred_xgb <span class="op">=</span> clf_xgb.predict(X_test)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>y_proba_xgb <span class="op">=</span> clf_xgb.predict_proba(X_test)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy_score(y_test, y_pred_xgb)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Precision: </span><span class="sc">{</span>precision_score(y_test, y_pred_xgb)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Recall: </span><span class="sc">{</span>recall_score(y_test, y_pred_xgb)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ROC AUC: </span><span class="sc">{</span>roc_auc_score(y_test, y_proba_xgb[:, <span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Accuracy: 0.9983366666666667
 Precision: 0.9893835616438356
@@ -1336,12 +1362,12 @@ ROC AUC: 0.999973496046352</code></pre>
 </div>
 </div>
 <p>Let’s also check the confusion matrix to see where we still make mistakes</p>
-<div id="cell-32" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:11:15.856535Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:11:15.856307Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:11:16.141828Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:11:16.141059Z&quot;}" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> confusion_matrix(y_test, y_pred_xgb, labels<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>]).transpose() <span class="co"># Transpose the sklearn confusion matrix to match the convention in the lecture</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(conf_mat, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, fmt<span class="op">=</span><span class="st">'g'</span>, xticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>], yticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>])</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Actual"</span>)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Predicted"</span>)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-32" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:37.085261Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:37.085000Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:37.407143Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:37.406289Z&quot;}" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> confusion_matrix(y_test, y_pred_xgb, labels<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>]).transpose() <span class="co"># Transpose the sklearn confusion matrix to match the convention in the lecture</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(conf_mat, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, fmt<span class="op">=</span><span class="st">'g'</span>, xticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>], yticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>])</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Actual"</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Predicted"</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1355,17 +1381,17 @@ ROC AUC: 0.999973496046352</code></pre>
 <section id="feature-importance" class="level3" data-number="3.8.5">
 <h3 data-number="3.8.5" class="anchored" data-anchor-id="feature-importance"><span class="header-section-number">3.8.5</span> Feature Importance</h3>
 <p>We can also look at the feature importance of each model. The feature importance is a measure of how much each feature contributes to the model’s predictions. Let’s start with the Decision Tree model</p>
-<div id="cell-34" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:11:16.145094Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:11:16.144782Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:11:16.284578Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:11:16.283624Z&quot;}" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the feature importance</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>df_feature_importance_dt <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: clf_dt.feature_importances_})</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>df_feature_importance_dt <span class="op">=</span> df_feature_importance_dt.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the feature importance</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>plt.barh(df_feature_importance_dt[<span class="st">'Feature'</span>], df_feature_importance_dt[<span class="st">'Importance'</span>])</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Importance'</span>)</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature'</span>)</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Feature Importance - Decision Tree'</span>)</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-34" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:37.410221Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:37.409982Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:37.558319Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:37.557737Z&quot;}" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the feature importance</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>df_feature_importance_dt <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: clf_dt.feature_importances_})</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>df_feature_importance_dt <span class="op">=</span> df_feature_importance_dt.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the feature importance</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>plt.barh(df_feature_importance_dt[<span class="st">'Feature'</span>], df_feature_importance_dt[<span class="st">'Importance'</span>])</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Importance'</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature'</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Feature Importance - Decision Tree'</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1376,17 +1402,17 @@ ROC AUC: 0.999973496046352</code></pre>
 </div>
 <p>This shows that the <code>ratio_to_median_purchase_price</code> is the most important feature for determining whether a transaction is fraudulent or not. Whether a transaction is online, is important as well.</p>
 <p>Let’s also look at the feature importance of the Random Forest model</p>
-<div id="cell-36" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:11:16.287525Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:11:16.287323Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:11:16.420191Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:11:16.419399Z&quot;}" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the feature importance</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>df_feature_importance_rf <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: clf_rf.feature_importances_})</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>df_feature_importance_rf <span class="op">=</span> df_feature_importance_rf.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the feature importance</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>plt.barh(df_feature_importance_rf[<span class="st">'Feature'</span>], df_feature_importance_rf[<span class="st">'Importance'</span>])</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Importance'</span>)</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature'</span>)</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Feature Importance - Random Forest'</span>)</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-36" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:37.561504Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:37.561244Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:37.704444Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:37.703654Z&quot;}" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the feature importance</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>df_feature_importance_rf <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: clf_rf.feature_importances_})</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>df_feature_importance_rf <span class="op">=</span> df_feature_importance_rf.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the feature importance</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>plt.barh(df_feature_importance_rf[<span class="st">'Feature'</span>], df_feature_importance_rf[<span class="st">'Importance'</span>])</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Importance'</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature'</span>)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Feature Importance - Random Forest'</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1396,17 +1422,17 @@ ROC AUC: 0.999973496046352</code></pre>
 </div>
 </div>
 <p>Somewhat surprisingly, XGBoost seems to have picked up on different features than the Decision Tree and Random Forest models. The most important feature is <code>online_order</code>, followed by <code>ratio_to_median_purchase_price</code> as you can see from the plot below</p>
-<div id="cell-38" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:11:16.423834Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:11:16.423584Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:11:16.562547Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:11:16.561636Z&quot;}" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the feature importance</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>df_feature_importance_xgb <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: clf_xgb.feature_importances_})</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>df_feature_importance_xgb <span class="op">=</span> df_feature_importance_xgb.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the feature importance</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>plt.barh(df_feature_importance_xgb[<span class="st">'Feature'</span>], df_feature_importance_xgb[<span class="st">'Importance'</span>])</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Importance'</span>)</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature'</span>)</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Feature Importance - XGBoost'</span>)</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-38" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:37.707918Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:37.707634Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:37.851716Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:37.850888Z&quot;}" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the feature importance</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>df_feature_importance_xgb <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: clf_xgb.feature_importances_})</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>df_feature_importance_xgb <span class="op">=</span> df_feature_importance_xgb.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the feature importance</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>plt.barh(df_feature_importance_xgb[<span class="st">'Feature'</span>], df_feature_importance_xgb[<span class="st">'Importance'</span>])</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Importance'</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature'</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Feature Importance - XGBoost'</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1419,20 +1445,20 @@ ROC AUC: 0.999973496046352</code></pre>
 <section id="permuation-importance" class="level3" data-number="3.8.6">
 <h3 data-number="3.8.6" class="anchored" data-anchor-id="permuation-importance"><span class="header-section-number">3.8.6</span> Permuation Importance</h3>
 <p>We can also look at the permutation importance of each model. The permutation importance is a measure of how much each feature contributes to the model’s predictions. The permutation importance is calculated by permuting the values of each feature and measuring how much the model’s performance decreases. Let’s start with the Decision Tree model</p>
-<div id="cell-40" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:11:16.565814Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:11:16.565619Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:11:21.334813Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:11:21.334196Z&quot;}" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the permutation importance</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>result_dt <span class="op">=</span> permutation_importance(clf_dt, X_test, y_test, n_repeats<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the feature importance</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>df_permutation_importance_dt <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: result_dt.importances_mean})</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>df_permutation_importance_dt <span class="op">=</span> df_permutation_importance_dt.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the feature importance</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>plt.barh(df_permutation_importance_dt[<span class="st">'Feature'</span>], df_permutation_importance_dt[<span class="st">'Importance'</span>])</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Accuracy Decrease'</span>)</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature'</span>)</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Permutation Importance - Decision Tree'</span>)</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-40" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:37.856684Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:37.856441Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:42.856282Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:42.855360Z&quot;}" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the permutation importance</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>result_dt <span class="op">=</span> permutation_importance(clf_dt, X_test, y_test, n_repeats<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the permutation importance</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>df_permutation_importance_dt <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: result_dt.importances_mean})</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>df_permutation_importance_dt <span class="op">=</span> df_permutation_importance_dt.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the permutation importance</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>plt.barh(df_permutation_importance_dt[<span class="st">'Feature'</span>], df_permutation_importance_dt[<span class="st">'Importance'</span>])</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Accuracy Decrease'</span>)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature'</span>)</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Permutation Importance - Decision Tree'</span>)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1442,20 +1468,20 @@ ROC AUC: 0.999973496046352</code></pre>
 </div>
 </div>
 <p>Let’s also look at the permutation importance of the Random Forest model</p>
-<div id="cell-42" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:11:21.338786Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:11:21.338565Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:13:05.015056Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:13:05.014407Z&quot;}" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the permutation importance</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>result_rf <span class="op">=</span> permutation_importance(clf_rf, X_test, y_test, n_repeats<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the feature importance</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>df_permutation_importance_rf <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: result_rf.importances_mean})</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>df_permutation_importance_rf <span class="op">=</span> df_permutation_importance_rf.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the feature importance</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>plt.barh(df_permutation_importance_rf[<span class="st">'Feature'</span>], df_permutation_importance_rf[<span class="st">'Importance'</span>])</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Accuracy Decrease'</span>)</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature'</span>)</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Permutation Importance - Random Forest'</span>)</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-42" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:42.859962Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:42.859708Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:45:30.733357Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:45:30.732541Z&quot;}" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the permutation importance</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>result_rf <span class="op">=</span> permutation_importance(clf_rf, X_test, y_test, n_repeats<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the permutation importance</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>df_permutation_importance_rf <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: result_rf.importances_mean})</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>df_permutation_importance_rf <span class="op">=</span> df_permutation_importance_rf.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the permutation importance</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>plt.barh(df_permutation_importance_rf[<span class="st">'Feature'</span>], df_permutation_importance_rf[<span class="st">'Importance'</span>])</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Accuracy Decrease'</span>)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature'</span>)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Permutation Importance - Random Forest'</span>)</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1465,20 +1491,20 @@ ROC AUC: 0.999973496046352</code></pre>
 </div>
 </div>
 <p>Let’s also look at the permutation importance of the XGBoost model</p>
-<div id="cell-44" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-13T13:13:05.018343Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-13T13:13:05.018088Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-13T13:13:13.176046Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-13T13:13:13.175345Z&quot;}" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the permutation importance</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>result_xgb <span class="op">=</span> permutation_importance(clf_xgb, X_test, y_test, n_repeats<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the feature importance</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>df_permutation_importance_xgb <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: result_xgb.importances_mean})</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>df_permutation_importance_xgb <span class="op">=</span> df_permutation_importance_xgb.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the feature importance</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>plt.barh(df_permutation_importance_xgb[<span class="st">'Feature'</span>], df_permutation_importance_xgb[<span class="st">'Importance'</span>])</span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Accuracy Decrease'</span>)</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature'</span>)</span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Permutation Importance - XGBoost'</span>)</span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-44" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:45:30.738393Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:45:30.738183Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:45:39.521403Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:45:39.520719Z&quot;}" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the permutation importance</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>result_xgb <span class="op">=</span> permutation_importance(clf_xgb, X_test, y_test, n_repeats<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the permutation importance</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>df_permutation_importance_xgb <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: X_train.columns, <span class="st">'Importance'</span>: result_xgb.importances_mean})</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>df_permutation_importance_xgb <span class="op">=</span> df_permutation_importance_xgb.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the permutation importance</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>plt.barh(df_permutation_importance_xgb[<span class="st">'Feature'</span>], df_permutation_importance_xgb[<span class="st">'Importance'</span>])</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Accuracy Decrease'</span>)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Feature'</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Permutation Importance - XGBoost'</span>)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">

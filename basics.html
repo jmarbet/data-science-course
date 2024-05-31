@@ -945,7 +945,7 @@ Figure&nbsp;2.9: Area Under the Curve (AUC)
 <div>
 
 </div>
-<div class="cell quarto-layout-panel" data-layout-ncol="3" data-layout-align="center">
+<div class="cell quarto-layout-panel" data-layout-align="center" data-layout-ncol="3">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
@@ -1158,7 +1158,7 @@ Mini-Exercise
 <h2 data-number="2.5" class="anchored" data-anchor-id="python-implementation"><span class="header-section-number">2.5</span> Python Implementation</h2>
 <div class="quarto-embed-nb-cell" data-notebook="/Users/joel/Dropbox (Privat)/Studium/CEMFI/PhD/TA/Data Science for Diploma in Banking Supervision/Local/Lecture Notes/notebooks/basic_concepts.ipynb" data-notebook-title="Check if the file exists" data-notebook-cellid="cell-0">
 <p>Let’s have a look at how to implement a logistic regression model in Python. First, we need to import the required packages</p>
-<div id="cell-1" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:49.003514Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:49.003210Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:51.001946Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:51.001272Z&quot;}" data-execution_count="1">
+<div id="cell-1" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:37.509336Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:37.509056Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:39.996531Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:39.995766Z&quot;}" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -1170,7 +1170,7 @@ Mini-Exercise
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.max_columns'</span>, <span class="dv">50</span>) <span class="co"># Display up to 50 columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s download the dataset automatically, unzip it, and place it in a folder called <code>data</code> if you haven’t done so already</p>
-<div id="cell-3" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:51.006153Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:51.005740Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:51.011023Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:51.010268Z&quot;}" data-execution_count="2">
+<div id="cell-3" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:40.001148Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:40.000773Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:43.055849Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:43.055214Z&quot;}" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> io <span class="im">import</span> BytesIO</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib.request <span class="im">import</span> urlopen</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> zipfile <span class="im">import</span> ZipFile</span>
@@ -1189,15 +1189,18 @@ Mini-Exercise
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> ZipFile(BytesIO(zipresp.read())) <span class="im">as</span> zfile:</span>
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>            zfile.extractall(<span class="st">'data'</span>)</span>
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'DONE!'</span>)</span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Dataset already downloaded!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Dataset already downloaded!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Dataset already downloaded!</code></pre>
+<pre><code>Downloading dataset...
+DONE!</code></pre>
 </div>
 </div>
 <p>Then, we can load the data into a DataFrame using the <code>read_csv</code> function from the <code>pandas</code> library</p>
-<div id="cell-5" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:51.044598Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:51.044304Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:51.864553Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:51.863948Z&quot;}" data-execution_count="3">
+<div id="cell-5" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:43.059169Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:43.058925Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:43.901661Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:43.901060Z&quot;}" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/card_transdata.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note that it is common to call this variable <code>df</code> which is short for DataFrame.</p>
@@ -1208,14 +1211,14 @@ Mini-Exercise
 <section id="basic-dataframe-operations" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="basic-dataframe-operations">Basic Dataframe Operations</h4>
 <p>Let’s see how many rows and columns the dataset has</p>
-<div id="cell-7" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:51.867890Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:51.867645Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:51.874418Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:51.873736Z&quot;}" data-execution_count="4">
+<div id="cell-7" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:43.905015Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:43.904762Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:43.912619Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:43.912039Z&quot;}" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>(1000000, 8)</code></pre>
 </div>
 </div>
 <p>The dataset has 1 million rows (observations) and 8 columns (variables)! Now, let’s have a look at the first few rows of the dataset with the <code>head()</code> method</p>
-<div id="cell-9" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:51.877191Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:51.876986Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:51.887113Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:51.886610Z&quot;}" data-execution_count="5">
+<div id="cell-9" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:43.915615Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:43.915385Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:43.929105Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:43.928533Z&quot;}" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df.head().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <div>
@@ -1306,7 +1309,7 @@ Mini-Exercise
 </div>
 </div>
 <p>If you would like to see more entries in the dataset, you can use the <code>head()</code> method with an argument corresponding to the number of rows, e.g.,</p>
-<div id="cell-11" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:51.890040Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:51.889825Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:51.904179Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:51.903589Z&quot;}" data-execution_count="6">
+<div id="cell-11" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:43.932192Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:43.931949Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:43.949990Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:43.949346Z&quot;}" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df.head(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <div>
@@ -1557,7 +1560,7 @@ Mini-Exercise
 </div>
 <p>Note that analogously you can also use the <code>tail()</code> method to see the last few rows of the dataset.</p>
 <p>We can also check what the variables in our dataset are called</p>
-<div id="cell-13" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:51.907678Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:51.907467Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:51.911247Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:51.910741Z&quot;}" data-execution_count="7">
+<div id="cell-13" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:43.953563Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:43.953287Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:43.958035Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:43.957439Z&quot;}" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>Index(['distance_from_home', 'distance_from_last_transaction',
@@ -1567,7 +1570,7 @@ Mini-Exercise
 </div>
 </div>
 <p>and the data types of the variables</p>
-<div id="cell-15" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:51.913931Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:51.913662Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:51.919780Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:51.919186Z&quot;}" data-execution_count="8">
+<div id="cell-15" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:43.961158Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:43.960918Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:43.965614Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:43.965085Z&quot;}" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>distance_from_home                float64
@@ -1583,7 +1586,7 @@ dtype: object</code></pre>
 </div>
 <p>In this case, all our variables are floating-point numbers (<code>float</code>). This means that they are numbers that have a fractional part such as 1.5, 3.14, etc. The number after <code>float</code>, <code>64</code> in this case refers to the number of bits that are used to represent this number in the computer’s memory. With 64 bits you can store more decimals than you could with, for example, 32, meaning that the results of computations can be more precise. But for the topics discussed in this course, this is not very important. Other common data types that you might encounter are integers (<code>int</code>) such as 1, 3, 5, etc., or strings (<code>str</code>) such as <code>'hello'</code>, <code>'world'</code>, etc.</p>
 <p>Let’s dig deeper into the dataset and see some summary statistics</p>
-<div id="cell-17" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:51.922759Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:51.922536Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:52.181322Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:52.180743Z&quot;}" data-execution_count="9">
+<div id="cell-17" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:43.968537Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:43.968304Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:44.273250Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:44.272566Z&quot;}" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df.describe().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <div>
@@ -1706,7 +1709,7 @@ dtype: object</code></pre>
 <h4 class="unnumbered anchored" data-anchor-id="checking-for-missing-values-and-duplicated-rows">Checking for Missing Values and Duplicated Rows</h4>
 <p>It is also important to check for missing values and duplicated rows in the dataset. Missing values can be problematic for machine learning models, as they might not be able to handle them. Duplicated rows can also be problematic, as they might introduce bias in the model.</p>
 <p>We can check for missing values (NA) that are encoded as None or <code>numpy.NaN</code> (Not a Number) with the <code>isna()</code> method. This method returns a boolean DataFrame (i.e., a DataFrame with <code>True</code> and <code>False</code> values) with the same shape as the original DataFrame, where <code>True</code> values indicate missing values.</p>
-<div id="cell-19" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:52.184374Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:52.184080Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:52.199005Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:52.198388Z&quot;}" data-execution_count="10">
+<div id="cell-19" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:44.276571Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:44.276326Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:44.292844Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:44.291889Z&quot;}" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df.isna()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <div>
@@ -1858,7 +1861,7 @@ dtype: object</code></pre>
 </div>
 </div>
 <p>or to make it easier to see, we can sum the number of missing values for each variable</p>
-<div id="cell-21" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:52.202287Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:52.202043Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:52.215942Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:52.215396Z&quot;}" data-execution_count="11">
+<div id="cell-21" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:44.296013Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:44.295745Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:44.312444Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:44.311788Z&quot;}" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df.isna().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>distance_from_home                0
@@ -1874,7 +1877,7 @@ dtype: int64</code></pre>
 </div>
 <p>Luckily, there seem to be no missing values. However, you need to be careful! Sometimes missing values are encoded as empty strings <code>''</code> or <code>numpy.inf</code> (infinity), which are not considered missing values by the <code>isna()</code> method. If you suspect that this might be the case, you need to make additional checks.</p>
 <p>As an alternative, we could also look at the <code>info()</code> method, which provides a summary of the DataFrame, including the number of non-null values in each column. If there are missing values, the number of non-null values will be less than the number of rows in the dataset.</p>
-<div id="cell-23" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:52.219081Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:52.218816Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:52.236480Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:52.235866Z&quot;}" data-execution_count="12">
+<div id="cell-23" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:44.315680Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:44.315410Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:44.341337Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:44.340575Z&quot;}" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -1895,7 +1898,7 @@ memory usage: 61.0 MB</code></pre>
 </div>
 </div>
 <p>We can also check for duplicated rows with the <code>duplicated()</code> method.</p>
-<div id="cell-25" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:52.239589Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:52.239339Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:52.587659Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:52.587046Z&quot;}" data-execution_count="13">
+<div id="cell-25" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:44.344806Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:44.344474Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:44.755545Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:44.754828Z&quot;}" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df.loc[df.duplicated()]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div>
@@ -1930,7 +1933,7 @@ memory usage: 61.0 MB</code></pre>
 <h4 class="unnumbered anchored" data-anchor-id="data-visualization">Data Visualization</h4>
 <p>Let’s continue with some data visualization. We can use the <code>matplotlib</code> library to create plots. We have already imported the library at the beginning of the notebook.</p>
 <p>Let’s start by plotting the distribution of the target variable <code>fraud</code> which can only take values zero and one. We can type</p>
-<div id="cell-27" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:52.590790Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:52.590512Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:52.603791Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:52.603157Z&quot;}" data-execution_count="14">
+<div id="cell-27" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:44.758854Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:44.758591Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:44.775173Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:44.774500Z&quot;}" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'fraud'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>fraud
@@ -1940,7 +1943,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 <p>to get the count of each value. We can also use the <code>normalize=True</code> argument to get the fraction of observations instead of the count</p>
-<div id="cell-29" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:52.607007Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:52.606742Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:52.618701Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:52.618152Z&quot;}" data-execution_count="15">
+<div id="cell-29" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:44.778957Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:44.778650Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:44.790903Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:44.790082Z&quot;}" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'fraud'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>fraud
@@ -1950,7 +1953,7 @@ Name: proportion, dtype: float64</code></pre>
 </div>
 </div>
 <p>We can then plot it as follows</p>
-<div id="cell-31" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:52.621627Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:52.621392Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:52.802390Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:52.801742Z&quot;}" data-execution_count="16">
+<div id="cell-31" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:44.794842Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:44.794563Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:44.988475Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:44.987957Z&quot;}" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'fraud'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>).plot(kind<span class="op">=</span><span class="st">'bar'</span>)</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Fraud'</span>)</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Fraction of Observations'</span>)</span>
@@ -1967,7 +1970,7 @@ Name: proportion, dtype: float64</code></pre>
 </div>
 </div>
 <p>Alternatively, we can plot it as a pie chart</p>
-<div id="cell-33" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:52.805338Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:52.805116Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:52.888568Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:52.887700Z&quot;}" data-execution_count="17">
+<div id="cell-33" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:44.992370Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:44.992157Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:45.098729Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:45.097631Z&quot;}" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df.value_counts(<span class="st">"fraud"</span>).plot.pie(autopct <span class="op">=</span> <span class="st">"</span><span class="sc">%.1f</span><span class="st">"</span>)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">''</span>)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1981,7 +1984,7 @@ Name: proportion, dtype: float64</code></pre>
 </div>
 <p>Our dataset seems to be quite imbalanced, as only 8.7% of the transactions are fraudulent. This is a common problem in fraud detection datasets, as fraudulent transactions are usually very rare. We will need to <strong>keep this in mind</strong> when evaluating our machine learning model: the accuracy measure will be very high even for bad models, as the model can just predict that all transactions are not fraudulent and still get an accuracy of 91.3%.</p>
 <p>Let’s look at some distributions. Most of the variables in the dataset are binary (0 or 1) variables. However, we also have some continuous variables. Let’s plot the distribution of the variable <code>ratio_to_median_purchase_price</code>, which is a continuous variable.</p>
-<div id="cell-35" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:52.892250Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:52.892020Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:53.102372Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:53.101866Z&quot;}" data-execution_count="18">
+<div id="cell-35" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:45.102989Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:45.102739Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:45.302505Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:45.301894Z&quot;}" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'ratio_to_median_purchase_price'</span>].hist(bins <span class="op">=</span> <span class="dv">50</span>, <span class="bu">range</span><span class="op">=</span>[<span class="dv">0</span>, <span class="dv">30</span>])</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Ratio to Median Purchase Price'</span>)</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Count'</span>)</span>
@@ -1995,7 +1998,7 @@ Name: proportion, dtype: float64</code></pre>
 </div>
 </div>
 <p>We can also plot the distribution of the variable <code>ratio_to_median_purchase_price</code> by the target variable <code>fraud</code> to see if there are any differences between fraudulent and non-fraudulent transactions</p>
-<div id="cell-37" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:53.105151Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:53.104928Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:53.540426Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:53.539861Z&quot;}" data-execution_count="19">
+<div id="cell-37" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:45.305505Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:45.305276Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:45.747771Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:45.746974Z&quot;}" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'ratio_to_median_purchase_price'</span>].hist(bins <span class="op">=</span> <span class="dv">50</span>, <span class="bu">range</span><span class="op">=</span>[<span class="dv">0</span>, <span class="dv">30</span>], by<span class="op">=</span>df[<span class="st">'fraud'</span>], ax <span class="op">=</span> ax)</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlabel(<span class="st">'Ratio to Median Purchase Price'</span>)</span>
@@ -2014,7 +2017,7 @@ Name: proportion, dtype: float64</code></pre>
 </div>
 <p>There are indeed some differences between fraudulent and non-fraudulent transactions. For example, fraudulent transactions seem to have a higher ratio to the median purchase price, which is expected as fraudsters might try to make large transactions to maximize their profit.</p>
 <p>We can also look at the correlation between the variables in the dataset. The correlation is a measure of how two variables move together</p>
-<div id="cell-39" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:53.543158Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:53.542869Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:53.721490Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:53.720924Z&quot;}" data-execution_count="20">
+<div id="cell-39" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:45.751131Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:45.750873Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:45.933494Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:45.932881Z&quot;}" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df.corr() <span class="co"># Pearson correlation (for linear relationships)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
 <div>
@@ -2131,7 +2134,7 @@ Name: proportion, dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div id="cell-40" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:53.724604Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:53.724355Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:54.676268Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:54.675399Z&quot;}" data-execution_count="21">
+<div id="cell-40" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:45.936547Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:45.936299Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:46.996272Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:46.995477Z&quot;}" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df.corr(<span class="st">'spearman'</span>) <span class="co"># Spearman correlation (for monotonic relationships)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <div>
@@ -2249,7 +2252,7 @@ Name: proportion, dtype: float64</code></pre>
 </div>
 </div>
 <p>This is still a bit hard to read. We can visualize the correlation matrix with a heatmap using the Seaborn library, which we have already imported at the beginning of the notebook.</p>
-<div id="cell-42" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:54.679891Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:54.679595Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:55.822967Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:55.822426Z&quot;}" data-execution_count="22">
+<div id="cell-42" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:47.000105Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:46.999804Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:48.139298Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:48.138743Z&quot;}" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> df.corr(<span class="st">'spearman'</span>)</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>cmap <span class="op">=</span> sns.diverging_palette(<span class="dv">10</span>, <span class="dv">255</span>, as_cmap<span class="op">=</span><span class="va">True</span>) <span class="co"># Create a color map</span></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> np.triu(np.ones_like(corr, dtype<span class="op">=</span><span class="bu">bool</span>)) <span class="co"># Create a mask to only show the lower triangle of the matrix</span></span>
@@ -2265,7 +2268,7 @@ Name: proportion, dtype: float64</code></pre>
 </div>
 <p>Note how <code>ratio_to_median_purchase_price</code> is positively correlated with <code>fraud</code>, which is expected as we saw in the previous plot that fraudulent transactions have a higher ratio to the median purchase price. Furthermore, <code>used_chip</code> and <code>used_pin_number</code> are negatively correlated with <code>fraud</code>, which makes sense as transactions, where the chip or the pin is used, are supposed to be more secure.</p>
 <p>We can also plot boxplots to visualize the distribution of the variables</p>
-<div id="cell-44" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:55.826123Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:55.825870Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:56.501674Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:56.500798Z&quot;}" data-execution_count="23">
+<div id="cell-44" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:48.142332Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:48.142081Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:48.841655Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:48.840495Z&quot;}" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>selector <span class="op">=</span> [<span class="st">'distance_from_home'</span>, <span class="st">'distance_from_last_transaction'</span>, <span class="st">'ratio_to_median_purchase_price'</span>] <span class="co"># Select the variables we want to plot</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.boxplot(data <span class="op">=</span> df[selector], orient <span class="op">=</span> <span class="st">'h'</span>) </span>
@@ -2281,7 +2284,7 @@ Name: proportion, dtype: float64</code></pre>
 </div>
 <p>Boxplots are a good way to visualize the distribution of a variable, as they show the median, the interquartile range, and the outliers. Each of the distributions shown in the boxplots above has a long right tail, which explains the large number of outliers. However, you have to be careful: you cannot just remove these outliers since these are likely to be fraudulent transactions.</p>
 <p>Let’s see how many fraudulent transactions we would remove if we blindly remove the outliers according to the interquartile range</p>
-<div id="cell-46" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:56.504653Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:56.504436Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:56.545951Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:56.545332Z&quot;}" data-execution_count="24">
+<div id="cell-46" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:48.845243Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:48.844878Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:48.897660Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:48.896990Z&quot;}" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the interquartile range</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>Q1 <span class="op">=</span> df[<span class="st">'ratio_to_median_purchase_price'</span>].quantile(<span class="fl">0.25</span>)</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>Q3 <span class="op">=</span> df[<span class="st">'ratio_to_median_purchase_price'</span>].quantile(<span class="fl">0.75</span>)</span>
@@ -2300,7 +2303,7 @@ Name: proportion, dtype: float64</code></pre>
 Name: count, dtype: int64</code></pre>
 </div>
 </div>
-<div id="cell-47" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:56.548975Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:56.548724Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:56.565229Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:56.564612Z&quot;}" data-execution_count="25">
+<div id="cell-47" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:48.900879Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:48.900613Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:48.912427Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:48.911733Z&quot;}" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'fraud'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>fraud
@@ -2314,19 +2317,19 @@ Name: count, dtype: int64</code></pre>
 <section id="splitting-the-data-into-training-and-test-sets" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="splitting-the-data-into-training-and-test-sets">Splitting the Data into Training and Test Sets</h4>
 <p>Before we can train a machine learning model, we need to split our dataset into a training set and a test set.</p>
-<div id="cell-49" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:56.568155Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:56.567851Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:56.582410Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:56.581747Z&quot;}" data-execution_count="26">
+<div id="cell-49" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:48.915777Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:48.915196Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:48.928414Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:48.927866Z&quot;}" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop(<span class="st">'fraud'</span>, axis<span class="op">=</span><span class="dv">1</span>) <span class="co"># All variables except `fraud`</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'fraud'</span>] <span class="co"># Only our fraud variables</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The training set is used to train the model, while the test set is used to evaluate the model. We will use the <code>train_test_split</code> function from the <code>sklearn.model_selection</code> module to split our dataset. We will use 70% of the data for training and 30% for testing. We will also set the <code>stratify</code> argument to <code>y</code> to make sure that the distribution of the target variable is the same in the training and test sets. Otherwise, we might randomly not have any fraudulent transactions in the test set, which would make it impossible to correctly evaluate our model.</p>
-<div id="cell-51" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:56.585574Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:56.585339Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:56.959507Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:56.958629Z&quot;}" data-execution_count="27">
+<div id="cell-51" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:48.931420Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:48.931186Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:49.298773Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:49.297427Z&quot;}" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, stratify<span class="op">=</span>y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="scaling-features" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="scaling-features">Scaling Features</h4>
 <p>To improve the performance of our machine learning model, we should scale the features. This is especially important for models that are sensitive to the scale of the features, such as logistic regression. We will use the <code>StandardScaler</code> class from the <code>sklearn.preprocessing</code> module to scale the features. The <code>StandardScaler</code> class scales the features so that they have a mean of 0 and a standard deviation of 1. Since we don’t want to scale features that are binary (0 or 1), we will define a small function that scales only the features that we want</p>
-<div id="cell-53" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:56.963787Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:56.963460Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:56.969611Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:56.968901Z&quot;}" data-execution_count="28">
+<div id="cell-53" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:49.303388Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:49.302883Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:49.307848Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:49.307075Z&quot;}" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> scale_features(scaler, df, col_names, only_transform<span class="op">=</span><span class="va">False</span>):</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract the features we want to scale</span></span>
@@ -2342,7 +2345,7 @@ Name: count, dtype: int64</code></pre>
 <span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    df[col_names] <span class="op">=</span> features</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, we need to run the function</p>
-<div id="cell-55" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:56.973288Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:56.972984Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:57.022303Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:57.021529Z&quot;}" data-execution_count="29">
+<div id="cell-55" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:49.311533Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:49.311238Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:49.369827Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:49.368806Z&quot;}" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>col_names <span class="op">=</span> [<span class="st">'distance_from_home'</span>, <span class="st">'distance_from_last_transaction'</span>, <span class="st">'ratio_to_median_purchase_price'</span>] </span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler() </span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>scale_features(scaler, X_train, col_names)</span>
@@ -2368,18 +2371,18 @@ Mini-Exercise
 <h3 data-number="2.5.2" class="anchored" data-anchor-id="implementing-logistic-regression"><span class="header-section-number">2.5.2</span> Implementing Logistic Regression</h3>
 <p>Now that we have explored and preprocessed our dataset, we can move on to the next step: training a machine learning model. We will use a logistic regression model to predict whether a transaction is fraudulent or not.</p>
 <p>Using the <code>LogisticRegression</code> class from the <code>sklearn.linear_model</code> module, fitting the model to the data is straightforward using the <code>fit</code> method</p>
-<div id="cell-57" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:57.026348Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:57.026049Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:58.024034Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:58.023354Z&quot;}" data-execution_count="30">
+<div id="cell-57" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:49.373677Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:49.373372Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:50.436153Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:50.435419Z&quot;}" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> LogisticRegression().fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can then use the <code>predict</code> method to predict the class of the test set</p>
-<div id="cell-59" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:58.027609Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:58.027373Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:58.034159Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:58.033449Z&quot;}" data-execution_count="31">
+<div id="cell-59" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:50.439618Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:50.439377Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:50.445848Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:50.445106Z&quot;}" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>clf.predict(X_test.head(<span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="31">
 <pre><code>array([0., 0., 0., 0., 1.])</code></pre>
 </div>
 </div>
 <p>The actual classes of the first five observations in the test dataset are</p>
-<div id="cell-61" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:58.037291Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:58.037074Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:58.041770Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:58.040998Z&quot;}" data-execution_count="32">
+<div id="cell-61" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:50.448995Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:50.448754Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:50.453822Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:50.453110Z&quot;}" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>y_test.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="32">
 <pre><code>217309    0.0
@@ -2391,7 +2394,7 @@ Name: fraud, dtype: float64</code></pre>
 </div>
 </div>
 <p>This seems to match quite well. Let’s have a look at different performance metrics</p>
-<div id="cell-63" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:58.045196Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:58.044924Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:58.437017Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:58.436505Z&quot;}" data-execution_count="33">
+<div id="cell-63" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:50.457063Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:50.456840Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:50.895730Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:50.895063Z&quot;}" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> clf.predict(X_test)</span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>y_proba <span class="op">=</span> clf.predict_proba(X_test)</span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2407,7 +2410,7 @@ ROC AUC: 0.9671832218100465</code></pre>
 </div>
 </div>
 <p>As expected, the accuracy is quite high since we do not have many fraudulent transactions. Recall that the precision (<span class="math inline">\(\text{Precision} = \frac{\text{TP}}{\text{TP}+\text{FP}}\)</span>) is the fraction of correctly predicted fraudulent transactions among all transactions transactions predicted to be fraudulent. The recall (<span class="math inline">\(\text{Recall} = \frac{\text{TP}}{\text{TP}+\text{FN}}\)</span>) is the fraction of correctly predicted fraudulent transactions among the actual fraudulent transactions. The ROC AUC is the area under the curve for the receiver operating characteristic (ROC) curve</p>
-<div id="cell-65" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:58.439921Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:58.439702Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:58.703398Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:58.702875Z&quot;}" data-execution_count="34">
+<div id="cell-65" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:50.899220Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:50.898944Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:51.177719Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:51.177134Z&quot;}" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the ROC curve</span></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>y_proba <span class="op">=</span> clf.predict_proba(X_test)</span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>fpr, tpr, thresholds <span class="op">=</span> roc_curve(y_test, y_proba[:,<span class="dv">1</span>])</span>
@@ -2428,7 +2431,7 @@ ROC AUC: 0.9671832218100465</code></pre>
 </div>
 </div>
 <p>The confusion matrix for the test set can be computed as follows</p>
-<div id="cell-67" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:58.706426Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:58.706048Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:58.900087Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:58.898792Z&quot;}" data-execution_count="35">
+<div id="cell-67" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:51.180496Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:51.180281Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:51.377066Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:51.376466Z&quot;}" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> confusion_matrix(y_test, y_pred, labels<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>]).transpose() <span class="co"># Transpose the sklearn confusion matrix to match the convention in the lecture</span></span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>conf_mat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="35">
@@ -2437,7 +2440,7 @@ ROC AUC: 0.9671832218100465</code></pre>
 </div>
 </div>
 <p>We can also plot the confusion matrix as a heatmap</p>
-<div id="cell-69" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:58.903072Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:58.902844Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:59.037509Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:59.036661Z&quot;}" data-execution_count="36">
+<div id="cell-69" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:51.380150Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:51.379899Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:51.509694Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:51.508995Z&quot;}" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>sns.heatmap(conf_mat, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, fmt<span class="op">=</span><span class="st">'g'</span>, xticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>], yticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>])</span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Actual"</span>)</span>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Predicted"</span>)</span>
@@ -2452,7 +2455,7 @@ ROC AUC: 0.9671832218100465</code></pre>
 </div>
 <p>As you can see, we have mostly true negatives and true positives. However, there is still a significant number of false negatives, which means that we are missing fraudulent transactions, and a significant number of false positives, which means that we are predicting transactions as fraudulent that are not fraudulent.</p>
 <p>If we would like to use a threshold other than 0.5 to predict the class of the test set, we can do so as follows</p>
-<div id="cell-71" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:59.040542Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:59.040333Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:53:59.320539Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:53:59.319960Z&quot;}" data-execution_count="37">
+<div id="cell-71" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:51.512829Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:51.512625Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:41:51.819314Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:41:51.818695Z&quot;}" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternative threshold</span></span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>threshold <span class="op">=</span> <span class="fl">0.1</span></span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2472,7 +2475,7 @@ Recall: 0.9389420693337401</code></pre>
 <p>Setting a lower threshold increases the recall but decreases the precision. This is because we are more likely to predict a transaction as fraudulent, which increases the number of true positives but also the number of false positives.</p>
 <p>What the correct threshold is depends on the problem at hand. For example, if the cost of missing a fraudulent transaction is very high, you might want to set a lower threshold to increase the recall. If the cost of falsely predicting a transaction as fraudulent is very high, you might want to set a higher threshold to increase the precision.</p>
 <p>We can also plot the performance metrics for different thresholds</p>
-<div id="cell-73" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T16:53:59.323587Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T16:53:59.323329Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T16:54:12.607865Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T16:54:12.607332Z&quot;}" data-execution_count="38">
+<div id="cell-73" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:41:51.822493Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:41:51.822238Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:06.668768Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:06.667656Z&quot;}" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">50</span></span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>thresholds_array <span class="op">=</span> np.linspace(<span class="fl">0.0</span>, <span class="fl">0.999</span>, N)</span>
 <span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>accuracy_array <span class="op">=</span> np.zeros(N)</span>

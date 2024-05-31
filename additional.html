@@ -298,7 +298,7 @@ window.Quarto = {
 <div id="fig-k-nearest-neighbors" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-k-nearest-neighbors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div id="f21c4696" class="cell" data-execution_count="1">
+<div id="c961ff20" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -338,7 +338,7 @@ Figure&nbsp;5.1: K-Nearest Neighbors Classification with <span class="math inlin
 <div>
 
 </div>
-<div id="9bb34a86" class="cell quarto-layout-panel" data-execution_count="2" data-layout-ncol="2">
+<div id="df1299a0" class="cell quarto-layout-panel" data-layout-ncol="2" data-execution_count="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
@@ -366,9 +366,9 @@ Figure&nbsp;5.2: K-Means Clusters and Elbow Method
 </section>
 <section id="python-implementation" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="python-implementation"><span class="header-section-number">5.3</span> Python Implementation</h2>
-<div class="quarto-embed-nb-cell" data-notebook="/Users/joel/Dropbox (Privat)/Studium/CEMFI/PhD/TA/Data Science for Diploma in Banking Supervision/Local/Lecture Notes/notebooks/additional_methods.ipynb" data-notebook-title="Load the data" data-notebook-cellid="cell-0">
+<div class="quarto-embed-nb-cell" data-notebook="/Users/joel/Dropbox (Privat)/Studium/CEMFI/PhD/TA/Data Science for Diploma in Banking Supervision/Local/Lecture Notes/notebooks/additional_methods.ipynb" data-notebook-title="Check if the file exists" data-notebook-cellid="cell-0">
 <p>Let’s have a look at how to implement KNN and K-means in Python. Again, we need to first import the required packages and load the data</p>
-<div id="cell-1" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:15:57.477626Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:15:57.477337Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:15:59.794478Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:15:59.793824Z&quot;}" data-execution_count="1">
+<div id="cell-1" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:00:49.008510Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:00:49.008247Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:00:52.235027Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:00:52.234099Z&quot;}" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -379,13 +379,39 @@ Figure&nbsp;5.2: K-Means Clusters and Elbow Method
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, accuracy_score, roc_auc_score, recall_score, precision_score, roc_curve</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.max_columns'</span>, <span class="dv">50</span>) <span class="co"># Display up to 50 columns</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/card_transdata.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> io <span class="im">import</span> BytesIO</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib.request <span class="im">import</span> urlopen</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> zipfile <span class="im">import</span> ZipFile</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os.path</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the file exists</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.isfile(<span class="st">'data/card_transdata.csv'</span>):</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Downloading dataset...'</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define the dataset to be downloaded</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    zipurl <span class="op">=</span> <span class="st">'https://www.kaggle.com/api/v1/datasets/download/dhanushnarayananr/credit-card-fraud'</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Download and unzip the dataset in the data folder</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> urlopen(zipurl) <span class="im">as</span> zipresp:</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> ZipFile(BytesIO(zipresp.read())) <span class="im">as</span> zfile:</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>            zfile.extractall(<span class="st">'data'</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'DONE!'</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Dataset already downloaded!'</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/card_transdata.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dataset already downloaded!</code></pre>
+</div>
 </div>
 <p>This is the <strong>dataset of credit card transactions</strong> from <a href="https://www.kaggle.com/datasets/dhanushnarayananr/credit-card-fraud/data">Kaggle.com</a> which we have used before. Recall that the target variable <span class="math inline">\(y\)</span> is <code>fraud</code>, which indicates whether the transaction is fraudulent or not. The other variables are the features <span class="math inline">\(x\)</span> of the transactions.</p>
-<div id="cell-3" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:15:59.797809Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:15:59.797552Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:15:59.818738Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:15:59.818148Z&quot;}" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df.head(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-3" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:00:52.239181Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:00:52.238818Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:00:52.262828Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:00:52.262252Z&quot;}" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.head(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 <div>
@@ -633,8 +659,8 @@ Figure&nbsp;5.2: K-Means Clusters and Elbow Method
 </div>
 </div>
 </div>
-<div id="cell-4" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:15:59.859043Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:15:59.858734Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:16:00.126029Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:16:00.125431Z&quot;}" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-4" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:00:52.265854Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:00:52.265611Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:00:52.531186Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:00:52.530531Z&quot;}" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 <div>
@@ -750,8 +776,8 @@ Figure&nbsp;5.2: K-Means Clusters and Elbow Method
 </div>
 </div>
 </div>
-<div id="cell-5" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:16:00.129017Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:16:00.128772Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:16:00.148507Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:16:00.147871Z&quot;}" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-5" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:00:52.534179Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:00:52.533942Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:00:52.556123Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:00:52.555485Z&quot;}" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
 RangeIndex: 1000000 entries, 0 to 999999
@@ -774,56 +800,56 @@ memory usage: 61.0 MB</code></pre>
 <h3 data-number="5.3.1" class="anchored" data-anchor-id="data-preprocessing"><span class="header-section-number">5.3.1</span> Data Preprocessing</h3>
 <p>Since we have already explored the dataset in the previous notebook, we can skip that part and move directly to the data preprocessing.</p>
 <p>We will again split the data into training and test sets using the <code>train_test_split</code> function</p>
-<div id="cell-7" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:16:00.151527Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:16:00.151295Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:16:00.624772Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:16:00.623960Z&quot;}" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop(<span class="st">'fraud'</span>, axis<span class="op">=</span><span class="dv">1</span>) <span class="co"># All variables except `fraud`</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'fraud'</span>] <span class="co"># Only our fraud variables</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, stratify<span class="op">=</span>y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-7" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:00:52.559225Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:00:52.558967Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:00:53.011438Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:00:53.010465Z&quot;}" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop(<span class="st">'fraud'</span>, axis<span class="op">=</span><span class="dv">1</span>) <span class="co"># All variables except `fraud`</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'fraud'</span>] <span class="co"># Only our fraud variables</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, stratify<span class="op">=</span>y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we can do the feature scaling to ensure our non-binary variables have mean zero and variance 1</p>
-<div id="cell-9" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:16:00.629553Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:16:00.629068Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:16:00.712298Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:16:00.711385Z&quot;}" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> scale_features(scaler, df, col_names, only_transform<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract the features we want to scale</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    features <span class="op">=</span> df[col_names] </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fit the scaler to the features and transform them</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> only_transform:</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> scaler.transform(features.values)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> scaler.fit_transform(features.values)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Replace the original features with the scaled features</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    df[col_names] <span class="op">=</span> features</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Define which features to scale with the StandardScaler and MinMaxScaler</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>for_standard_scaler <span class="op">=</span> [</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">'distance_from_home'</span>, </span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">'distance_from_last_transaction'</span>, </span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ratio_to_median_purchase_price'</span>,</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the standard scaler (Note: we use the same mean and std for scaling the test set)</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>standard_scaler <span class="op">=</span> StandardScaler() </span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>scale_features(standard_scaler, X_train, for_standard_scaler)</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>scale_features(standard_scaler, X_test, for_standard_scaler, only_transform<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-9" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:00:53.015570Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:00:53.015268Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:00:53.075680Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:00:53.074787Z&quot;}" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> scale_features(scaler, df, col_names, only_transform<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract the features we want to scale</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    features <span class="op">=</span> df[col_names] </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fit the scaler to the features and transform them</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> only_transform:</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> scaler.transform(features.values)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> scaler.fit_transform(features.values)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Replace the original features with the scaled features</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    df[col_names] <span class="op">=</span> features</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Define which features to scale with the StandardScaler and MinMaxScaler</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>for_standard_scaler <span class="op">=</span> [</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">'distance_from_home'</span>, </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">'distance_from_last_transaction'</span>, </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ratio_to_median_purchase_price'</span>,</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the standard scaler (Note: we use the same mean and std for scaling the test set)</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>standard_scaler <span class="op">=</span> StandardScaler() </span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>scale_features(standard_scaler, X_train, for_standard_scaler)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>scale_features(standard_scaler, X_test, for_standard_scaler, only_transform<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="k-nearest-neighbors-knn" class="level3" data-number="5.3.2">
 <h3 data-number="5.3.2" class="anchored" data-anchor-id="k-nearest-neighbors-knn"><span class="header-section-number">5.3.2</span> K-Nearest Neighbors (KNN)</h3>
 <p>We can now implement the KNN algorithm using the <code>KNeighborsClassifier</code> class from the <code>sklearn.neighbors</code> module. We will use the default value of <span class="math inline">\(k=5\)</span> for the number of neighbors.</p>
-<div id="cell-11" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:16:00.715950Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:16:00.715684Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:16:01.889247Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:16:01.888459Z&quot;}" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>clf_knn <span class="op">=</span> KNeighborsClassifier().fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-11" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:00:53.079562Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:00:53.079265Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:00:54.150338Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:00:54.149675Z&quot;}" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>clf_knn <span class="op">=</span> KNeighborsClassifier().fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can now use the trained model to make predictions on the test set and evaluate the model performance using the confusion matrix and accuracy score.</p>
-<div id="cell-13" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:16:01.892795Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:16:01.892530Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:17:21.372336Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:17:21.371658Z&quot;}" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>y_pred_knn <span class="op">=</span> clf_knn.predict(X_test)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>y_proba_knn <span class="op">=</span> clf_knn.predict_proba(X_test)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy_score(y_test, y_pred_knn)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Precision: </span><span class="sc">{</span>precision_score(y_test, y_pred_knn)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Recall: </span><span class="sc">{</span>recall_score(y_test, y_pred_knn)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ROC AUC: </span><span class="sc">{</span>roc_auc_score(y_test, y_proba_knn[:, <span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-13" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:00:54.153741Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:00:54.153488Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:02:17.711562Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:02:17.710913Z&quot;}" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>y_pred_knn <span class="op">=</span> clf_knn.predict(X_test)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>y_proba_knn <span class="op">=</span> clf_knn.predict_proba(X_test)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy_score(y_test, y_pred_knn)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Precision: </span><span class="sc">{</span>precision_score(y_test, y_pred_knn)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Recall: </span><span class="sc">{</span>recall_score(y_test, y_pred_knn)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ROC AUC: </span><span class="sc">{</span>roc_auc_score(y_test, y_proba_knn[:, <span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Accuracy: 0.9987
 Precision: 0.9935419771485345
@@ -832,17 +858,17 @@ ROC AUC: 0.9997341251520317</code></pre>
 </div>
 </div>
 <p>This seems to work quite well with a ROC AUC of 0.9997. We seem to have an almost perfect classifier. We can also plot the ROC curve to visualize the performance of the classifier</p>
-<div id="cell-15" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:17:21.375386Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:17:21.375138Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:17:21.574881Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:17:21.573920Z&quot;}" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the ROC curve</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>fpr, tpr, thresholds <span class="op">=</span> roc_curve(y_test, y_proba_knn[:, <span class="dv">1</span>])</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the ROC curve</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>plt.plot(fpr, tpr)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">1</span>], linestyle<span class="op">=</span><span class="st">'--'</span>, color<span class="op">=</span><span class="st">'grey'</span>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'False Positive Rate (FPR)'</span>)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'True Positive Rate (TPR)'</span>)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'ROC Curve'</span>)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-15" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:02:17.714673Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:02:17.714437Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:02:17.939001Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:02:17.938339Z&quot;}" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the ROC curve</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fpr, tpr, thresholds <span class="op">=</span> roc_curve(y_test, y_proba_knn[:, <span class="dv">1</span>])</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the ROC curve</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>plt.plot(fpr, tpr)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">1</span>], linestyle<span class="op">=</span><span class="st">'--'</span>, color<span class="op">=</span><span class="st">'grey'</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'False Positive Rate (FPR)'</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'True Positive Rate (TPR)'</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'ROC Curve'</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -852,12 +878,12 @@ ROC AUC: 0.9997341251520317</code></pre>
 </div>
 </div>
 <p>Let’s also check the confusion matrix to see where we still make mistakes</p>
-<div id="cell-17" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:17:21.577999Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:17:21.577780Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:17:21.872369Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:17:21.871567Z&quot;}" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> confusion_matrix(y_test, y_pred_knn, labels<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>]).transpose() <span class="co"># Transpose the sklearn confusion matrix to match the convention in the lecture</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(conf_mat, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, fmt<span class="op">=</span><span class="st">'g'</span>, xticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>], yticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>])</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Actual"</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Predicted"</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-17" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:02:17.941931Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:02:17.941693Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:02:18.267144Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:02:18.266384Z&quot;}" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> confusion_matrix(y_test, y_pred_knn, labels<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>]).transpose() <span class="co"># Transpose the sklearn confusion matrix to match the convention in the lecture</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(conf_mat, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, fmt<span class="op">=</span><span class="st">'g'</span>, xticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>], yticklabels<span class="op">=</span>[<span class="st">'Fraud'</span>, <span class="st">'No Fraud'</span>])</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Actual"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Predicted"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -870,39 +896,39 @@ ROC AUC: 0.9997341251520317</code></pre>
 <section id="k-means" class="level3" data-number="5.3.3">
 <h3 data-number="5.3.3" class="anchored" data-anchor-id="k-means"><span class="header-section-number">5.3.3</span> K-Means</h3>
 <p>This is the first example of an unsupervised learning algorithm meaning that we will ignore the labels in the training set. We will use the <code>KMeans</code> class from the <code>sklearn.cluster</code> module to implement the K-means algorithm. Note that we can not use categorical variables in the K-means algorithm, so we will only use the continuous variables in this example. Furthermore, to simplify interpretability we will only use two variables</p>
-<div id="cell-19" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:17:21.875381Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:17:21.875170Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:17:23.114734Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:17:23.113574Z&quot;}" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>continuous_variables <span class="op">=</span> [<span class="st">'distance_from_home'</span>, <span class="st">'distance_from_last_transaction'</span>, <span class="st">'ratio_to_median_purchase_price'</span>]</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>n_clusters<span class="op">=</span><span class="dv">2</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span>n_clusters, random_state<span class="op">=</span><span class="dv">42</span>, n_init<span class="op">=</span><span class="dv">10</span>).fit(X_train[continuous_variables])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-19" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:02:18.270118Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:02:18.269864Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:02:19.599778Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:02:19.598778Z&quot;}" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>continuous_variables <span class="op">=</span> [<span class="st">'distance_from_home'</span>, <span class="st">'distance_from_last_transaction'</span>, <span class="st">'ratio_to_median_purchase_price'</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>n_clusters<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span>n_clusters, random_state<span class="op">=</span><span class="dv">42</span>, n_init<span class="op">=</span><span class="dv">10</span>).fit(X_train[continuous_variables])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can check the cluster centers using the <code>cluster_centers_</code> attribute of the trained model</p>
-<div id="cell-21" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:17:23.119505Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:17:23.119136Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:17:23.125659Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:17:23.124812Z&quot;}" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>kmeans.cluster_centers_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-21" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:02:19.604428Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:02:19.604129Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:02:19.609994Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:02:19.609295Z&quot;}" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>kmeans.cluster_centers_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>array([[-2.01860525e-05, -1.55050548e-03, -1.68843633e-01],
        [ 3.66287246e-04,  2.81347918e-02,  3.06376244e+00]])</code></pre>
 </div>
 </div>
 <p>Since we only have two variables we can easily visualize the clusters using a scatter plot. We first need to unscale the data to make the plot more interpretable</p>
-<div id="cell-23" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:17:23.128956Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:17:23.128683Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:17:23.253667Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:17:23.253157Z&quot;}" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Unscale the data</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>X_train_unscaled <span class="op">=</span> X_train.copy()</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>X_train_unscaled[for_standard_scaler] <span class="op">=</span> standard_scaler.inverse_transform(X_train[for_standard_scaler])</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>X_test_unscaled <span class="op">=</span> X_test.copy()</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>X_test_unscaled[for_standard_scaler] <span class="op">=</span> standard_scaler.inverse_transform(X_test[for_standard_scaler])</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>cluster_centers <span class="op">=</span> standard_scaler.inverse_transform(kmeans.cluster_centers_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-23" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:02:19.613074Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:02:19.612848Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:02:19.762905Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:02:19.761741Z&quot;}" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Unscale the data</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>X_train_unscaled <span class="op">=</span> X_train.copy()</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>X_train_unscaled[for_standard_scaler] <span class="op">=</span> standard_scaler.inverse_transform(X_train[for_standard_scaler])</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>X_test_unscaled <span class="op">=</span> X_test.copy()</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>X_test_unscaled[for_standard_scaler] <span class="op">=</span> standard_scaler.inverse_transform(X_test[for_standard_scaler])</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>cluster_centers <span class="op">=</span> standard_scaler.inverse_transform(kmeans.cluster_centers_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, we can create the scatter plot to see what the clusters look like</p>
-<div id="cell-25" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:17:23.258412Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:17:23.258164Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:17:35.187696Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:17:35.187006Z&quot;}" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>_, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>scatter <span class="op">=</span> ax.scatter(X_train_unscaled[continuous_variables[<span class="dv">0</span>]], X_train_unscaled[continuous_variables[<span class="dv">2</span>]], c<span class="op">=</span>kmeans.labels_)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>scatter <span class="op">=</span> ax.scatter(cluster_centers[:, <span class="dv">0</span>], cluster_centers[:, <span class="dv">2</span>], c<span class="op">=</span><span class="st">'black'</span>, marker<span class="op">=</span><span class="st">'x'</span>, s<span class="op">=</span><span class="dv">100</span>, label <span class="op">=</span> <span class="st">'K-means Centers'</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span>continuous_variables[<span class="dv">0</span>], ylabel<span class="op">=</span>continuous_variables[<span class="dv">2</span>])</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ax.set_xscale(<span class="st">'log'</span>)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>ax.set_yscale(<span class="st">'log'</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'K-Means Clusters'</span>)</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-25" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:02:19.766899Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:02:19.766606Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:02:32.647354Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:02:32.646632Z&quot;}" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>_, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>scatter <span class="op">=</span> ax.scatter(X_train_unscaled[continuous_variables[<span class="dv">0</span>]], X_train_unscaled[continuous_variables[<span class="dv">2</span>]], c<span class="op">=</span>kmeans.labels_)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>scatter <span class="op">=</span> ax.scatter(cluster_centers[:, <span class="dv">0</span>], cluster_centers[:, <span class="dv">2</span>], c<span class="op">=</span><span class="st">'black'</span>, marker<span class="op">=</span><span class="st">'x'</span>, s<span class="op">=</span><span class="dv">100</span>, label <span class="op">=</span> <span class="st">'K-means Centers'</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span>continuous_variables[<span class="dv">0</span>], ylabel<span class="op">=</span>continuous_variables[<span class="dv">2</span>])</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>ax.set_xscale(<span class="st">'log'</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>ax.set_yscale(<span class="st">'log'</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'K-Means Clusters'</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -912,16 +938,16 @@ ROC AUC: 0.9997341251520317</code></pre>
 </div>
 </div>
 <p>Note that the centers might look a bit off because we are using log scales on the x and y-axis. In the other dimension, we don’t have such a nice separation of the clusters</p>
-<div id="cell-27" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:17:35.190737Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:17:35.190491Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:17:46.745804Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:17:46.745234Z&quot;}" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>_, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>scatter <span class="op">=</span> ax.scatter(X_train_unscaled[continuous_variables[<span class="dv">0</span>]], X_train_unscaled[continuous_variables[<span class="dv">1</span>]], c<span class="op">=</span>kmeans.labels_)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>scatter <span class="op">=</span> ax.scatter(cluster_centers[:, <span class="dv">0</span>], cluster_centers[:, <span class="dv">1</span>], c<span class="op">=</span><span class="st">'black'</span>, marker<span class="op">=</span><span class="st">'x'</span>, s<span class="op">=</span><span class="dv">100</span>, label <span class="op">=</span> <span class="st">'K-means Centers'</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span>continuous_variables[<span class="dv">0</span>], ylabel<span class="op">=</span>continuous_variables[<span class="dv">1</span>])</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>ax.set_xscale(<span class="st">'log'</span>)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>ax.set_yscale(<span class="st">'log'</span>)</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'K-Means Clusters'</span>)</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-27" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:02:32.650321Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:02:32.650079Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:02:45.369492Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:02:45.368870Z&quot;}" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>_, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>scatter <span class="op">=</span> ax.scatter(X_train_unscaled[continuous_variables[<span class="dv">0</span>]], X_train_unscaled[continuous_variables[<span class="dv">1</span>]], c<span class="op">=</span>kmeans.labels_)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>scatter <span class="op">=</span> ax.scatter(cluster_centers[:, <span class="dv">0</span>], cluster_centers[:, <span class="dv">1</span>], c<span class="op">=</span><span class="st">'black'</span>, marker<span class="op">=</span><span class="st">'x'</span>, s<span class="op">=</span><span class="dv">100</span>, label <span class="op">=</span> <span class="st">'K-means Centers'</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span>continuous_variables[<span class="dv">0</span>], ylabel<span class="op">=</span>continuous_variables[<span class="dv">1</span>])</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>ax.set_xscale(<span class="st">'log'</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>ax.set_yscale(<span class="st">'log'</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'K-Means Clusters'</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -931,9 +957,9 @@ ROC AUC: 0.9997341251520317</code></pre>
 </div>
 </div>
 <p>But what do these two clusters represent? We can check the mean of the target variable <code>fraud</code> for each cluster to get an idea of what the clusters represent</p>
-<div id="cell-29" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:17:46.748954Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:17:46.748715Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:17:46.789496Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:17:46.788875Z&quot;}" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>X_train_unscaled[<span class="st">'cluster'</span>] <span class="op">=</span> kmeans.labels_</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>X_train_unscaled.query(<span class="st">'cluster == 1'</span>).describe().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-29" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:02:45.372694Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:02:45.372450Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:02:45.421311Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:02:45.420645Z&quot;}" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>X_train_unscaled[<span class="st">'cluster'</span>] <span class="op">=</span> kmeans.labels_</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>X_train_unscaled.query(<span class="st">'cluster == 1'</span>).describe().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <div>
 <div>
@@ -1049,8 +1075,8 @@ ROC AUC: 0.9997341251520317</code></pre>
 </div>
 </div>
 </div>
-<div id="cell-30" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:17:46.792551Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:17:46.792313Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:17:47.052179Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:17:47.051592Z&quot;}" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>X_train_unscaled.query(<span class="st">'cluster == 0'</span>).describe().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-30" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:02:45.424375Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:02:45.424125Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:02:45.762841Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:02:45.761621Z&quot;}" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>X_train_unscaled.query(<span class="st">'cluster == 0'</span>).describe().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <div>
 <div>
@@ -1166,26 +1192,26 @@ ROC AUC: 0.9997341251520317</code></pre>
 </div>
 </div>
 </div>
-<div id="cell-31" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:17:47.055018Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:17:47.054796Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:17:47.066458Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:17:47.065845Z&quot;}" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>y_train[X_train_unscaled[<span class="st">'cluster'</span>] <span class="op">==</span> <span class="dv">0</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-31" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:02:45.767007Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:02:45.766316Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:02:45.784263Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:02:45.783521Z&quot;}" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>y_train[X_train_unscaled[<span class="st">'cluster'</span>] <span class="op">==</span> <span class="dv">0</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>0.057474435454327545</code></pre>
 </div>
 </div>
-<div id="cell-32" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:17:47.069799Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:17:47.069541Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:17:47.080412Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:17:47.079871Z&quot;}" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>y_train[X_train_unscaled[<span class="st">'cluster'</span>] <span class="op">==</span> <span class="dv">1</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-32" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:02:45.787914Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:02:45.787597Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:02:45.798970Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:02:45.798255Z&quot;}" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>y_train[X_train_unscaled[<span class="st">'cluster'</span>] <span class="op">==</span> <span class="dv">1</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>0.6286430927778838</code></pre>
 </div>
 </div>
 <p>There does not seem to be a clear difference between the two clusters except for the difference in the mean of the ratio_to_median_purchase_price variable. This is not necessarily very surprising since we only used three variables in the clustering algorithm. However, due to the correlation of <code>ratio_to_median_purchase_price</code> we have more fraudulent transactions in one cluster than the other. To be able to carry out a more meaningful clustering analysis using K-means we would need a different dataset with more quantitative variables. Nevertheless, let’s also check the elbow method to how many clusters it would suggest</p>
-<div id="cell-34" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:17:47.083516Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:17:47.083269Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:18:14.262454Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:18:14.261783Z&quot;}" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>interias <span class="op">=</span> [KMeans(n_clusters<span class="op">=</span>n, n_init<span class="op">=</span><span class="dv">10</span>).fit(X_train).inertia_ <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>)]</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>_, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>), interias, marker<span class="op">=</span><span class="st">'o'</span>)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">'Number of clusters'</span>, ylabel<span class="op">=</span><span class="st">'Objective Function'</span>)</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Elbow Method'</span>)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-34" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:02:45.802643Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:02:45.802349Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:03:16.309029Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:03:16.308443Z&quot;}" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>interias <span class="op">=</span> [KMeans(n_clusters<span class="op">=</span>n, n_init<span class="op">=</span><span class="dv">10</span>).fit(X_train).inertia_ <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>)]</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>_, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>), interias, marker<span class="op">=</span><span class="st">'o'</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">'Number of clusters'</span>, ylabel<span class="op">=</span><span class="st">'Objective Function'</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Elbow Method'</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1195,8 +1221,8 @@ ROC AUC: 0.9997341251520317</code></pre>
 </div>
 </div>
 <p>There does not seem to be a clear elbow in the plot. Finally, we can also make predictions on the test set using the trained K-means model</p>
-<div id="cell-36" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-10T15:18:14.265623Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-10T15:18:14.265362Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-10T15:18:14.286445Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-10T15:18:14.285709Z&quot;}" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>kmeans.predict(X_test[continuous_variables])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-36" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T22:03:16.312235Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T22:03:16.311978Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T22:03:16.336753Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T22:03:16.336034Z&quot;}" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>kmeans.predict(X_test[continuous_variables])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>array([0, 0, 0, ..., 0, 0, 1], dtype=int32)</code></pre>
 </div>
