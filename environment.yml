@@ -1,6 +1,6 @@
 name: datascience_course_cemfi
 dependencies:
-  - python=3.8.8
+  - python
   - jupyter
   - numpy
   - pandas

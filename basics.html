@@ -833,25 +833,7 @@ Figure&nbsp;2.5: Decision Boundary - Logistic Regression with Features <span cla
 <h4 class="unnumbered anchored" data-anchor-id="confusion-matrices">Confusion Matrices</h4>
 <p>In this and the following subsection, we focus on binary classification problems.</p>
 <p>Let <span class="math inline">\(\hat{y}\)</span> denote the predicted class and <span class="math inline">\(y\)</span> the true class. In a binary classification problem, we can make <strong>two types of errors</strong>. First, we can make an error because we predicted <span class="math inline">\(\hat{y}=1\)</span> when <span class="math inline">\(y=0\)</span>, which is called a <strong>false positive</strong> (or a <strong>“false alarm”</strong>). Sometimes this is also called a <strong>type I error</strong>. Second, we can make an error because we <span class="math inline">\(\hat{y}=0\)</span> when <span class="math inline">\(y=1\)</span>, which is called a <strong>false negative</strong> (or a <strong>“missed detection”</strong>). Sometimes this is referred to as a <strong>type II error</strong>.</p>
-<p>We can summarize the predictions of a classification model in a <strong>confusion matrix</strong> as seen in <a href="#fig-confusion-matrix" class="quarto-xref">Figure&nbsp;<span>2.7</span></a>. The confusion matrix is a <span class="math inline">\(2\times 2\)</span> matrix that shows the number of true positives (TP), true negatives (TN), false positives (FP), and false negatives (FN) of a binary classification model.</p>
-<div id="fig-confusion-matrix" class="quarto-figure quarto-figure-center quarto-float anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-confusion-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="basics_files/figure-html/confusion-matrix-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confusion-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.7: Confusion matrix
-</figcaption>
-</figure>
-</div>
+<p>We can summarize the predictions of a classification model in a <strong>confusion matrix</strong> as seen in <span class="quarto-unresolved-ref">?fig-confusion-matrix</span>. The confusion matrix is a <span class="math inline">\(2\times 2\)</span> matrix that shows the number of true positives (TP), true negatives (TN), false positives (FP), and false negatives (FN) of a binary classification model.</p>
 <p>There is a <strong>tradeoff</strong> between the two types of errors. For example, you <em>could get fewer false negatives by predicting <span class="math inline">\(\hat{y}=1\)</span> more often, but this would increase the number of false positives</em>. In the extreme case, if you only predict <span class="math inline">\(\hat{y}=1\)</span> for all observations, you would have no false negatives at all. However, you would also have no true negatives making the model of questionable usefulness.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -894,7 +876,7 @@ Multiclass Classification
 </section>
 <section id="receiver-operating-characteristic-roc-curves-and-area-under-the-curve-auc" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="receiver-operating-characteristic-roc-curves-and-area-under-the-curve-auc">Receiver Operating Characteristic (ROC) Curves and Area Under the Curve (AUC)</h4>
-<p><a href="#fig-roc" class="quarto-xref">Figure&nbsp;<span>2.8</span></a> shows a <strong>Receiver Operating Characteristic (ROC) curve</strong> which is a graphical representation of the tradeoff between the true positive rate (TPR) and the false positive rate (FPR) for different classification thresholds. The ROC curve is a useful tool to visualize the performance of a classification model. The diagonal line in the ROC curve represents a random classifier. A classifier that is better than random will have a ROC curve above the diagonal line. The closer the ROC curve is to the top-left corner, the better the classifier.</p>
+<p><a href="#fig-roc" class="quarto-xref">Figure&nbsp;<span>2.7</span></a> shows a <strong>Receiver Operating Characteristic (ROC) curve</strong> which is a graphical representation of the tradeoff between the true positive rate (TPR) and the false positive rate (FPR) for different classification thresholds. The ROC curve is a useful tool to visualize the performance of a classification model. The diagonal line in the ROC curve represents a random classifier. A classifier that is better than random will have a ROC curve above the diagonal line. The closer the ROC curve is to the top-left corner, the better the classifier.</p>
 <div id="fig-roc" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-roc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -909,11 +891,11 @@ Multiclass Classification
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-roc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.8: Receiver Operating Characteristic (ROC) Curve
+Figure&nbsp;2.7: Receiver Operating Characteristic (ROC) Curve
 </figcaption>
 </figure>
 </div>
-<p>The <strong>Area Under the Curve (AUC)</strong> of the ROC curve is a measure to compare different classification models. The AUC is a value between 0 and 1, where a value of 1 indicates a perfect classifier and a value of 0.5 indicates a random classifier. <a href="#fig-auc" class="quarto-xref">Figure&nbsp;<span>2.9</span></a> shows the AUC of a classifier as the shaded area under the ROC curve. Note that the AUC summarizes the ROC curve, which itself represents the quality of predictions of our classification model at different thresholds, in a single number.</p>
+<p>The <strong>Area Under the Curve (AUC)</strong> of the ROC curve is a measure to compare different classification models. The AUC is a value between 0 and 1, where a value of 1 indicates a perfect classifier and a value of 0.5 indicates a random classifier. <a href="#fig-auc" class="quarto-xref">Figure&nbsp;<span>2.8</span></a> shows the AUC of a classifier as the shaded area under the ROC curve. Note that the AUC summarizes the ROC curve, which itself represents the quality of predictions of our classification model at different thresholds, in a single number.</p>
 <div id="fig-auc" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-auc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -928,7 +910,7 @@ Figure&nbsp;2.8: Receiver Operating Characteristic (ROC) Curve
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-auc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.9: Area Under the Curve (AUC)
+Figure&nbsp;2.8: Area Under the Curve (AUC)
 </figcaption>
 </figure>
 </div>
@@ -950,21 +932,21 @@ Figure&nbsp;2.9: Area Under the Curve (AUC)
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="basics_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="basics_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="basics_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="basics_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="basics_files/figure-html/unnamed-chunk-9-3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="basics_files/figure-html/unnamed-chunk-8-3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -972,11 +954,11 @@ Figure&nbsp;2.9: Area Under the Curve (AUC)
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-overfitting-underfitting-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.10: Examples of Overfitting and Underfitting
+Figure&nbsp;2.9: Examples of Overfitting and Underfitting
 </figcaption>
 </figure>
 </div>
-<p><a href="#fig-overfitting-underfitting" class="quarto-xref">Figure&nbsp;<span>2.10</span></a> provides examples of overfitting and underfitting. The blue dots represent the training data <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, the orange curve represents the fit of the model to the training data. The left plot shows an example of <strong>underfitting</strong>: the model is too simple to capture the underlying structure of the data. The middle plot shows a “good fit”: the model captures the underlying structure of the data. The right plot shows an example of <strong>overfitting</strong>: the model is too complex and captures the noise in the data.</p>
+<p><a href="#fig-overfitting-underfitting" class="quarto-xref">Figure&nbsp;<span>2.9</span></a> provides examples of overfitting and underfitting. The blue dots represent the training data <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, the orange curve represents the fit of the model to the training data. The left plot shows an example of <strong>underfitting</strong>: the model is too simple to capture the underlying structure of the data. The middle plot shows a “good fit”: the model captures the underlying structure of the data. The right plot shows an example of <strong>overfitting</strong>: the model is too complex and captures the noise in the data.</p>
 <section id="bias-variance-tradeoff" class="level3" data-number="2.4.1">
 <h3 data-number="2.4.1" class="anchored" data-anchor-id="bias-variance-tradeoff"><span class="header-section-number">2.4.1</span> Bias-Variance Tradeoff</h3>
 <p>The concepts of <strong>bias</strong> and <strong>variance</strong> are useful to understand the tradeoff between underfitting and overfitting. Suppose that data is generated from the true model <span class="math inline">\(Y=f(X)+\epsilon\)</span>, where <span class="math inline">\(\epsilon\)</span> is a random error term such that <span class="math inline">\(\mathbb{E}[\epsilon]=0\)</span> and <span class="math inline">\(\text{Var}[\epsilon]=\sigma^2\)</span>. Let <span class="math inline">\(\hat{f}(x)\)</span> be the prediction of the model at <span class="math inline">\(x\)</span>. One can show that the expected prediction error (or generalization error) of a model can be decomposed into three parts</p>
@@ -1001,11 +983,11 @@ Figure&nbsp;2.10: Examples of Overfitting and Underfitting
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-generalization-error-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.11: Model Complexity and Generalization Error <span class="citation" data-cites="Hastie2009">(adapted from <a href="references.html#ref-Hastie2009" role="doc-biblioref">Hastie, Tibshirani, and Friedman 2009</a>)</span>
+Figure&nbsp;2.10: Model Complexity and Generalization Error <span class="citation" data-cites="Hastie2009">(adapted from <a href="references.html#ref-Hastie2009" role="doc-biblioref">Hastie, Tibshirani, and Friedman 2009</a>)</span>
 </figcaption>
 </figure>
 </div>
-<p><a href="#fig-generalization-error" class="quarto-xref">Figure&nbsp;<span>2.11</span></a> shows the relationship between the model complexity and the prediction error. A more complex model can reduce the prediction error only up to a certain point. After this point, the model starts to overfit the training data (it learns noise in the data), and the prediction error for the test data (i.e., data not used for model training) increases. Ideally, we would like to find the model complexity that minimizes the prediction error for the test data.</p>
+<p><a href="#fig-generalization-error" class="quarto-xref">Figure&nbsp;<span>2.10</span></a> shows the relationship between the model complexity and the prediction error. A more complex model can reduce the prediction error only up to a certain point. After this point, the model starts to overfit the training data (it learns noise in the data), and the prediction error for the test data (i.e., data not used for model training) increases. Ideally, we would like to find the model complexity that minimizes the prediction error for the test data.</p>
 </section>
 <section id="regularization" class="level3" data-number="2.4.2">
 <h3 data-number="2.4.2" class="anchored" data-anchor-id="regularization"><span class="header-section-number">2.4.2</span> Regularization</h3>
@@ -1013,7 +995,7 @@ Figure&nbsp;2.11: Model Complexity and Generalization Error <span class="citatio
 <p>These techniques are applicable across a large range of ML models and depending on the type of model additional regularization techniques might be available. For example, in neural networks, <strong>dropout regularization</strong> is a common regularization technique that randomly removes a set of artificial neurons during training.</p>
 <p>In the context of linear regressions, L1 regularization is also called <strong>LASSO regression</strong>. The loss function of LASSO regression is given by</p>
 <p><span class="math display">\[\text{Loss} = \text{MSE}(y,x; w) + \lambda \sum_{i=1}^m |w_i|,\]</span></p>
-<p>where <span class="math inline">\(\text{MSE}(y,x; w)\)</span> refers to the mean squared error (the standard loss function of a linear regression), <span class="math inline">\(\lambda\)</span> is a hyperparameter that controls the strength of the regularization. Note that LASSO regression can also be used for <strong>feature selection</strong>, as it tends to set the weights of irrelevant features to zero. <a href="#fig-lasso-regression-loss" class="quarto-xref">Figure&nbsp;<span>2.12</span></a> shows the LASSO regression loss for different levels of <span class="math inline">\(\lambda\)</span>.</p>
+<p>where <span class="math inline">\(\text{MSE}(y,x; w)\)</span> refers to the mean squared error (the standard loss function of a linear regression), <span class="math inline">\(\lambda\)</span> is a hyperparameter that controls the strength of the regularization. Note that LASSO regression can also be used for <strong>feature selection</strong>, as it tends to set the weights of irrelevant features to zero. <a href="#fig-lasso-regression-loss" class="quarto-xref">Figure&nbsp;<span>2.11</span></a> shows the LASSO regression loss for different levels of <span class="math inline">\(\lambda\)</span>.</p>
 <div id="fig-lasso-regression-loss" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-lasso-regression-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1021,20 +1003,20 @@ Figure&nbsp;2.11: Model Complexity and Generalization Error <span class="citatio
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="basics_files/figure-html/unnamed-chunk-10-7.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="basics_files/figure-html/unnamed-chunk-9-7.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lasso-regression-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.12: LASSO Regression Loss for Different Levels of <span class="math inline">\(\lambda\)</span>
+Figure&nbsp;2.11: LASSO Regression Loss for Different Levels of <span class="math inline">\(\lambda\)</span>
 </figcaption>
 </figure>
 </div>
 <p>An L2 regularization in a linear regression context is called a <strong>Ridge regression</strong>. Its loss function is given by</p>
 <p><span class="math display">\[\text{Loss} = \text{MSE}(y,x; w) + \lambda \sum_{i=1}^m w_i^2.\]</span></p>
-<p>We will have a closer look at regularization in the application sections. For now, it is important to understand that regularization works by constraining the weights of the model (i.e., keeping the weights small), which can help to avoid overfitting (which might require some weights to be very large). <a href="#fig-ridge-regression-loss" class="quarto-xref">Figure&nbsp;<span>2.13</span></a> shows the Ridge regression loss for different levels of <span class="math inline">\(\lambda\)</span>. Note how the Ridge regression loss is smoother than the LASSO regression loss and that the weights are never set to exactly zero but just get closer and closer to zero.</p>
+<p>We will have a closer look at regularization in the application sections. For now, it is important to understand that regularization works by constraining the weights of the model (i.e., keeping the weights small), which can help to avoid overfitting (which might require some weights to be very large). <a href="#fig-ridge-regression-loss" class="quarto-xref">Figure&nbsp;<span>2.12</span></a> shows the Ridge regression loss for different levels of <span class="math inline">\(\lambda\)</span>. Note how the Ridge regression loss is smoother than the LASSO regression loss and that the weights are never set to exactly zero but just get closer and closer to zero.</p>
 <div id="fig-ridge-regression-loss" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ridge-regression-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1042,21 +1024,21 @@ Figure&nbsp;2.12: LASSO Regression Loss for Different Levels of <span class="mat
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="basics_files/figure-html/unnamed-chunk-11-9.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="basics_files/figure-html/unnamed-chunk-10-9.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ridge-regression-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.13: Ridge Regression Loss for Different Levels of <span class="math inline">\(\lambda\)</span>
+Figure&nbsp;2.12: Ridge Regression Loss for Different Levels of <span class="math inline">\(\lambda\)</span>
 </figcaption>
 </figure>
 </div>
 </section>
 <section id="training-validation-and-test-datasets" class="level3" data-number="2.4.3">
 <h3 data-number="2.4.3" class="anchored" data-anchor-id="training-validation-and-test-datasets"><span class="header-section-number">2.4.3</span> Training, Validation, and Test Datasets</h3>
-<p>Regularization discussed in the previous section is a method to directly <em>prevent</em> overfitting. However, another approach to the issues is to <strong>adjust our evaluation procedure</strong> in a way that allows us <em>to detect overfitting</em>. To do this, we can split the dataset into several parts. The first option shown in <a href="#fig-training-test-dataset" class="quarto-xref">Figure&nbsp;<span>2.14</span></a> is to split the dataset into a <strong>training dataset</strong> and a <strong>test dataset</strong>. The training dataset is used to train the model, while the test dataset is used to evaluate the model. Why does this help to detect overfitting? If the model performs well on the training dataset but poorly on the test dataset, this is a sign of overfitting. If the model performs well on the test dataset, this is a sign that the model generalizes well to new data.</p>
+<p>Regularization discussed in the previous section is a method to directly <em>prevent</em> overfitting. However, another approach to the issues is to <strong>adjust our evaluation procedure</strong> in a way that allows us <em>to detect overfitting</em>. To do this, we can split the dataset into several parts. The first option shown in <a href="#fig-training-test-dataset" class="quarto-xref">Figure&nbsp;<span>2.13</span></a> is to split the dataset into a <strong>training dataset</strong> and a <strong>test dataset</strong>. The training dataset is used to train the model, while the test dataset is used to evaluate the model. Why does this help to detect overfitting? If the model performs well on the training dataset but poorly on the test dataset, this is a sign of overfitting. If the model performs well on the test dataset, this is a sign that the model generalizes well to new data.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1084,11 +1066,11 @@ Difference with Terminology in Econometrics/Statistics
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-training-test-dataset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.14: Option A - Splitting the Whole Dataset into Training, and Test Datasets
+Figure&nbsp;2.13: Option A - Splitting the Whole Dataset into Training, and Test Datasets
 </figcaption>
 </figure>
 </div>
-<p>The second option shown in <a href="#fig-training-test-validation-dataset" class="quarto-xref">Figure&nbsp;<span>2.15</span></a> is to split the dataset into a <strong>training dataset</strong>, a <strong>validation dataset</strong>, and a <strong>test dataset</strong>. The training dataset is used to train the model, the validation dataset is used to tune the hyperparameters of the model, and the test dataset is used to evaluate the model.</p>
+<p>The second option shown in <a href="#fig-training-test-validation-dataset" class="quarto-xref">Figure&nbsp;<span>2.14</span></a> is to split the dataset into a <strong>training dataset</strong>, a <strong>validation dataset</strong>, and a <strong>test dataset</strong>. The training dataset is used to train the model, the validation dataset is used to tune the hyperparameters of the model, and the test dataset is used to evaluate the model.</p>
 <div id="fig-training-test-validation-dataset" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-training-test-validation-dataset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1103,7 +1085,7 @@ Figure&nbsp;2.14: Option A - Splitting the Whole Dataset into Training, and Test
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-training-test-validation-dataset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.15: Option B - Splitting the Whole Dataset into Training, Test, and Validation Datasets
+Figure&nbsp;2.14: Option B - Splitting the Whole Dataset into Training, Test, and Validation Datasets
 </figcaption>
 </figure>
 </div>
@@ -1111,7 +1093,7 @@ Figure&nbsp;2.15: Option B - Splitting the Whole Dataset into Training, Test, an
 </section>
 <section id="cross-validation" class="level3" data-number="2.4.4">
 <h3 data-number="2.4.4" class="anchored" data-anchor-id="cross-validation"><span class="header-section-number">2.4.4</span> Cross-Validation</h3>
-<p>Another approach to detect overfitting is to use <strong>cross-validation</strong>. There are different types of cross-validation but <strong>k-fold cross-validation</strong> is probably the most common. In k-fold cross-validation, shown in <a href="#fig-cross-validation" class="quarto-xref">Figure&nbsp;<span>2.16</span></a>, the dataset is split into <span class="math inline">\(k\)</span> parts (called <strong>folds</strong>). The model is trained on <span class="math inline">\(k-1\)</span> folds and evaluated on the remaining fold. This process is repeated <span class="math inline">\(k\)</span> times, each time using a different fold as the test fold. The performance of the model is then averaged over the <span class="math inline">\(k\)</span> iterations. In practice, <span class="math inline">\(k=10\)</span> is a common choice. If we set <span class="math inline">\(k=N\)</span>, where <span class="math inline">\(N\)</span> is the number of observations in the dataset, we call this <strong>leave-one-out cross-validation</strong> or <strong>LOOCV</strong>.</p>
+<p>Another approach to detect overfitting is to use <strong>cross-validation</strong>. There are different types of cross-validation but <strong>k-fold cross-validation</strong> is probably the most common. In k-fold cross-validation, shown in <a href="#fig-cross-validation" class="quarto-xref">Figure&nbsp;<span>2.15</span></a>, the dataset is split into <span class="math inline">\(k\)</span> parts (called <strong>folds</strong>). The model is trained on <span class="math inline">\(k-1\)</span> folds and evaluated on the remaining fold. This process is repeated <span class="math inline">\(k\)</span> times, each time using a different fold as the test fold. The performance of the model is then averaged over the <span class="math inline">\(k\)</span> iterations. In practice, <span class="math inline">\(k=10\)</span> is a common choice. If we set <span class="math inline">\(k=N\)</span>, where <span class="math inline">\(N\)</span> is the number of observations in the dataset, we call this <strong>leave-one-out cross-validation</strong> or <strong>LOOCV</strong>.</p>
 <div id="fig-cross-validation" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cross-validation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1126,7 +1108,7 @@ Figure&nbsp;2.15: Option B - Splitting the Whole Dataset into Training, Test, an
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cross-validation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.16: 5-Fold Cross-Validation
+Figure&nbsp;2.15: 5-Fold Cross-Validation
 </figcaption>
 </figure>
 </div>
