@@ -248,8 +248,8 @@ window.Quarto = {
   <li><a href="#what-is-machine-learning" id="toc-what-is-machine-learning" class="nav-link" data-scroll-target="#what-is-machine-learning"><span class="header-section-number">1.2</span> What Is Machine Learning?</a>
   <ul class="collapse">
   <li><a href="#sec-definition" id="toc-sec-definition" class="nav-link" data-scroll-target="#sec-definition"><span class="header-section-number">1.2.1</span> Definition</a></li>
-  <li><a href="#relation-to-statistics-and-econometrics" id="toc-relation-to-statistics-and-econometrics" class="nav-link" data-scroll-target="#relation-to-statistics-and-econometrics"><span class="header-section-number">1.2.2</span> Relation to Statistics and Econometrics</a></li>
-  <li><a href="#artificial-intelligence-vs.-machine-learning-vs.-deep-learning" id="toc-artificial-intelligence-vs.-machine-learning-vs.-deep-learning" class="nav-link" data-scroll-target="#artificial-intelligence-vs.-machine-learning-vs.-deep-learning"><span class="header-section-number">1.2.3</span> Artificial Intelligence vs.&nbsp;Machine Learning vs.&nbsp;Deep Learning</a></li>
+  <li><a href="#common-terminology" id="toc-common-terminology" class="nav-link" data-scroll-target="#common-terminology"><span class="header-section-number">1.2.2</span> Common Terminology</a></li>
+  <li><a href="#relation-to-statistics-and-econometrics" id="toc-relation-to-statistics-and-econometrics" class="nav-link" data-scroll-target="#relation-to-statistics-and-econometrics"><span class="header-section-number">1.2.3</span> Relation to Statistics and Econometrics</a></li>
   </ul></li>
   <li><a href="#why-has-machine-learning-become-popular-only-recently" id="toc-why-has-machine-learning-become-popular-only-recently" class="nav-link" data-scroll-target="#why-has-machine-learning-become-popular-only-recently"><span class="header-section-number">1.3</span> Why Has Machine Learning Become Popular Only Recently?</a></li>
   <li><a href="#types-of-learning" id="toc-types-of-learning" class="nav-link" data-scroll-target="#types-of-learning"><span class="header-section-number">1.4</span> Types of Learning</a>
@@ -333,7 +333,7 @@ Figure&nbsp;1.1: Go board (Source: <a href="https://commons.wikimedia.org/wiki/F
 </section>
 <section id="what-is-machine-learning" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="what-is-machine-learning"><span class="header-section-number">1.2</span> What Is Machine Learning?</h2>
-<p>You might have already some idea of what machine learning is. In this section, we will provide a more formal definition, discuss the relation to statistics and econometrics, and distinguish between machine learning, artificial intelligence, and deep learning.</p>
+<p>You might already have some idea of what machine learning is. In this section, we will provide a more formal definition, distinguish between machine learning, artificial intelligence, and deep learning, and discuss the relation to statistics and econometrics.</p>
 <section id="sec-definition" class="level3" data-number="1.2.1">
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="sec-definition"><span class="header-section-number">1.2.1</span> Definition</h3>
 <p>Let’s start with the straightforward definition provided by <span class="citation" data-cites="Murphy2012">Murphy (<a href="references.html#ref-Murphy2012" role="doc-biblioref">2012</a>)</span></p>
@@ -347,23 +347,8 @@ Figure&nbsp;1.1: Go board (Source: <a href="https://commons.wikimedia.org/wiki/F
 </blockquote>
 <p>In the context of this course, experience <span class="math inline">\(E\)</span> is given by a dataset that we feed into a machine-learning algorithm, tasks <span class="math inline">\(T\)</span> are usually some form of prediction that we would like to perform (e.g., loan default prediction), and the performance measure <span class="math inline">\(P\)</span> is the measure assessing the accuracy of our predictions.</p>
 </section>
-<section id="relation-to-statistics-and-econometrics" class="level3" data-number="1.2.2">
-<h3 data-number="1.2.2" class="anchored" data-anchor-id="relation-to-statistics-and-econometrics"><span class="header-section-number">1.2.2</span> Relation to Statistics and Econometrics</h3>
-<p>We have already mentioned that machine learning is similar to statistics and econometrics, in the sense that it provides a set of methods for data analysis. The <strong>focus</strong> of machine learning is more <strong>on prediction rather than causality</strong> meaning that in machine learning we are often interested in whether we can predict A given B rather than whether B truly causes A. For example, we could probably predict the sale of sunburn lotion on a day given the sales of ice cream on the previous day. However, this does not mean that ice cream sales cause sunburn lotion sales, it is just that the sunny weather on the first day causes both.</p>
-<p><span class="citation" data-cites="Varian2014">Varian (<a href="references.html#ref-Varian2014" role="doc-biblioref">2014</a>)</span> provides another example showing the difference between prediction and causality:</p>
-<blockquote class="blockquote">
-<p>A classic example: there are often more police in precincts with high crime, but that does not imply that increasing the number of police in a precinct would increase crime. […] If our data were generated by policymakers who assigned police to areas with high crime, then the observed relationship between police and crime rates could be highly predictive for the <em>historical</em> data but not useful in predicting the causal impact of explicitly <em>assigning</em> additional police to a precinct.</p>
-</blockquote>
-<!--
-* **Causal impact:** Change in sales associated with change in advertising expenditure everything else held constant
-* **Prediction:** Change in sales you would expect to observe when advertising expenditure changes
-
-To decide whether to increase advertising expenditures, we are interested in the former rather than the latter.
--->
-<p>Nevertheless, leaving problems aside where we are interested in causality, there is still a very large range of problems where we are interested in mere prediction, such as loan default prediction, or credit card fraud detection.</p>
-</section>
-<section id="artificial-intelligence-vs.-machine-learning-vs.-deep-learning" class="level3" data-number="1.2.3">
-<h3 data-number="1.2.3" class="anchored" data-anchor-id="artificial-intelligence-vs.-machine-learning-vs.-deep-learning"><span class="header-section-number">1.2.3</span> Artificial Intelligence vs.&nbsp;Machine Learning vs.&nbsp;Deep Learning</h3>
+<section id="common-terminology" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="common-terminology"><span class="header-section-number">1.2.2</span> Common Terminology</h3>
 <p>Artificial intelligence (AI), machine learning (ML), and deep learning (DL) are often used interchangeably in the media. However, they describe more narrow subfields <span class="citation" data-cites="Microsoft2024">(<a href="references.html#ref-Microsoft2024" role="doc-biblioref">Microsoft 2024</a>)</span>:</p>
 <div id="fig-ai-ml-dl" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -388,7 +373,23 @@ Figure&nbsp;1.2: Artificial intelligence vs.&nbsp;Machine Learning vs.&nbsp;Deep
 <li><strong>Machine Learning (ML)</strong>: A subset of AI including methods that allow machines to improve at tasks with experience.</li>
 <li><strong>Deep Learning (DL)</strong>: A subset of ML using neural networks with many layers allowing machines to learn how to perform tasks.</li>
 </ul>
-<p>We will have a look at neural networks and deep learning later on.</p>
+<p>More recently, with the rise of <strong>large language models (LLMs)</strong> such as ChatGPT, the term <strong>Generative AI</strong> has also become popular. Generative AI refers to AI models that can generate new content, such as text, images, or music, based on the patterns learned from their training data. ChatGPT is an example of a generative AI model that generates human-like text responses based on the input it receives. In this course, we will be more concerned with what is sometimes called <strong>Predictive AI</strong>. Predictive AI refers to machine learning models used to make predictions or classifications based on input data, such as predicting loan defaults or classifying images.</p>
+<p>A term you may also encounter is <strong>Artificial General Intelligence (AGI)</strong>, which refers to highly autonomous systems that possess the ability to understand, learn, and apply knowledge across a wide range of tasks at a level comparable to human intelligence. Unlike current AI systems, which are specialized for specific tasks, AGI would be capable of general reasoning and problem-solving. While AGI is a topic of significant research and debate, it remains largely theoretical at this stage.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Please note that AGI and related concepts are beyond the scope of this course and will not be covered.</p>
+</section>
+<section id="relation-to-statistics-and-econometrics" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="relation-to-statistics-and-econometrics"><span class="header-section-number">1.2.3</span> Relation to Statistics and Econometrics</h3>
+<p>We have already mentioned that machine learning is similar to statistics and econometrics, in the sense that it provides a set of methods for data analysis. The <strong>focus</strong> of machine learning is more <strong>on prediction rather than causality</strong> meaning that in machine learning we are often interested in whether we can predict A given B rather than whether B truly causes A. For example, we could probably predict the sale of sunburn lotion on a day given the sales of ice cream on the previous day. However, this does not mean that ice cream sales cause sunburn lotion sales, it is just that the sunny weather on the first day causes both.</p>
+<p><span class="citation" data-cites="Varian2014">Varian (<a href="references.html#ref-Varian2014" role="doc-biblioref">2014</a>)</span> provides another example showing the difference between prediction and causality:</p>
+<blockquote class="blockquote">
+<p>A classic example: there are often more police in precincts with high crime, but that does not imply that increasing the number of police in a precinct would increase crime. […] If our data were generated by policymakers who assigned police to areas with high crime, then the observed relationship between police and crime rates could be highly predictive for the <em>historical</em> data but not useful in predicting the causal impact of explicitly <em>assigning</em> additional police to a precinct.</p>
+</blockquote>
+<!--
+* **Causal impact:** Change in sales associated with change in advertising expenditure everything else held constant
+* **Prediction:** Change in sales you would expect to observe when advertising expenditure changes
+
+To decide whether to increase advertising expenditures, we are interested in the former rather than the latter.
+-->
+<p>Nevertheless, leaving problems aside where we are interested in causality, there is still a very large range of problems where we are interested in mere prediction, such as loan default prediction, or credit card fraud detection.</p>
 </section>
 </section>
 <section id="why-has-machine-learning-become-popular-only-recently" class="level2" data-number="1.3">
@@ -425,7 +426,7 @@ Types of Learning in Practice
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Machine learning models might <strong>combine different types of learning</strong>. For example, ChatGPT is trained using a combination of supervised and reinforcement learning. Furthermore, some machine learning methods, such as neural networks, might be used as part of different types of learning.</p>
+<p>Machine learning models might <strong>combine different types of learning</strong>. For example, ChatGPT is trained using a combination of self-supervised (a form of unsupervised learning), supervised and reinforcement learning. Furthermore, some machine learning methods, such as neural networks, might be used as part of different types of learning.</p>
 </div>
 </div>
 <section id="supervised-learning" class="level3" data-number="1.4.1">
@@ -608,13 +609,18 @@ Mini-Exercise
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Are the following tasks examples of supervised, or unsupervised learning?</p>
+<p>Are the following tasks examples of supervised, unsupervised, or reinforcement learning?</p>
 <ol type="1">
 <li>Predicting the price of a house based on its size and location (given a dataset of house prices and features).</li>
 <li>Finding groups of customers with similar purchasing behavior (given a dataset of customer transactions and customer characteristics).</li>
 <li>Detecting fraudulent credit card transactions (given a dataset of <em>unlabeled</em> credit card transactions).</li>
 <li>Detecting fraudulent credit card transactions (given a dataset of <em>labeled</em> credit card transactions).</li>
 <li>Recognizing handwritten digits in the MNIST dataset (see next section).</li>
+<li>Grouping news articles by topic based only on their content (without knowing the topics in advance).</li>
+<li>Predicting whether a customer will cancel their subscription next month, given historical data on customer behavior and cancellations.</li>
+<li>Classifying emails as spam or not spam, using a dataset where each email is labeled as spam or not.</li>
+<li>Segmenting images into regions with similar colors, without any information about what the regions represent.</li>
+<li>Training a robot to navigate a maze by receiving rewards for reaching the exit and penalties for hitting walls.</li>
 </ol>
 </div>
 </div>
@@ -695,7 +701,8 @@ Varian, Hal R. 2014. <span>“<span class="nocase">Big Data: New Tricks for Econ
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>See <a href="https://www.bis.org/ifc/publ/ifcb57.htm">https://www.bis.org/ifc/publ/ifcb57.htm</a> for a more detailed overview<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>See <a href="https://www.bis.org/ifc/publ/ifcb57.htm">https://www.bis.org/ifc/publ/ifcb57.htm</a> for a more detailed overview.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>For more information, see, e.g., <a href="https://cloud.google.com/discover/what-is-artificial-general-intelligence?hl=en">https://cloud.google.com/discover/what-is-artificial-general-intelligence?hl=en</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
