@@ -289,10 +289,13 @@ window.Quarto = {
   <li><a href="#stopping-criteria-and-pruning-a-tree" id="toc-stopping-criteria-and-pruning-a-tree" class="nav-link" data-scroll-target="#stopping-criteria-and-pruning-a-tree"><span class="header-section-number">3.3.2</span> Stopping Criteria and Pruning a Tree</a></li>
   </ul></li>
   <li><a href="#advantages-and-disadvantages" id="toc-advantages-and-disadvantages" class="nav-link" data-scroll-target="#advantages-and-disadvantages"><span class="header-section-number">3.4</span> Advantages and Disadvantages</a></li>
-  <li><a href="#random-forests" id="toc-random-forests" class="nav-link" data-scroll-target="#random-forests"><span class="header-section-number">3.5</span> Random Forests</a></li>
-  <li><a href="#boosting" id="toc-boosting" class="nav-link" data-scroll-target="#boosting"><span class="header-section-number">3.6</span> Boosting</a></li>
-  <li><a href="#interpreting-ensemble-methods" id="toc-interpreting-ensemble-methods" class="nav-link" data-scroll-target="#interpreting-ensemble-methods"><span class="header-section-number">3.7</span> Interpreting Ensemble Methods</a></li>
-  <li><a href="#python-implementation" id="toc-python-implementation" class="nav-link" data-scroll-target="#python-implementation"><span class="header-section-number">3.8</span> Python Implementation</a></li>
+  <li><a href="#ensemble-methods" id="toc-ensemble-methods" class="nav-link" data-scroll-target="#ensemble-methods"><span class="header-section-number">3.5</span> Ensemble Methods</a>
+  <ul class="collapse">
+  <li><a href="#random-forests" id="toc-random-forests" class="nav-link" data-scroll-target="#random-forests"><span class="header-section-number">3.5.1</span> Random Forests</a></li>
+  <li><a href="#boosting" id="toc-boosting" class="nav-link" data-scroll-target="#boosting"><span class="header-section-number">3.5.2</span> Boosting</a></li>
+  <li><a href="#interpreting-ensemble-methods" id="toc-interpreting-ensemble-methods" class="nav-link" data-scroll-target="#interpreting-ensemble-methods"><span class="header-section-number">3.5.3</span> Interpreting Ensemble Methods</a></li>
+  </ul></li>
+  <li><a href="#python-implementation" id="toc-python-implementation" class="nav-link" data-scroll-target="#python-implementation"><span class="header-section-number">3.6</span> Python Implementation</a></li>
   </ul>
 <div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html"><i class="bi bi-link-45deg"></i>Scikit-Learn: Decision Tree Classifier</a></li><li><a href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html"><i class="bi bi-link-45deg"></i>Scikit-Learn: Decision Tree Regressor</a></li><li><a href="https://xgboost.readthedocs.io/en/stable/python/sklearn_estimator.html"><i class="bi bi-link-45deg"></i>XGBoost</a></li></ul></div><div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="notebooks/decision_trees.ipynb"><i class="bi bi-file-code"></i>Download Jupyter Notebook</a></li><li><a href="https://colab.research.google.com/github/jmarbet/data-science-course/blob/main/notebooks/decision_trees.ipynb"><i class="bi bi-file-code"></i>Open Jupyter Notebook in Google Colab</a></li></ul></div></nav>
     </div>
@@ -368,7 +371,7 @@ Figure&nbsp;3.2: Regression Tree - Prediction of <span class="math inline">\(y\)
 <div>
 
 </div>
-<div class="cell quarto-layout-panel" data-layout-align="center" data-layout-ncol="2">
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-layout-align="center">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
@@ -690,9 +693,12 @@ Mini-Exercise
 <li>They are <strong>unstable</strong>: small changes to the input data can have large effects on the structure of the tree (small changes at the top can affect the rest of the tree)</li>
 </ul>
 </section>
-<section id="random-forests" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="random-forests"><span class="header-section-number">3.5</span> Random Forests</h2>
-<p><strong>Decision trees can be unstable</strong> meaning that small changes in the training data can lead to large changes in the tree structure. One way to address this issue is to use <strong>Random Forests</strong>. Random Forests is an <strong>ensemble method</strong>: The idea is to build a <strong>large number of trees</strong> (also called weak learners in this context), each of which is <strong>trained on a random subset of the data</strong>. The predictions of the trees are then averaged in regression tasks or determined through majority voting in the case of classification tasks to make the final prediction. Training multiple trees on random subsets of the data is also called <strong>bagging</strong> (short for <strong>bootstrap aggregating</strong>). Random Forests adds an additional layer of randomness by selecting a random subset of features for each tree. This means that each tree is trained on a different subset of the data and a different subset of features.</p>
+<section id="ensemble-methods" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="ensemble-methods"><span class="header-section-number">3.5</span> Ensemble Methods</h2>
+<p>Decision trees are powerful models, but they can be unstable. To address these issues, we can use <strong>ensemble methods</strong> that combine multiple decision trees to improve the performance of the model. The two most popular ensemble methods are <strong>Random Forests</strong> and <strong>Boosting</strong>.</p>
+<section id="random-forests" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="random-forests"><span class="header-section-number">3.5.1</span> Random Forests</h3>
+<p>The idea of <strong>Random Forests</strong> is to build a <strong>large number of trees</strong> (also called weak learners in this context), each of which is <strong>trained on a random subset of the data</strong>. The predictions of the trees are then averaged in regression tasks or determined through majority voting in the case of classification tasks to make the final prediction. Training multiple trees on random subsets of the data is also called <strong>bagging</strong> (short for <strong>bootstrap aggregating</strong>). Random Forests adds an additional layer of randomness by selecting a random subset of features for each tree. This means that each tree is trained on a different subset of the data and a different subset of features.</p>
 <div id="fig-random-forest" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-random-forest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -720,8 +726,8 @@ Figure&nbsp;3.8: Random Forests - Ensemble of Decision Trees with Majority Decis
 </ol>
 <p>Note that because we draw samples with replacement, some samples will not be included in the bootstrap sample. These samples are called <strong>out-of-bag (OOB) samples</strong>. The OOB samples can be used to estimate the performance of the model without the need for cross-validation since it is “performed along the way” (<span class="citation" data-cites="Hastie2009">Hastie, Tibshirani, and Friedman (<a href="references.html#ref-Hastie2009" role="doc-biblioref">2009</a>)</span>). The OOB error is almost identical to the error obtained through N-fold cross-validation.</p>
 </section>
-<section id="boosting" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="boosting"><span class="header-section-number">3.6</span> Boosting</h2>
+<section id="boosting" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="boosting"><span class="header-section-number">3.5.2</span> Boosting</h3>
 <p>Another popular ensemble method is <strong>Boosting</strong>. The idea behind boosting is to train a sequence of weak learners (e.g., decision trees), each of which tries to correct the mistakes of the previous one. The predictions of the weak learners are then combined to make the final prediction. Note how this differs from Random Forests where the trees are trained independently of each other in parallel, while here we sequentially train the trees to fix the mistakes of the previous ones. The basic steps can be roughly summarized as follows:</p>
 <ol type="1">
 <li><strong>Initialize the model</strong>: Construct a base tree with just a root node. In the case of a regression problem, the prediction could be the mean of the target variable. In the case of a classification problem, the prediction could be the log odds of the target variable.</li>
@@ -731,8 +737,8 @@ Figure&nbsp;3.8: Random Forests - Ensemble of Decision Trees with Majority Decis
 </ol>
 <p>XGBoost (eXtreme Gradient Boosting) is a popular implementation of the (gradient) boosting algorithm. It is known for its performance and is widely used in machine learning competitions. The algorithm is based on the idea of gradient boosting, which is a generalization of boosting. We will see how to implement XGBoost in Python but will not go into the details of the algorithm here. Other popular implementations of the boosting algorithm are AdaBoost and LightGBM.</p>
 </section>
-<section id="interpreting-ensemble-methods" class="level2" data-number="3.7">
-<h2 data-number="3.7" class="anchored" data-anchor-id="interpreting-ensemble-methods"><span class="header-section-number">3.7</span> Interpreting Ensemble Methods</h2>
+<section id="interpreting-ensemble-methods" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="interpreting-ensemble-methods"><span class="header-section-number">3.5.3</span> Interpreting Ensemble Methods</h3>
 <p>A downside of using ensemble methods is that you lose the interpretability of a single decision tree. However, there are ways to interpret ensemble methods. One way is to look at the <strong>feature importance</strong>. Feature importance tells you how much each feature contributes to the reduction in the loss function. The idea is that features that are used in splits that lead to a large reduction in the loss function are more important. <span class="citation" data-cites="Murphy2022">Murphy (<a href="references.html#ref-Murphy2022" role="doc-biblioref">2022</a>)</span> shows that the feature importance of feature <span class="math inline">\(k\)</span> is</p>
 <p><span class="math display">\[R_k(b)=\sum_{j=1}^{J-1} G_j \mathbb{I}(v_j=k)\]</span></p>
 <p>where the sum is over all non-leaf (internal) nodes, <span class="math inline">\(G_j\)</span> is the loss reduction (gain) at node <span class="math inline">\(j\)</span>, and <span class="math inline">\(v_j = k\)</span> if node <span class="math inline">\(j\)</span> uses feature <span class="math inline">\(k\)</span>. Simply put, we sum up all gains of the splits that use feature <span class="math inline">\(k\)</span>. Then, we average over all trees in our ensemble to get the feature importance of feature <span class="math inline">\(k\)</span></p>
@@ -752,8 +758,9 @@ Warning
 </div>
 </div>
 </section>
-<section id="python-implementation" class="level2" data-number="3.8">
-<h2 data-number="3.8" class="anchored" data-anchor-id="python-implementation"><span class="header-section-number">3.8</span> Python Implementation</h2>
+</section>
+<section id="python-implementation" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="python-implementation"><span class="header-section-number">3.6</span> Python Implementation</h2>
 <div class="quarto-embed-nb-cell" data-notebook="/Users/joel/Dropbox (Privat)/Studium/CEMFI/PhD/TA/Data Science for Diploma in Banking Supervision/Local/Lecture Notes/notebooks/decision_trees.ipynb" data-notebook-title="Check if the file exists" data-notebook-cellid="cell-0">
 <p>Let’s have a look at how to implement a decision tree in Python. Again, we need to first import the required packages and load the data</p>
 <div id="cell-1" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:11.447517Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:11.447229Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:14.385646Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:14.384714Z&quot;}" data-execution_count="1">
@@ -1186,8 +1193,8 @@ dtypes: float64(8)
 memory usage: 61.0 MB</code></pre>
 </div>
 </div>
-<section id="data-preprocessing" class="level3" data-number="3.8.1">
-<h3 data-number="3.8.1" class="anchored" data-anchor-id="data-preprocessing"><span class="header-section-number">3.8.1</span> Data Preprocessing</h3>
+<section id="data-preprocessing" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="data-preprocessing"><span class="header-section-number">3.6.1</span> Data Preprocessing</h3>
 <p>Since we have already explored the dataset in the previous notebook, we can skip that part and move directly to the data preprocessing.</p>
 <p>We will again split the data into training and test sets using the <code>train_test_split</code> function</p>
 <div id="cell-7" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:14.709129Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:14.708889Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:15.140280Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:15.139363Z&quot;}" data-execution_count="5">
@@ -1217,8 +1224,8 @@ memory usage: 61.0 MB</code></pre>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>scale_features(scaler, X_test, col_names, only_transform<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="implementing-a-decision-tree-classifier" class="level3" data-number="3.8.2">
-<h3 data-number="3.8.2" class="anchored" data-anchor-id="implementing-a-decision-tree-classifier"><span class="header-section-number">3.8.2</span> Implementing a Decision Tree Classifier</h3>
+<section id="implementing-a-decision-tree-classifier" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="implementing-a-decision-tree-classifier"><span class="header-section-number">3.6.2</span> Implementing a Decision Tree Classifier</h3>
 <p>We can now implement a decision tree model using the <code>DecisionTreeClassifier</code> class from the <code>sklearn.tree</code> module. Fitting the model to the data is almost the same as when we used logistic regression</p>
 <div id="cell-11" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:15.216478Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:15.216062Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:42:16.810704Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:42:16.809876Z&quot;}" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>clf_dt <span class="op">=</span> DecisionTreeClassifier(random_state<span class="op">=</span><span class="dv">0</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1301,8 +1308,8 @@ ROC AUC: 0.999939141362689</code></pre>
 </div>
 <p>There are only 3 false negatives, i.e., fraudulent transactions that we did not detect. There are also 2 false positives, i.e., “false alarms”, where non-fraudulent transactions were classified as fraudulent. The decision tree classifier is almost perfect which is a bit suspicious. We might have been lucky in the sense that the training and test sets were split in a way that the model performs very well. We should not expect this to be the case in general. It might be better to use cross-validation to get a more reliable estimate of the model’s performance.</p>
 </section>
-<section id="implementing-a-random-forest-classifier" class="level3" data-number="3.8.3">
-<h3 data-number="3.8.3" class="anchored" data-anchor-id="implementing-a-random-forest-classifier"><span class="header-section-number">3.8.3</span> Implementing a Random Forest Classifier</h3>
+<section id="implementing-a-random-forest-classifier" class="level3" data-number="3.6.3">
+<h3 data-number="3.6.3" class="anchored" data-anchor-id="implementing-a-random-forest-classifier"><span class="header-section-number">3.6.3</span> Implementing a Random Forest Classifier</h3>
 <p>We can also implement a random forest model using the <code>RandomForestClassifier</code> class from the <code>sklearn.ensemble</code> module. Fitting the model to the data is almost the same as when we used logistic regression and decision trees</p>
 <div id="cell-23" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:42:19.934623Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:42:19.934275Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:30.233105Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:30.232143Z&quot;}" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>clf_rf <span class="op">=</span> RandomForestClassifier(random_state <span class="op">=</span> <span class="dv">0</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1340,8 +1347,8 @@ ROC AUC: 0.9999999993035008</code></pre>
 </div>
 <p>There are still some false negatives, but the number of false positives has decreased compared to the Decision Tree model.</p>
 </section>
-<section id="implementing-a-xgboost-classifier" class="level3" data-number="3.8.4">
-<h3 data-number="3.8.4" class="anchored" data-anchor-id="implementing-a-xgboost-classifier"><span class="header-section-number">3.8.4</span> Implementing a XGBoost Classifier</h3>
+<section id="implementing-a-xgboost-classifier" class="level3" data-number="3.6.4">
+<h3 data-number="3.6.4" class="anchored" data-anchor-id="implementing-a-xgboost-classifier"><span class="header-section-number">3.6.4</span> Implementing a XGBoost Classifier</h3>
 <p>Let’s also have a look at the XGBoost classifier. We can implement the model using the <code>XGBClassifier</code> class from the <code>xgboost</code> package. Fitting the model to the data is almost the same as when we used logistic regression, decision trees, and random forests, even though it is not part of the <code>sklearn</code> package. This is because the <code>xgboost</code> package is designed to work well with the <code>sklearn</code> package. Let’s fit the model to the data</p>
 <div id="cell-29" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:34.286855Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:34.286641Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:36.494100Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:36.493306Z&quot;}" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>clf_xgb <span class="op">=</span> XGBClassifier(random_state <span class="op">=</span> <span class="dv">0</span>).fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1378,8 +1385,8 @@ ROC AUC: 0.999973496046352</code></pre>
 </div>
 <p>The XGBoost model seems to perform a bit worse than the Random Forest model. There are more false negatives and false positives. However, the model is still very good at detecting fraudulent transactions and has a high ROC AUC score. Adjusting the hyperparameters of the model might improve its performance.</p>
 </section>
-<section id="feature-importance" class="level3" data-number="3.8.5">
-<h3 data-number="3.8.5" class="anchored" data-anchor-id="feature-importance"><span class="header-section-number">3.8.5</span> Feature Importance</h3>
+<section id="feature-importance" class="level3" data-number="3.6.5">
+<h3 data-number="3.6.5" class="anchored" data-anchor-id="feature-importance"><span class="header-section-number">3.6.5</span> Feature Importance</h3>
 <p>We can also look at the feature importance of each model. The feature importance is a measure of how much each feature contributes to the model’s predictions. Let’s start with the Decision Tree model</p>
 <div id="cell-34" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:37.410221Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:37.409982Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:37.558319Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:37.557737Z&quot;}" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with the feature importance</span></span>
@@ -1442,8 +1449,8 @@ ROC AUC: 0.999973496046352</code></pre>
 </div>
 </div>
 </section>
-<section id="permuation-importance" class="level3" data-number="3.8.6">
-<h3 data-number="3.8.6" class="anchored" data-anchor-id="permuation-importance"><span class="header-section-number">3.8.6</span> Permuation Importance</h3>
+<section id="permuation-importance" class="level3" data-number="3.6.6">
+<h3 data-number="3.6.6" class="anchored" data-anchor-id="permuation-importance"><span class="header-section-number">3.6.6</span> Permuation Importance</h3>
 <p>We can also look at the permutation importance of each model. The permutation importance is a measure of how much each feature contributes to the model’s predictions. The permutation importance is calculated by permuting the values of each feature and measuring how much the model’s performance decreases. Let’s start with the Decision Tree model</p>
 <div id="cell-40" class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2024-05-31T21:43:37.856684Z&quot;,&quot;iopub.status.busy&quot;:&quot;2024-05-31T21:43:37.856441Z&quot;,&quot;iopub.status.idle&quot;:&quot;2024-05-31T21:43:42.856282Z&quot;,&quot;shell.execute_reply&quot;:&quot;2024-05-31T21:43:42.855360Z&quot;}" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the permutation importance</span></span>
@@ -1515,8 +1522,8 @@ ROC AUC: 0.999973496046352</code></pre>
 </div>
 <p>Here the results for the three models are quite similar. The most important feature is <code>ratio_to_median_purchase_price</code>, followed by <code>online_order</code>.</p>
 </section>
-<section id="conclusions" class="level3" data-number="3.8.7">
-<h3 data-number="3.8.7" class="anchored" data-anchor-id="conclusions"><span class="header-section-number">3.8.7</span> Conclusions</h3>
+<section id="conclusions" class="level3" data-number="3.6.7">
+<h3 data-number="3.6.7" class="anchored" data-anchor-id="conclusions"><span class="header-section-number">3.6.7</span> Conclusions</h3>
 <p>In this notebook, we have seen how to implement decision trees, random forests, and XGBoost classifiers in Python. We have also seen how to evaluate the performance of these models using metrics such as accuracy, precision, recall, and ROC AUC. We have seen that the Random Forest and XGBoost models perform better than the Decision Tree model. Furthermore, we looked at the feature and permutation importance of each model to see which features are most important for determining whether a transaction is fraudulent or not.</p>
 </section>
 </div>
